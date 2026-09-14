@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FramingSignal, PrismCategory } from '@/lib/types';
 import { PRISM_CATEGORIES } from '@/lib/prism-rubric';
 import {
@@ -10,11 +10,25 @@ import {
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
-  Filter,
   Layers,
-  Sparkles,
-  BookOpen,
+  Globe,
+  ExternalLink,
+  Loader2,
+  AlertTriangle,
+  FileSearch,
 } from 'lucide-react';
+
+interface WebCorroborationData {
+  query: string;
+  verdict: 'corroborated' | 'contested' | 'unverified';
+  summary: string;
+  sources: Array<{
+    title: string;
+    url: string;
+    snippet: string;
+    domain: string;
+  }>;
+}
 
 interface InspectionDrawerProps {
   signal: FramingSignal | null;
@@ -36,6 +50,45 @@ export const InspectionDrawer: React.FC<InspectionDrawerProps> = ({
   onNext,
 }) => {
   const [activeTab, setActiveTab] = useState<'explanation' | 'alternatives' | 'corroboration'>('explanation');
+  const [corroborationData, setCorroborationData] = useState<WebCorroborationData | null>(null);
+  const [isCorroborating, setIsCorroborating] = useState<boolean>(false);
+  const [corroborationError, setCorroborationError] = useState<string | null>(null);
+
+  // Reset corroboration state when signal changes
+  useEffect(() => {
+    setCorroborationData(null);
+    setIsCorroborating(false);
+    setCorroborationError(null);
+  }, [signal?.quoted_text]);
+
+  const handleFetchWebCorroboration = async () => {
+    if (!signal) return;
+    setIsCorroborating(true);
+    setCorroborationError(null);
+
+    try {
+      const res = await fetch('/api/corroborate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quote: signal.quoted_text,
+          category: signal.category,
+          context: signal.explanation,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch web corroboration.');
+      }
+
+      const data: WebCorroborationData = await res.json();
+      setCorroborationData(data);
+    } catch (err: any) {
+      setCorroborationError(err.message || 'Error checking web corroboration.');
+    } finally {
+      setIsCorroborating(false);
+    }
+  };
 
   if (!signal) {
     return (
@@ -45,7 +98,7 @@ export const InspectionDrawer: React.FC<InspectionDrawerProps> = ({
           Interactive Inspector Workbench
         </h4>
         <p className="text-xs text-[#5D544C] leading-relaxed max-w-md mx-auto">
-          Click on any annotated phrase in the article above to inspect its framing mechanism, linguistic vectors, and neutral reformulations.
+          Click on any annotated phrase in the article above to inspect its framing mechanism, linguistic vectors, and live web corroboration.
         </p>
       </div>
     );
@@ -154,13 +207,14 @@ export const InspectionDrawer: React.FC<InspectionDrawerProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('corroboration')}
-            className={`flex-1 py-1.5 text-xs font-semibold rounded transition-all ${
+            className={`flex-1 py-1.5 text-xs font-semibold rounded transition-all flex items-center justify-center gap-1 ${
               activeTab === 'corroboration'
                 ? 'bg-[#FAF7F2] text-[#241E19] shadow-xs'
                 : 'text-[#5D544C] hover:text-[#241E19]'
             }`}
           >
-            Corroboration
+            <Globe className="w-3 h-3 text-[#3B6B56]" />
+            <span>Corroboration</span>
           </button>
         </div>
 
@@ -240,21 +294,118 @@ export const InspectionDrawer: React.FC<InspectionDrawerProps> = ({
           </div>
         )}
 
-        {/* Tab 3: Corroboration */}
+        {/* Tab 3: Corroboration (Live Web Fact-Checking & Primary Sources) */}
         {activeTab === 'corroboration' && (
           <div className="space-y-3 animate-fadeIn">
-            <div className="p-3 bg-[#F7F3EE] rounded-xl border border-[#D8CFC4]/70 text-xs text-[#5D544C] space-y-2">
-              <div className="flex items-center gap-1.5 font-bold text-[#241E19]">
-                <ShieldCheck className="w-4 h-4 text-[#3B6B56]" />
-                <span>Verbatim String Verification</span>
+            {/* Action Trigger if not checked yet */}
+            {!corroborationData && !isCorroborating && (
+              <div className="p-4 bg-[#F7F3EE] rounded-xl border border-[#D8CFC4]/70 text-center space-y-3">
+                <Globe className="w-6 h-6 text-[#3B6B56] mx-auto opacity-80" />
+                <div>
+                  <h5 className="font-serif text-sm font-semibold text-[#241E19]">
+                    Empirical Web Corroboration
+                  </h5>
+                  <p className="text-xs text-[#5D544C] mt-0.5 max-w-sm mx-auto">
+                    Cross-reference this excerpt against live news archives, public records, and external coverage.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleFetchWebCorroboration}
+                  className="bg-[#241E19] hover:bg-[#3D352E] text-[#FAF7F2] text-xs font-semibold px-4 py-2 rounded-full inline-flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer"
+                >
+                  <FileSearch className="w-3.5 h-3.5 text-[#A66B24]" />
+                  <span>Search Live Web Sources</span>
+                </button>
               </div>
-              <p>
-                This signal passed 100% server-side string inclusion verification against the monitored article text.
-              </p>
-              <div className="font-mono text-[11px] text-[#7C7167]">
-                Verified at: {new Date().toLocaleTimeString()}
+            )}
+
+            {/* Loading Indicator */}
+            {isCorroborating && (
+              <div className="p-6 bg-[#F7F3EE] rounded-xl border border-[#D8CFC4]/70 text-center space-y-2">
+                <Loader2 className="w-5 h-5 text-[#9E4A28] animate-spin mx-auto" />
+                <p className="text-xs font-mono text-[#5D544C]">
+                  Scanning live web records &amp; synthesizing primary evidence...
+                </p>
               </div>
-            </div>
+            )}
+
+            {/* Error Message */}
+            {corroborationError && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-800 text-xs rounded-xl flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+                <span>{corroborationError}</span>
+              </div>
+            )}
+
+            {/* Results Display */}
+            {corroborationData && (
+              <div className="space-y-3">
+                {/* Synthesis Summary Badge */}
+                <div className="p-3.5 bg-[#FAF7F2] rounded-xl border border-[#D8CFC4] space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-[#7C7167]">
+                      Web Synthesis
+                    </span>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                        corroborationData.verdict === 'corroborated'
+                          ? 'bg-[#EBF1EE] text-[#3B6B56] border border-[#B9D5C8]'
+                          : corroborationData.verdict === 'contested'
+                          ? 'bg-[#F9EFEA] text-[#9E4A28] border border-[#E8B6A2]'
+                          : 'bg-[#FAF3EA] text-[#A66B24] border border-[#E8D4BE]'
+                      }`}
+                    >
+                      {corroborationData.verdict}
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#241E19] leading-relaxed">
+                    {corroborationData.summary}
+                  </p>
+                </div>
+
+                {/* Cited Sources List */}
+                {corroborationData.sources.length > 0 && (
+                  <div className="space-y-2">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-[#7C7167] block px-1">
+                      Matched Web Sources &amp; Coverage ({corroborationData.sources.length})
+                    </span>
+                    <div className="space-y-2">
+                      {corroborationData.sources.map((src, i) => (
+                        <a
+                          key={i}
+                          href={src.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block p-2.5 bg-[#F7F3EE] hover:bg-[#EFE8DF] rounded-lg border border-[#D8CFC4]/70 transition-colors group"
+                        >
+                          <div className="flex items-center justify-between text-[11px] font-semibold text-[#241E19] group-hover:text-[#9E4A28] mb-1">
+                            <span className="line-clamp-1">{src.title}</span>
+                            <ExternalLink className="w-3 h-3 text-[#7C7167] shrink-0 ml-1" />
+                          </div>
+                          <p className="text-[11px] text-[#5D544C] line-clamp-2 leading-tight">
+                            {src.snippet}
+                          </p>
+                          <span className="text-[10px] font-mono text-[#7C7167] mt-1 block">
+                            {src.domain}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-2 text-center">
+                  <button
+                    type="button"
+                    onClick={handleFetchWebCorroboration}
+                    className="text-[11px] text-[#7C7167] hover:text-[#241E19] underline"
+                  >
+                    Re-check live sources
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
