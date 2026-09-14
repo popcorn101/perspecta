@@ -42,15 +42,18 @@ export async function POST(req: NextRequest) {
     if (groqApiKey && !groqApiKey.includes('gsk_...')) {
       try {
         const groq = new Groq({ apiKey: groqApiKey });
-        // Priority candidate models: llama-3.3-70b-versatile first, cascading to llama-3.1-8b-instant
-        const requestedModel = process.env.GROQ_MODEL?.trim() || 'llama-3.3-70b-versatile';
+        // Priority candidate models: includes available high-capacity models on Groq
+        const requestedModel = process.env.GROQ_MODEL?.trim();
         const candidateModels = Array.from(
-          new Set([
-            requestedModel,
-            'llama-3.3-70b-versatile',
-            'llama-3.1-8b-instant',
-            'meta-llama/llama-guard-3-8b',
-          ])
+          new Set(
+            [
+              requestedModel,
+              'qwen/qwen3.8-27b',
+              'qwen/qwen3.6-27b',
+              'llama-3.3-70b-versatile',
+              'llama-3.1-8b-instant',
+            ].filter(Boolean) as string[]
+          )
         );
 
         // Optimize prompt token size: truncate article text if too long to stay strictly within TPM limits
@@ -68,7 +71,7 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
 `;
 
         let completion = null;
-        let modelName = requestedModel;
+        let modelName: string = requestedModel || candidateModels[0] || 'qwen/qwen3.8-27b';
 
         // Try candidate models sequentially (handles 404 model not found and 429 rate limits gracefully)
         for (const candidate of candidateModels) {
