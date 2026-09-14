@@ -65,51 +65,66 @@
   font-weight: 500;
 }
 
-/* Category Highlighter Pen Styles */
+/* Category Highlighter Pen Styles — Vibrant, Tactile & High-Density */
 .highlight-attribution {
-  background-color: #FDF6EC;
-  border-bottom: 2px solid #8C531B;
-  color: #5C320A;
+  background-color: #FEE7C8;
+  border-bottom: 2.5px solid #C05621;
+  color: #7B341E;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(192, 86, 33, 0.12);
 }
 
 .highlight-evaluative {
-  background-color: #F9EFEA;
-  border-bottom: 2px solid #9E4A28;
-  color: #682910;
+  background-color: #FCD5C7;
+  border-bottom: 2.5px solid #C53030;
+  color: #742A2A;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(197, 48, 48, 0.12);
 }
 
 .highlight-certainty {
-  background-color: #FAF3EA;
-  border-bottom: 2px solid #A66B24;
-  color: #694112;
+  background-color: #FEEDB8;
+  border-bottom: 2.5px solid #D69E2E;
+  color: #744210;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(214, 158, 46, 0.12);
 }
 
 .highlight-claims {
-  background-color: #EEF0F8;
-  border-bottom: 2px solid #434D80;
-  color: #293054;
+  background-color: #D6E4FF;
+  border-bottom: 2.5px solid #3182CE;
+  color: #1A365D;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(49, 130, 206, 0.12);
 }
 
 .highlight-primacy {
-  background-color: #EBF1EE;
-  border-bottom: 2px solid #3B6B56;
-  color: #224234;
+  background-color: #C6F6D5;
+  border-bottom: 2.5px solid #2F855A;
+  color: #1C4532;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(47, 133, 90, 0.12);
 }
 
 .highlight-omission {
-  background-color: #ECF1F6;
-  border-bottom: 2px solid #3C567A;
-  color: #24354D;
+  background-color: #E2E8F0;
+  border-bottom: 2.5px solid #4A5568;
+  color: #1A202C;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(74, 85, 104, 0.12);
 }
 
 .highlight-emotional {
-  background-color: #F6ECF0;
-  border-bottom: 2px solid #7D374B;
-  color: #541F2F;
+  background-color: #FED7E2;
+  border-bottom: 2.5px solid #B83280;
+  color: #702459;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(184, 50, 128, 0.12);
 }
 
 /* Active Highlight Glow */
 .highlight-active {
-  box-shadow: 0 0 0 2px #9E4A28;
-  font-weight: 500;
+  box-shadow: 0 0 0 3px #9E4A28, 0 4px 12px rgba(158, 74, 40, 0.25) !important;
+  font-weight: 600 !important;
+  transform: translateY(-1px);
 }

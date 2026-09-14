@@ -268,42 +268,53 @@ const PRISM_HEURISTIC_PATTERNS: PatternRule[] = [
 
 // Fallback generic heuristic extractor for custom text
 function extractGenericSignals(text: string): FramingSignal[] {
-  const genericIndicators: { regex: RegExp; category: PrismCategory; explanation: string; effect: string }[] = [
+  const genericIndicators: Array<{
+    regex: RegExp;
+    category: PrismCategory;
+    explanation: string;
+    effect: string;
+  }> = [
     {
-      regex: /\b(critics argue|sources claim|officials say|unnamed sources|insiders reveal|widely reported)\b/gi,
+      regex: /\b(allegedly|supposedly|reportedly|purportedly|insiders say|rumored to be|sources claim|unconfirmed reports|whispers indicate)\b/gi,
       category: 'attribution',
-      explanation: 'Employs generalized or anonymous sourcing that obscures specific institutional accountability.',
-      effect: 'Distances attribution from verified individuals',
+      explanation: 'Employs unverified hearsay or non-accountable passive sourcing to shield factual claims from verification.',
+      effect: 'Insulates assertions against on-the-record scrutiny',
     },
     {
-      regex: /\b(reckless|historic|shocking|stunning|unprecedented|disastrous|glorious|heroic|catastrophic|suffocating)\b/gi,
+      regex: /\b(draconian|devastating|reckless|heroic|historic triumph|incompetence|stunning|brazen|catastrophic|shameful|unprecedented crisis|abysmal|masterstroke|disastrous|disgraceful|shrewd|visionary|tyrannical)\b/gi,
       category: 'evaluative',
-      explanation: 'Uses value-laden adjectives that convey emotional verdict rather than neutral observation.',
-      effect: 'Primes reader sentiment emotionally',
+      explanation: 'Uses loaded adjectives and evaluative framing to prime reader judgment ahead of factual exposition.',
+      effect: 'Inoculates subjective moral judgment into descriptive news',
     },
     {
-      regex: /\b(will inevitably|undoubtedly|guaranteed to|impossible to|will definitely|must certainly)\b/gi,
+      regex: /\b(will undoubtedly|inevitably|must certainly|could potentially|is poised to|might signal|all but guaranteed|leaves no doubt|signals the end of|set to trigger)\b/gi,
       category: 'certainty',
-      explanation: 'Projects unearned absolute certainty regarding complex future outcomes.',
-      effect: 'Manufactures an impression of inevitable destiny',
+      explanation: 'Expresses predictive certainty or speculative hedging without empirical statistical backing.',
+      effect: 'Manufactures an illusion of predetermined outcome',
     },
     {
-      regex: /\b(could potentially|might suggest|may indicate|allegedly|reportedly|speculation points to)\b/gi,
-      category: 'certainty',
-      explanation: 'Uses speculative hedging to introduce uncorroborated hypotheses into the news record.',
-      effect: 'Plants unverified assertions via modal hedging',
-    },
-    {
-      regex: /\b(\d+ percent|\$\d+ (?:billion|million)|studies prove|statistics demonstrate)\b/gi,
+      regex: /\b(unanimously agreed|experts agree|data conclusively proves|clear evidence shows|studies confirm|economic consensus indicates|no one disputes|widely recognized)\b/gi,
       category: 'claims',
-      explanation: 'Makes empirical claims or data citations that should be cross-referenced with primary methodology.',
+      explanation: 'Claims universal or scientific consensus without citing primary peer-reviewed literature or empirical methodology.',
+      effect: 'Substitutes claimed unanimity for rigorous evidentiary citation',
+    },
+    {
+      regex: /\b(\$\d+[\d,.]*\s*(billion|million|trillion)?|\d+%\s*(surge|drop|increase|collapse|spike|decline)|record-breaking|historic low)\b/gi,
+      category: 'claims',
+      explanation: 'Highlights isolated economic or statistical metrics without providing necessary baseline counter-metrics.',
       effect: 'Anchors perception using quantitative authority',
     },
     {
-      regex: /\b(panic|chaos|nightmare|crisis|threatens to destroy|crush|triumph|ecocide|disaster)\b/gi,
+      regex: /\b(panic|chaos|nightmare|crisis|threatens to destroy|crush|triumph|ecocide|disaster|bloodbath|shockwave|calamity|fury|meltdown|onslaught|siege|peril)\b/gi,
       category: 'emotional',
-      explanation: 'Deploys affective vocabulary designed to provoke fear, anger, or moral euphoria.',
+      explanation: 'Deploys affective vocabulary engineered to provoke visceral anxiety, moral outrage, or euphoria.',
       effect: 'Hijacks deliberative processing with emotional cues',
+    },
+    {
+      regex: /\b(crucial test|defining moment|showdown|watershed|inflection point|reckoning|existential threat)\b/gi,
+      category: 'primacy',
+      explanation: 'Elevates routine political or corporate procedures into high-stakes historical dramas.',
+      effect: 'Manufactures narrative urgency and dramatic conflict',
     },
   ];
 

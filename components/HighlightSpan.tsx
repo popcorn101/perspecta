@@ -49,21 +49,22 @@ export const HighlightSpan: React.FC<HighlightSpanProps> = ({
         e.stopPropagation();
         onSelect(signal);
       }}
-      className={`inline cursor-pointer transition-all duration-150 px-1 py-0.5 rounded-sm font-inherit ${getCategoryClass(
+      className={`inline-block cursor-pointer transition-all duration-200 px-1.5 py-0.5 mx-0.5 rounded-md font-inherit ${getCategoryClass(
         signal.category
       )} ${
         isActive
-          ? 'ring-2 ring-[#9E4A28] ring-offset-1 font-medium scale-[1.01]'
-          : 'hover:opacity-85'
+          ? 'highlight-active'
+          : 'hover:brightness-95 hover:shadow-sm hover:-translate-y-0.5'
       }`}
-      title={`${categoryMeta.name} (${Math.round(signal.confidence * 100)}% conf) — Click to inspect`}
+      title={`${categoryMeta.name} (${Math.round(signal.confidence * 100)}% confidence) — Click to inspect`}
     >
-      {signal.quoted_text}
+      <span className="font-serif leading-snug">{signal.quoted_text}</span>
       <span
-        className="inline-block ml-0.5 text-[9px] uppercase px-1 py-0.2 rounded font-sans tracking-wider align-super"
+        className="inline-flex items-center ml-1 text-[10px] font-mono font-bold uppercase px-1.5 py-0.2 rounded-full tracking-wider shadow-2xs select-none"
         style={{
           color: categoryMeta.color,
-          backgroundColor: 'rgba(255, 255, 255, 0.7)',
+          backgroundColor: 'rgba(255, 255, 255, 0.92)',
+          border: `1px solid ${categoryMeta.borderColor}`,
         }}
       >
         {signal.category.slice(0, 3)}
