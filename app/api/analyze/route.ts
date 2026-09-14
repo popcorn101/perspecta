@@ -56,17 +56,19 @@ export async function POST(req: NextRequest) {
           )
         );
 
-        // Optimize prompt token size: truncate article text if too long to stay strictly within TPM limits
+        // Strict token budget to prevent 429 TPM Rate Limit on free tiers:
+        // Cap article excerpt length to 1,500 characters so combined prompt stays under 1,800 tokens
         const tokenConstrainedArticles = articles.map((art) => ({
-          ...art,
-          text: art.text.length > 4500 ? `${art.text.slice(0, 4500)}...` : art.text,
+          id: art.id,
+          title: art.title,
+          publisher: art.publisher,
+          text: art.text.length > 1500 ? `${art.text.slice(0, 1500)}` : art.text,
         }));
 
-        const promptContent = `Analyze the following ${tokenConstrainedArticles.length} article(s) using the PRISM news framing methodology.
-Decompose each article into framing signals.
-CRITICAL EVIDENCE RULE: Every single 'quoted_text' MUST be an exact, case-sensitive verbatim substring copied directly from the target article's text. Do not summarize, paraphrase, or truncate words.
+        const promptContent = `Decompose each article into PRISM framing signals.
+CRITICAL: Every 'quoted_text' MUST be an exact verbatim substring from target text.
 
-Articles to analyze:
+Articles:
 ${JSON.stringify(tokenConstrainedArticles, null, 2)}
 `;
 
@@ -78,50 +80,18 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
           try {
             completion = await groq.chat.completions.create({
               model: candidate,
-              temperature: 0.2,
-              max_tokens: 2200,
+              temperature: 0.15,
+              max_tokens: 1400, // Reduced to prevent exceeding output token budget
               response_format: { type: 'json_object' },
               messages: [
-                { role: 'system', content: PRISM_SYSTEM_PROMPT },
+                {
+                  role: 'system',
+                  content:
+                    'You are PERSPECTA PRISM. Decompose news text into framing signals (attribution, evaluative, certainty, claims, primacy, omission, emotional). Quoted_text must be exact verbatim substring. Respond with strict JSON matching schema: {"articles": [{"article_id": "string", "title": "string", "publisher": "string", "primary_framing": "string", "dominant_tone": "string", "highlighted_actors": ["string"], "omitted_perspectives": ["string"], "signals": [{"quoted_text": "verbatim text", "category": "attribution"|"evaluative"|"certainty"|"claims"|"primacy"|"omission"|"emotional", "explanation": "string", "confidence": 0.85, "framing_effect": "string", "alternative_phrasing": "string"}]}], "comparative_findings": [{"category": "string", "title": "string", "description": "string", "contrast_table": [{"publisher": "string", "approach": "string"}]}], "summary": "string"}',
+                },
                 {
                   role: 'user',
-                  content: `${promptContent}
-
-Respond strictly with valid JSON conforming to this schema:
-{
-  "articles": [
-    {
-      "article_id": "string",
-      "title": "string",
-      "publisher": "string",
-      "primary_framing": "string",
-      "dominant_tone": "string",
-      "highlighted_actors": ["string"],
-      "omitted_perspectives": ["string"],
-      "signals": [
-        {
-          "quoted_text": "string (EXACT verbatim excerpt from source text)",
-          "category": "attribution" | "evaluative" | "certainty" | "claims" | "primacy" | "omission" | "emotional",
-          "explanation": "string",
-          "confidence": number,
-          "framing_effect": "string",
-          "alternative_phrasing": "string"
-        }
-      ]
-    }
-  ],
-  "comparative_findings": [
-    {
-      "category": "string",
-      "title": "string",
-      "description": "string",
-      "contrast_table": [
-        { "publisher": "string", "approach": "string" }
-      ]
-    }
-  ],
-  "summary": "string"
-}`,
+                  content: promptContent,
                 },
               ],
             });
