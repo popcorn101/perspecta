@@ -132,7 +132,7 @@ export const StoryAnalysisDashboard: React.FC<StoryAnalysisDashboardProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <span>Model: Groq Llama-3.3 70B</span>
+            <span>Model: PRISM Evaluator</span>
             <span className="text-[#D8CFC4]">•</span>
             <span>
               Signals Detected: <strong className="text-[#241E19] font-bold">{allSignals.length}</strong>

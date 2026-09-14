@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     if (groqApiKey && !groqApiKey.includes('gsk_...')) {
       try {
         const groq = new Groq({ apiKey: groqApiKey });
-        const modelName = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+        let modelName = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
 
         const promptContent = `Analyze the following ${articles.length} article(s) using the PRISM news framing methodology.
 Decompose each article into framing signals.
@@ -52,16 +52,18 @@ Articles to analyze:
 ${JSON.stringify(articles, null, 2)}
 `;
 
-        const completion = await groq.chat.completions.create({
-          model: modelName,
-          temperature: 0.2,
-          max_tokens: 2500, // Token budget limit to prevent quota exhaustion
-          response_format: { type: 'json_object' },
-          messages: [
-            { role: 'system', content: PRISM_SYSTEM_PROMPT },
-            {
-              role: 'user',
-              content: `${promptContent}
+        let completion;
+        try {
+          completion = await groq.chat.completions.create({
+            model: modelName,
+            temperature: 0.2,
+            max_tokens: 2500, // Token budget limit to prevent quota exhaustion
+            response_format: { type: 'json_object' },
+            messages: [
+              { role: 'system', content: PRISM_SYSTEM_PROMPT },
+              {
+                role: 'user',
+                content: `${promptContent}
 
 Respond strictly with valid JSON conforming to this schema:
 {
@@ -98,9 +100,71 @@ Respond strictly with valid JSON conforming to this schema:
   ],
   "summary": "string"
 }`,
-            },
-          ],
-        });
+              },
+            ],
+          });
+        } catch (initialModelErr: any) {
+          // If model doesn't exist or is unavailable on this key, fallback immediately to llama-3.1-8b-instant
+          if (
+            initialModelErr?.status === 404 ||
+            initialModelErr?.message?.includes('model_not_found') ||
+            initialModelErr?.error?.error?.code === 'model_not_found'
+          ) {
+            console.warn(`Model ${modelName} not available. Automatically falling back to llama-3.1-8b-instant.`);
+            modelName = 'llama-3.1-8b-instant';
+            completion = await groq.chat.completions.create({
+              model: modelName,
+              temperature: 0.2,
+              max_tokens: 2000,
+              response_format: { type: 'json_object' },
+              messages: [
+                { role: 'system', content: PRISM_SYSTEM_PROMPT },
+                {
+                  role: 'user',
+                  content: `${promptContent}
+
+Respond strictly with valid JSON conforming to this schema:
+{
+  "articles": [
+    {
+      "article_id": "string",
+      "title": "string",
+      "publisher": "string",
+      "primary_framing": "string",
+      "dominant_tone": "string",
+      "highlighted_actors": ["string"],
+      "omitted_perspectives": ["string"],
+      "signals": [
+        {
+          "quoted_text": "string (EXACT verbatim excerpt from source text)",
+          "category": "attribution" | "evaluative" | "certainty" | "claims" | "primacy" | "omission" | "emotional",
+          "explanation": "string",
+          "confidence": number,
+          "framing_effect": "string",
+          "alternative_phrasing": "string"
+        }
+      ]
+    }
+  ],
+  "comparative_findings": [
+    {
+      "category": "string",
+      "title": "string",
+      "description": "string",
+      "contrast_table": [
+        { "publisher": "string", "approach": "string" }
+      ]
+    }
+  ],
+  "summary": "string"
+}`,
+                },
+              ],
+            });
+          } else {
+            throw initialModelErr;
+          }
+        }
 
         const rawJsonString = completion.choices[0]?.message?.content;
         if (rawJsonString) {
