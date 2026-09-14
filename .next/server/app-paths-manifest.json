@@ -1,5 +1,8 @@
 {
-  "/api/parse-source/route": "app/api/parse-source/route.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/analyze/route": "app/api/analyze/route.js",
+  "/api/demos/route": "app/api/demos/route.js",
+  "/api/parse-source/route": "app/api/parse-source/route.js",
   "/page": "app/page.js"
 }

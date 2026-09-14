@@ -9,13 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.116.0",
     "cheerio": "^1.2.0",
     "clsx": "^2.1.1",
     "groq-sdk": "^1.6.0",
     "lucide-react": "^0.453.0",
     "mammoth": "^1.12.3",
-    "next": "^14.2.15",
+    "next": "^16.3.5",
     "pdf-parse": "^1.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -30,6 +32,7 @@
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
+    "prisma": "^6.4.1",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   }
