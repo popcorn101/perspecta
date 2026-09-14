@@ -1,17 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ArticleInput, DemoCase } from '@/lib/types';
 import { DEMO_CASES } from '@/lib/demo-data';
 import {
-  Sparkles,
   Plus,
   Trash2,
-  BookOpen,
   ArrowRight,
   RotateCcw,
   Layers,
   FileText,
+  Globe,
+  Upload,
+  Link,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
 } from 'lucide-react';
 
 interface InputSectionProps {
@@ -23,6 +27,20 @@ interface InputSectionProps {
   activeDemoId?: string;
 }
 
+type InputMode = 'paste' | 'url' | 'file';
+
+interface IngestionState {
+  [articleId: string]: {
+    mode: InputMode;
+    urlInput: string;
+    loading: boolean;
+    error: string | null;
+    successMessage: string | null;
+    fileName: string | null;
+    wordCount: number;
+  };
+}
+
 export const InputSection: React.FC<InputSectionProps> = ({
   articles,
   setArticles,
@@ -32,14 +50,52 @@ export const InputSection: React.FC<InputSectionProps> = ({
   activeDemoId,
 }) => {
   const [activeTab, setActiveTab] = useState<'multi' | 'single'>('multi');
+  const [ingestionStates, setIngestionStates] = useState<IngestionState>({});
+  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+
+  const getArticleState = (id: string, text: string) => {
+    const existing = ingestionStates[id];
+    const calculatedWordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+    if (existing) {
+      return { ...existing, wordCount: calculatedWordCount };
+    }
+    return {
+      mode: 'paste' as InputMode,
+      urlInput: '',
+      loading: false,
+      error: null,
+      successMessage: null,
+      fileName: null,
+      wordCount: calculatedWordCount,
+    };
+  };
+
+  const updateArticleState = (id: string, partial: Partial<IngestionState[string]>) => {
+    setIngestionStates((prev) => ({
+      ...prev,
+      [id]: {
+        ...(prev[id] || {
+          mode: 'paste',
+          urlInput: '',
+          loading: false,
+          error: null,
+          successMessage: null,
+          fileName: null,
+          wordCount: 0,
+        }),
+        ...partial,
+      },
+    }));
+  };
 
   const handleAddArticle = () => {
     if (articles.length >= 3) return;
     const nextNum = articles.length + 1;
+    const newId = `custom-art-${Date.now()}-${nextNum}`;
     setArticles([
       ...articles,
       {
-        id: `custom-art-${Date.now()}-${nextNum}`,
+        id: newId,
         title: '',
         publisher: `Source ${String.fromCharCode(64 + nextNum)}`,
         text: '',
@@ -67,10 +123,136 @@ export const InputSection: React.FC<InputSectionProps> = ({
     if (tab === 'single' && articles.length > 1) {
       setArticles([articles[0]]);
     } else if (tab === 'multi' && articles.length === 1) {
-      // If switching back to multi, default to 3 demo articles from active or first demo
       const currentDemo =
         DEMO_CASES.find((d) => d.id === activeDemoId) || DEMO_CASES[0];
       setArticles(currentDemo.articles);
+    }
+  };
+
+  // URL Ingestion Handler
+  const handleFetchUrl = async (artId: string) => {
+    const state = getArticleState(artId, '');
+    const url = state.urlInput.trim();
+
+    if (!url) {
+      updateArticleState(artId, { error: 'Please enter a valid web URL.' });
+      return;
+    }
+
+    updateArticleState(artId, { loading: true, error: null, successMessage: null });
+
+    try {
+      const response = await fetch('/api/parse-source', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `Failed to fetch URL (${response.statusText})`);
+      }
+
+      setArticles((prev) =>
+        prev.map((a) =>
+          a.id === artId
+            ? {
+                ...a,
+                title: data.title || a.title || 'Extracted Web Article',
+                publisher: data.publisher || a.publisher || 'Web Source',
+                text: data.text,
+                url: data.source || url,
+              }
+            : a
+        )
+      );
+
+      const words = data.text ? data.text.trim().split(/\s+/).length : 0;
+      updateArticleState(artId, {
+        loading: false,
+        error: null,
+        successMessage: `Successfully extracted ${words} words from webpage.`,
+        wordCount: words,
+      });
+    } catch (err: any) {
+      updateArticleState(artId, {
+        loading: false,
+        error: err.message || 'Failed to ingest URL',
+        successMessage: null,
+      });
+    }
+  };
+
+  // File Upload Ingestion Handler
+  const handleFileUpload = async (artId: string, file: File) => {
+    if (!file) return;
+
+    const allowedExts = ['pdf', 'docx', 'txt', 'md'];
+    const ext = file.name.split('.').pop()?.toLowerCase() || '';
+
+    if (!allowedExts.includes(ext)) {
+      updateArticleState(artId, {
+        error: `Unsupported file extension .${ext}. Please provide .pdf, .docx, .txt, or .md.`,
+      });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      updateArticleState(artId, {
+        error: `File exceeds 5 MB limit (${(file.size / (1024 * 1024)).toFixed(2)} MB).`,
+      });
+      return;
+    }
+
+    updateArticleState(artId, {
+      loading: true,
+      error: null,
+      successMessage: null,
+      fileName: file.name,
+    });
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/parse-source', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `Failed to parse document (${response.statusText})`);
+      }
+
+      setArticles((prev) =>
+        prev.map((a) =>
+          a.id === artId
+            ? {
+                ...a,
+                title: data.title || file.name,
+                publisher: data.publisher || 'Document Upload',
+                text: data.text,
+              }
+            : a
+        )
+      );
+
+      const words = data.text ? data.text.trim().split(/\s+/).length : 0;
+      updateArticleState(artId, {
+        loading: false,
+        error: null,
+        successMessage: `Successfully parsed ${words} words from ${file.name}.`,
+        wordCount: words,
+      });
+    } catch (err: any) {
+      updateArticleState(artId, {
+        loading: false,
+        error: err.message || 'Failed to parse file document',
+        successMessage: null,
+      });
     }
   };
 
@@ -133,7 +315,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
 
       {/* Side-by-side Article Text Input Cards */}
       <div
-        className={`grid gap-4 ${
+        className={`grid gap-5 ${
           articles.length === 1
             ? 'grid-cols-1'
             : articles.length === 2
@@ -141,75 +323,234 @@ export const InputSection: React.FC<InputSectionProps> = ({
             : 'grid-cols-1 lg:grid-cols-3'
         }`}
       >
-        {articles.map((art, idx) => (
-          <div
-            key={art.id}
-            className="bg-[#F7F3EE] border border-[#D8CFC4] rounded p-4 flex flex-col justify-between space-y-3"
-          >
-            <div className="flex items-center justify-between border-b border-[#E2D9CE] pb-2">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-[#9E4A28]">
-                Perspective {idx + 1}
-              </span>
-              {articles.length > 1 && (
+        {articles.map((art, idx) => {
+          const state = getArticleState(art.id, art.text);
+          const wordCount = art.text.trim() ? art.text.trim().split(/\s+/).length : 0;
+
+          return (
+            <div
+              key={art.id}
+              className="bg-[#F7F3EE] border border-[#D8CFC4] rounded p-4 flex flex-col justify-between space-y-3 relative"
+            >
+              {/* Header with Perspective Index & Input Mode Selectors */}
+              <div className="flex items-center justify-between border-b border-[#E2D9CE] pb-2">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-[#9E4A28]">
+                  Perspective {idx + 1}
+                </span>
+
+                {articles.length > 1 && (
+                  <button
+                    onClick={() => handleRemoveArticle(art.id)}
+                    className="text-[#7C7167] hover:text-[#9E4A28] p-1 transition-colors"
+                    title="Remove this perspective"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Ingestion Mode Toggle Tabs */}
+              <div className="flex items-center gap-1 bg-[#EAE2D7] p-0.5 rounded text-[11px] font-medium text-[#5D544C]">
                 <button
-                  onClick={() => handleRemoveArticle(art.id)}
-                  className="text-[#7C7167] hover:text-[#9E4A28] p-1 transition-colors"
-                  title="Remove this perspective"
+                  type="button"
+                  onClick={() => updateArticleState(art.id, { mode: 'paste' })}
+                  className={`flex-1 py-1 px-2 rounded flex items-center justify-center gap-1 transition-all ${
+                    state.mode === 'paste'
+                      ? 'bg-[#FAF7F2] text-[#241E19] font-semibold shadow-xs'
+                      : 'hover:text-[#241E19]'
+                  }`}
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <FileText className="w-3 h-3 text-[#9E4A28]" />
+                  <span>Paste Text</span>
                 </button>
+                <button
+                  type="button"
+                  onClick={() => updateArticleState(art.id, { mode: 'url' })}
+                  className={`flex-1 py-1 px-2 rounded flex items-center justify-center gap-1 transition-all ${
+                    state.mode === 'url'
+                      ? 'bg-[#FAF7F2] text-[#241E19] font-semibold shadow-xs'
+                      : 'hover:text-[#241E19]'
+                  }`}
+                >
+                  <Globe className="w-3 h-3 text-[#9E4A28]" />
+                  <span>Import URL</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateArticleState(art.id, { mode: 'file' })}
+                  className={`flex-1 py-1 px-2 rounded flex items-center justify-center gap-1 transition-all ${
+                    state.mode === 'file'
+                      ? 'bg-[#FAF7F2] text-[#241E19] font-semibold shadow-xs'
+                      : 'hover:text-[#241E19]'
+                  }`}
+                >
+                  <Upload className="w-3 h-3 text-[#9E4A28]" />
+                  <span>Upload File</span>
+                </button>
+              </div>
+
+              {/* Mode-Specific Ingestion Input */}
+              {state.mode === 'url' && (
+                <div className="bg-[#FAF7F2] border border-[#D8CFC4] rounded p-2.5 space-y-2">
+                  <label className="text-[10px] uppercase font-semibold text-[#7C7167] block">
+                    Scrape News Webpage
+                  </label>
+                  <div className="flex gap-1.5">
+                    <div className="relative flex-1">
+                      <Link className="w-3.5 h-3.5 text-[#7C7167] absolute left-2.5 top-2.5" />
+                      <input
+                        type="url"
+                        value={state.urlInput}
+                        onChange={(e) =>
+                          updateArticleState(art.id, { urlInput: e.target.value })
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleFetchUrl(art.id);
+                          }
+                        }}
+                        placeholder="https://example.com/news-story"
+                        className="w-full bg-white border border-[#D8CFC4] rounded pl-8 pr-2 py-1.5 text-xs text-[#241E19] focus:outline-none focus:border-[#9E4A28]"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      disabled={state.loading}
+                      onClick={() => handleFetchUrl(art.id)}
+                      className="bg-[#241E19] hover:bg-[#3D352E] disabled:opacity-50 text-[#FAF7F2] px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1 transition-colors shrink-0"
+                    >
+                      {state.loading ? (
+                        <>
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                          <span>Fetching...</span>
+                        </>
+                      ) : (
+                        <span>Fetch</span>
+                      )}
+                    </button>
+                  </div>
+                </div>
               )}
-            </div>
 
-            {/* Publisher Name Input */}
-            <div>
-              <label className="text-[10px] uppercase font-semibold text-[#7C7167] block mb-1">
-                Publisher / Source Name
-              </label>
-              <input
-                type="text"
-                value={art.publisher}
-                onChange={(e) =>
-                  handleUpdateArticle(art.id, 'publisher', e.target.value)
-                }
-                placeholder="e.g., The Daily Chronicle"
-                className="w-full bg-[#FAF7F2] border border-[#D8CFC4] rounded px-2.5 py-1.5 text-xs text-[#241E19] focus:outline-none focus:border-[#9E4A28]"
-              />
-            </div>
+              {state.mode === 'file' && (
+                <div className="bg-[#FAF7F2] border border-[#D8CFC4] rounded p-3 space-y-2">
+                  <label className="text-[10px] uppercase font-semibold text-[#7C7167] block">
+                    Upload Document (.pdf, .docx, .txt, .md)
+                  </label>
+                  <input
+                    type="file"
+                    ref={(el) => {
+                      fileInputRefs.current[art.id] = el;
+                    }}
+                    accept=".pdf,.docx,.txt,.md,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload(art.id, file);
+                    }}
+                    className="hidden"
+                  />
+                  <div
+                    onClick={() => fileInputRefs.current[art.id]?.click()}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      const file = e.dataTransfer.files?.[0];
+                      if (file) handleFileUpload(art.id, file);
+                    }}
+                    className="border-2 border-dashed border-[#D8CFC4] hover:border-[#9E4A28] rounded p-4 text-center cursor-pointer bg-white transition-colors flex flex-col items-center justify-center gap-1.5"
+                  >
+                    {state.loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 text-[#9E4A28] animate-spin" />
+                        <span className="text-xs font-medium text-[#241E19]">
+                          Extracting document text...
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-5 h-5 text-[#7C7167]" />
+                        <span className="text-xs font-medium text-[#241E19]">
+                          Click to select or drag & drop file
+                        </span>
+                        <span className="text-[10px] text-[#7C7167]">
+                          PDF, DOCX, TXT, or MD up to 5 MB
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
 
-            {/* Article Headline Input */}
-            <div>
-              <label className="text-[10px] uppercase font-semibold text-[#7C7167] block mb-1">
-                Headline / Title
-              </label>
-              <input
-                type="text"
-                value={art.title}
-                onChange={(e) =>
-                  handleUpdateArticle(art.id, 'title', e.target.value)
-                }
-                placeholder="e.g., Space Agency Achieves Historic Feat"
-                className="w-full bg-[#FAF7F2] border border-[#D8CFC4] rounded px-2.5 py-1.5 text-xs font-serif text-[#241E19] focus:outline-none focus:border-[#9E4A28]"
-              />
-            </div>
+              {/* Status Feedback Banners */}
+              {state.error && (
+                <div className="bg-red-50 border border-red-200 text-red-800 text-[11px] p-2 rounded flex items-start gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-red-600" />
+                  <span>{state.error}</span>
+                </div>
+              )}
+              {state.successMessage && (
+                <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] p-2 rounded flex items-start gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5 text-emerald-600" />
+                  <span>{state.successMessage}</span>
+                </div>
+              )}
 
-            {/* Article Body Text Input */}
-            <div className="flex-1 flex flex-col">
-              <label className="text-[10px] uppercase font-semibold text-[#7C7167] block mb-1">
-                Article Body Text (Raw Text for PRISM Decomposition)
-              </label>
-              <textarea
-                rows={6}
-                value={art.text}
-                onChange={(e) =>
-                  handleUpdateArticle(art.id, 'text', e.target.value)
-                }
-                placeholder="Paste the verbatim article text here..."
-                className="w-full flex-1 bg-[#FAF7F2] border border-[#D8CFC4] rounded p-2.5 text-xs font-serif leading-relaxed text-[#241E19] focus:outline-none focus:border-[#9E4A28] resize-y"
-              />
+              {/* Publisher Name Input */}
+              <div>
+                <label className="text-[10px] uppercase font-semibold text-[#7C7167] block mb-1">
+                  Publisher / Source Name
+                </label>
+                <input
+                  type="text"
+                  value={art.publisher}
+                  onChange={(e) =>
+                    handleUpdateArticle(art.id, 'publisher', e.target.value)
+                  }
+                  placeholder="e.g., The Daily Chronicle"
+                  className="w-full bg-[#FAF7F2] border border-[#D8CFC4] rounded px-2.5 py-1.5 text-xs text-[#241E19] focus:outline-none focus:border-[#9E4A28]"
+                />
+              </div>
+
+              {/* Article Headline Input */}
+              <div>
+                <label className="text-[10px] uppercase font-semibold text-[#7C7167] block mb-1">
+                  Headline / Title
+                </label>
+                <input
+                  type="text"
+                  value={art.title}
+                  onChange={(e) =>
+                    handleUpdateArticle(art.id, 'title', e.target.value)
+                  }
+                  placeholder="e.g., Space Agency Achieves Historic Feat"
+                  className="w-full bg-[#FAF7F2] border border-[#D8CFC4] rounded px-2.5 py-1.5 text-xs font-serif text-[#241E19] focus:outline-none focus:border-[#9E4A28]"
+                />
+              </div>
+
+              {/* Article Body Text & Ingestion Preview */}
+              <div className="flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[10px] uppercase font-semibold text-[#7C7167]">
+                    Article Body (Decomposition Source)
+                  </label>
+                  <span className="text-[10px] font-mono text-[#7C7167] bg-[#EAE2D7] px-1.5 py-0.5 rounded">
+                    {wordCount} {wordCount === 1 ? 'word' : 'words'}
+                  </span>
+                </div>
+                <textarea
+                  rows={6}
+                  value={art.text}
+                  onChange={(e) =>
+                    handleUpdateArticle(art.id, 'text', e.target.value)
+                  }
+                  placeholder="Paste verbatim text, or import above via live URL or document upload..."
+                  className="w-full flex-1 bg-[#FAF7F2] border border-[#D8CFC4] rounded p-2.5 text-xs font-serif leading-relaxed text-[#241E19] focus:outline-none focus:border-[#9E4A28] resize-y"
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Bottom Action Controls */}

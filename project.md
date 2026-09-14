@@ -87,3 +87,11 @@ Generate a complete, functioning project structure:
 - `components/` for ArticleViewer, HighlightSpan, InspectionDrawer, and ComparisonMatrix.
 
 Ensure zero TypeScript errors, clean modular components, and an immediate working build on `npm run dev`.
+
+---
+
+## 5. STANDING INSTRUCTIONS FOR CODING AGENTS (PRISM OBSERVABILITY)
+- **PRISM Observability Connection**: Maintain PRISM observability configuration in environment variables (`PRISMTRACE_HOST`, `PRISMTRACE_PROJECT_ID`, `PRISMTRACE_ORG_ID`, `PRISMTRACE_API_KEY`).
+- **Secret Safety**: Secrets belong strictly in `.env` (untracked). Update `.env.example` with variable names only.
+- **Trace & Telemetry Guardrail**: Always run `/api/setup-doctor` to verify PRISM trace connection prior to performing agent operations or reporting telemetry status.
+- **Cost Awareness**: Always check credit balances before executing paid AI endpoints, announce credit costs before spending user credits, and get explicit user approval.

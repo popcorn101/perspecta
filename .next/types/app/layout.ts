@@ -1,4 +1,4 @@
-// File: C:\Users\Aromal\Desktop\perspecta\app\layout.tsx
+// File: C:\Users\Aromal\Documents\perspecta\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
