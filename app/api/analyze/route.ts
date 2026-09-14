@@ -54,6 +54,7 @@ ${JSON.stringify(articles, null, 2)}
         const completion = await groq.chat.completions.create({
           model: modelName,
           temperature: 0.2,
+          max_tokens: 2500, // Token budget limit to prevent quota exhaustion
           response_format: { type: 'json_object' },
           messages: [
             { role: 'system', content: PRISM_SYSTEM_PROMPT },
