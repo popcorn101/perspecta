@@ -42,80 +42,41 @@ export async function POST(req: NextRequest) {
     if (groqApiKey && !groqApiKey.includes('gsk_...')) {
       try {
         const groq = new Groq({ apiKey: groqApiKey });
-        let modelName = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
+        // Priority candidate models: llama-3.3-70b-versatile first, cascading to llama-3.1-8b-instant
+        const requestedModel = process.env.GROQ_MODEL?.trim() || 'llama-3.3-70b-versatile';
+        const candidateModels = Array.from(
+          new Set([
+            requestedModel,
+            'llama-3.3-70b-versatile',
+            'llama-3.1-8b-instant',
+            'meta-llama/llama-guard-3-8b',
+          ])
+        );
 
-        const promptContent = `Analyze the following ${articles.length} article(s) using the PRISM news framing methodology.
+        // Optimize prompt token size: truncate article text if too long to stay strictly within TPM limits
+        const tokenConstrainedArticles = articles.map((art) => ({
+          ...art,
+          text: art.text.length > 4500 ? `${art.text.slice(0, 4500)}...` : art.text,
+        }));
+
+        const promptContent = `Analyze the following ${tokenConstrainedArticles.length} article(s) using the PRISM news framing methodology.
 Decompose each article into framing signals.
 CRITICAL EVIDENCE RULE: Every single 'quoted_text' MUST be an exact, case-sensitive verbatim substring copied directly from the target article's text. Do not summarize, paraphrase, or truncate words.
 
 Articles to analyze:
-${JSON.stringify(articles, null, 2)}
+${JSON.stringify(tokenConstrainedArticles, null, 2)}
 `;
 
-        let completion;
-        try {
-          completion = await groq.chat.completions.create({
-            model: modelName,
-            temperature: 0.2,
-            max_tokens: 2500, // Token budget limit to prevent quota exhaustion
-            response_format: { type: 'json_object' },
-            messages: [
-              { role: 'system', content: PRISM_SYSTEM_PROMPT },
-              {
-                role: 'user',
-                content: `${promptContent}
+        let completion = null;
+        let modelName = requestedModel;
 
-Respond strictly with valid JSON conforming to this schema:
-{
-  "articles": [
-    {
-      "article_id": "string",
-      "title": "string",
-      "publisher": "string",
-      "primary_framing": "string",
-      "dominant_tone": "string",
-      "highlighted_actors": ["string"],
-      "omitted_perspectives": ["string"],
-      "signals": [
-        {
-          "quoted_text": "string (EXACT verbatim excerpt from source text)",
-          "category": "attribution" | "evaluative" | "certainty" | "claims" | "primacy" | "omission" | "emotional",
-          "explanation": "string",
-          "confidence": number,
-          "framing_effect": "string",
-          "alternative_phrasing": "string"
-        }
-      ]
-    }
-  ],
-  "comparative_findings": [
-    {
-      "category": "string",
-      "title": "string",
-      "description": "string",
-      "contrast_table": [
-        { "publisher": "string", "approach": "string" }
-      ]
-    }
-  ],
-  "summary": "string"
-}`,
-              },
-            ],
-          });
-        } catch (initialModelErr: any) {
-          // If model doesn't exist or is unavailable on this key, fallback immediately to llama-3.1-8b-instant
-          if (
-            initialModelErr?.status === 404 ||
-            initialModelErr?.message?.includes('model_not_found') ||
-            initialModelErr?.error?.error?.code === 'model_not_found'
-          ) {
-            console.warn(`Model ${modelName} not available. Automatically falling back to llama-3.1-8b-instant.`);
-            modelName = 'llama-3.1-8b-instant';
+        // Try candidate models sequentially (handles 404 model not found and 429 rate limits gracefully)
+        for (const candidate of candidateModels) {
+          try {
             completion = await groq.chat.completions.create({
-              model: modelName,
+              model: candidate,
               temperature: 0.2,
-              max_tokens: 2000,
+              max_tokens: 2200,
               response_format: { type: 'json_object' },
               messages: [
                 { role: 'system', content: PRISM_SYSTEM_PROMPT },
@@ -161,12 +122,22 @@ Respond strictly with valid JSON conforming to this schema:
                 },
               ],
             });
-          } else {
-            throw initialModelErr;
+
+            if (completion?.choices?.[0]?.message?.content) {
+              modelName = candidate;
+              break;
+            }
+          } catch (modelErr: any) {
+            const isRateLimit = modelErr?.status === 429 || modelErr?.message?.includes('Rate limit') || modelErr?.error?.error?.code === 'rate_limit_exceeded';
+            const isNotFound = modelErr?.status === 404 || modelErr?.message?.includes('model_not_found');
+            console.warn(
+              `Model ${candidate} encountered ${isRateLimit ? '429 Rate Limit' : isNotFound ? '404 Not Found' : 'error'}. Attempting next fallback model in cascade...`
+            );
+            // Continue loop to next candidate
           }
         }
 
-        const rawJsonString = completion.choices[0]?.message?.content;
+        const rawJsonString = completion?.choices?.[0]?.message?.content;
         if (rawJsonString) {
           const parsedContent = JSON.parse(rawJsonString);
 
