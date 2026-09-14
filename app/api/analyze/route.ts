@@ -12,6 +12,7 @@ import {
   generateComparativeFindings,
 } from '@/lib/mock-engine';
 import { persistAnalysisRun } from '@/lib/supabase';
+import { sendPrismTrace } from '@/lib/prism-tracer';
 
 export const runtime = 'nodejs';
 
@@ -150,7 +151,7 @@ Respond strictly with valid JSON conforming to this schema:
 
           const latencyMs = Date.now() - startTime;
 
-          // Asynchronously persist to Supabase for historical evaluation traces
+          // Asynchronously persist to Supabase and PRISM Observability
           for (let i = 0; i < articles.length; i++) {
             const originalArt = articles[i];
             const matchingAnalysis = verifiedArticles.find((va) => va.article_id === originalArt.id);
@@ -161,6 +162,17 @@ Respond strictly with valid JSON conforming to this schema:
                 model: modelName,
                 latencyMs,
               }).catch((e) => console.warn('Background Supabase persistence error:', e));
+
+              sendPrismTrace({
+                model: modelName,
+                articleTitle: originalArt.title || 'Untitled Article',
+                publisher: originalArt.publisher || 'Unknown Publisher',
+                inputText: originalArt.text,
+                outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
+                latencyMs,
+                signalsCount: matchingAnalysis.signals.length,
+                verifiedCount: matchingAnalysis.signals.length,
+              }).catch((e) => console.warn('Background PRISM trace error:', e));
             }
           }
 
@@ -207,6 +219,17 @@ Respond strictly with valid JSON conforming to this schema:
           model: 'prism-heuristic-engine-v4',
           latencyMs,
         }).catch((e) => console.warn('Background Supabase persistence error:', e));
+
+        sendPrismTrace({
+          model: 'prism-heuristic-engine-v4',
+          articleTitle: originalArt.title || 'Untitled Article',
+          publisher: originalArt.publisher || 'Unknown Publisher',
+          inputText: originalArt.text,
+          outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
+          latencyMs,
+          signalsCount: matchingAnalysis.signals.length,
+          verifiedCount: matchingAnalysis.signals.length,
+        }).catch((e) => console.warn('Background PRISM trace error:', e));
       }
     }
 
