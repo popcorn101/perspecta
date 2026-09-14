@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html lang="en" style=""><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "on-error-container": "#93000a",
+        "on-secondary-container": "#6d6359",
+        "background": "#F7F3EE",
+        "surface-container-high": "#EFE8DF",
+        "on-error": "#ffffff",
+        "on-primary-fixed": "#380d00",
+        "secondary": "#675d53",
+        "on-primary-fixed-variant": "#7a2f0f",
+        "primary-container": "#9e4a28",
+        "on-surface-variant": "#5D544C",
+        "on-background": "#241E19",
+        "on-secondary-fixed": "#211a13",
+        "secondary-fixed": "#efe0d4",
+        "tertiary-fixed-dim": "#9fd2b8",
+        "on-primary-container": "#ffd6c9",
+        "outline-variant": "#E2D9CE",
+        "on-secondary-fixed-variant": "#4e453c",
+        "on-tertiary-fixed-variant": "#1e4f3c",
+        "primary-fixed-dim": "#ffb59a",
+        "on-primary": "#ffffff",
+        "on-tertiary": "#ffffff",
+        "surface-bright": "#FAF7F2",
+        "surface-variant": "#EFE8DF",
+        "primary-fixed": "#ffdbcf",
+        "tertiary-container": "#3c6c57",
+        "error": "#ba1a1a",
+        "surface-container-lowest": "#FAF7F2",
+        "inverse-primary": "#ffb59a",
+        "inverse-surface": "#241E19",
+        "on-secondary": "#ffffff",
+        "inverse-on-surface": "#F7F3EE",
+        "secondary-fixed-dim": "#d2c4b8",
+        "on-tertiary-fixed": "#002115",
+        "primary": "#8C4A27",
+        "error-container": "#ffdad6",
+        "surface-dim": "#E7DFD4",
+        "tertiary-fixed": "#baeed3",
+        "on-tertiary-container": "#b7ebd0",
+        "surface-tint": "#8C4A27",
+        "surface-container-highest": "#E7DFD4",
+        "outline": "#D8CFC4",
+        "tertiary": "#235440",
+        "on-surface": "#241E19",
+        "surface-container": "#F2EBE1",
+        "secondary-container": "#EAE2D7",
+        "surface-container-low": "#FAF7F2",
+        "surface": "#F7F3EE"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.5rem",
+        "xl": "0.75rem",
+        "full": "9999px"
+      },
+      "spacing": {
+        "space-md": "1rem",
+        "space-xs": "0.25rem",
+        "space-sm": "0.5rem",
+        "gutter": "1.5rem",
+        "margin": "2rem",
+        "space-lg": "1.5rem",
+        "space-xl": "2.5rem"
+      },
+      "fontFamily": {
+        "headline-lg": ["Newsreader", "serif"],
+        "ui-body": ["Hanken Grotesk", "sans-serif"],
+        "body-default": ["Newsreader", "serif"],
+        "display-lg": ["Newsreader", "serif"],
+        "ui-medium": ["Hanken Grotesk", "sans-serif"],
+        "headline-sm": ["Newsreader", "serif"],
+        "data-mono": ["Hanken Grotesk", "sans-serif"],
+        "headline-xl": ["Newsreader", "serif"],
+        "display-lg-mobile": ["Newsreader", "serif"],
+        "body-editorial": ["Newsreader", "serif"],
+        "headline-xl-mobile": ["Newsreader", "serif"],
+        "label-prominent": ["Hanken Grotesk", "sans-serif"],
+        "label-micro": ["Hanken Grotesk", "sans-serif"]
+      },
+      "fontSize": {
+        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+        "ui-body": ["14px", {"lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+        "body-default": ["16px", {"lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400"}],
+        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+        "ui-medium": ["14px", {"lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "500"}],
+        "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "500"}],
+        "data-mono": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+        "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+        "body-editorial": ["18px", {"lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "400"}],
+        "headline-xl-mobile": ["26px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+        "label-prominent": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+        "label-micro": ["11px", {"lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600"}]
+      }
+    }
+  }
+}</script></head><body class="bg-[#F7F3EE] font-ui-body text-ui-body text-[#241E19] antialiased"><header class="fixed top-0 w-full z-50 bg-[#F7F3EE]/90 backdrop-blur-md border-b border-[#D8CFC4]/70 shadow-[0_1px_6px_rgba(36,30,25,0.03)]"><div class="h-16 w-full px-margin flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md shrink-0"><img alt="PERSPECTA Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UinaB6Zs31S1tnWh5uAau38-w7e5XvomfoOztVIZYJs6KPCjk3SQQIvQ3Cjs1nerIXmkk3JHXxUocVTi7xTP41kPR5Lz7peg0ei9p7ojkkmruukXKLu5P8lKxBz4X4KaaSOuouQEprwakgWDC79DgKRQtU_Q0VqaWBRdOKk0ZJQmWCFH2ni5dmk4FODsX4yIM9GuiYo39ygkSJbav1KV6oAfc0tbKu7K34ycMlVm3696JLKEiyqWPxnjag"/><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm tracking-tight text-[#241E19]">PERSPECTA</span><span class="px-2 py-0.5 rounded-full bg-[#EFE8DF] border border-[#D8CFC4] text-[#5D544C] font-label-micro text-label-micro uppercase tracking-wider ml-1">Perspective Intelligence</span></div></div><nav class="hidden lg:flex items-center gap-1 bg-[#EAE2D7]/80 p-1 rounded-full border border-[#D8CFC4]/70" data-active-classes="bg-[#FAF7F2] text-[#241E19] font-ui-medium shadow-sm"><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="analyze" href="#">Analyze</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="compare" href="#">Compare</a><a aria-current="page" class="px-4 py-1.5 rounded-full transition-colors bg-[#FAF7F2] text-[#241E19] font-ui-medium shadow-sm" data-path="prism-framework" href="#">Framework</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="how-it-works" href="#">How It Works</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="relative hidden xl:block"><button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF7F2] border border-[#D8CFC4] font-ui-medium text-ui-medium text-[#241E19] hover:bg-[#EFE8DF] hover:text-[#241E19] transition-colors shadow-sm" type="button"><span class="font-label-micro text-label-micro uppercase text-[#5D544C]">Sample:</span><span class="">Climate Accord 2025</span><span class="material-symbols-outlined text-[16px] text-[#5D544C]">expand_more</span></button></div><a class="hidden md:inline-block font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="about-model" href="#" title="Analytical architecture transparency notes">About the Model</a><button class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#241E19] text-[#FAF7F2] hover:bg-[#3D342C] font-ui-medium text-ui-medium transition-colors shadow-[0_1px_3px_rgba(36,30,25,0.12)]" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span class="">New Analysis</span></button><div class="w-8 h-8 rounded-full bg-[#8C4A27] flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-white text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-[#F7F3EE] min-h-screen"><div class="flex flex-col w-full">
+<!-- Subtle Ambient Glow Canvas in Sandstone / Ochre -->
+<div class="relative w-full px-margin pb-space-xl overflow-hidden">
+<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[1000px] h-[480px] bg-gradient-to-b from-[#E7DFD4]/50 via-[#EAE2D7]/30 to-transparent blur-3xl pointer-events-none -z-10"></div>
+<!-- Editorial Header Block -->
+<div class="max-w-4xl mx-auto text-center pt-space-lg pb-space-xl">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded-full bg-[#EFE8DF] border border-[#D8CFC4] text-[#5D544C] font-label-micro text-label-micro uppercase tracking-widest mb-space-md shadow-sm"><span class="w-1.5 h-1.5 rounded-full bg-[#8C4A27] animate-pulse"></span> Epistemic Architecture • Comprehensive Analysis Architecture</div>
+<h1 class="font-display-lg text-display-lg text-[#241E19] tracking-tight mb-space-sm">The PERSPECTA Framework</h1>
+<p class="font-body-editorial text-body-editorial text-[#5D544C] max-w-2xl mx-auto leading-relaxed">A unified epistemic framework explaining how PERSPECTA deconstructs every layer of modern journalism — from empirical assertions and lexical framing to emotional valence and omitted context.</p>
+</div>
+<!-- HERO INTERACTIVE PRISM APPARATUS -->
+<!-- INTERACTIVE LAB SANDBOX SECTION -->
+<div class="max-w-6xl mx-auto mt-space-xl">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-md">
+<div>
+<span class="font-label-micro text-label-micro uppercase tracking-widest text-[#8C4A27] font-bold">Hands-on Epistemic Loupe • PERSPECTA Framework Lab</span>
+<h2 class="font-headline-lg text-headline-lg text-[#241E19]">Interactive Layer Deconstruction Sandbox</h2>
+<p class="font-ui-body text-ui-body text-[#5D544C] mt-1">
+            Toggle optical filters to isolate raw telemetry or witness how rhetorical dressing shapes sentiment.
+          </p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-3 py-1.5 rounded-lg bg-[#FAF7F2] border border-[#D8CFC4] font-ui-medium text-ui-medium text-[#241E19] hover:bg-[#EFE8DF] transition-colors shadow-sm flex items-center gap-1" id="reset-filters" type="button">
+<span class="material-symbols-outlined text-[16px] text-[#5D544C]">restart_alt</span>
+<span class="">Reset Filters</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-[#241E19] text-[#FAF7F2] font-ui-medium text-ui-medium hover:bg-[#3D342C] transition-colors shadow-sm flex items-center gap-1" id="isolate-facts" type="button">
+<span class="material-symbols-outlined text-[16px]">filter_alt</span>
+<span class="">Isolate Empirical Facts Only</span>
+</button>
+</div>
+</div>
+<!-- Controls & Workbench Card -->
+<div class="bg-[#FAF7F2] border border-[#E2D9CE] rounded-xl p-space-lg shadow-[0_2px_18px_rgba(36,30,25,0.04)] flex flex-col gap-space-lg">
+<!-- Filter Toggle Pills -->
+<div class="flex flex-wrap items-center gap-space-sm p-space-sm bg-[#EFE8DF] rounded-lg border border-[#D8CFC4]/80">
+<span class="font-label-micro text-label-micro uppercase tracking-wider text-[#5D544C] font-semibold px-2">Active Spectrum Lenses:</span>
+<!-- Toggle Facts (Sage Green) -->
+<button class="layer-toggle px-3 py-1.5 rounded-full font-label-prominent text-label-prominent flex items-center gap-2 bg-[#426E54]/15 border border-[#426E54]/30 text-[#2C523C] shadow-sm transition-all" data-layer="facts" type="button">
+<span class="w-2 h-2 rounded-full bg-[#426E54]"></span>
+<span class="">Facts</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+<!-- Toggle Opinions (Warm Amber) -->
+<button class="layer-toggle px-3 py-1.5 rounded-full font-label-prominent text-label-prominent flex items-center gap-2 bg-[#C27803]/15 border border-[#C27803]/30 text-[#925500] shadow-sm transition-all" data-layer="opinion" type="button">
+<span class="w-2 h-2 rounded-full bg-[#C27803]"></span>
+<span class="">Opinions</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+<!-- Toggle Framing (Warm Slate / Deep Ochre) -->
+<button class="layer-toggle px-3 py-1.5 rounded-full font-label-prominent text-label-prominent flex items-center gap-2 bg-[#6E5544]/15 border border-[#6E5544]/30 text-[#543E30] shadow-sm transition-all" data-layer="framing" type="button">
+<span class="w-2 h-2 rounded-full bg-[#6E5544]"></span>
+<span class="">Framing</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+<!-- Toggle Emotion (Terracotta) -->
+<button class="layer-toggle px-3 py-1.5 rounded-full font-label-prominent text-label-prominent flex items-center gap-2 bg-[#B84E34]/15 border border-[#B84E34]/30 text-[#8E341D] shadow-sm transition-all" data-layer="emotion" type="button">
+<span class="w-2 h-2 rounded-full bg-[#B84E34]"></span>
+<span class="">Emotion</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+<!-- Toggle Context (Muted Plum / Indigo Earth) -->
+<button class="layer-toggle px-3 py-1.5 rounded-full font-label-prominent text-label-prominent flex items-center gap-2 bg-[#605678]/15 border border-[#605678]/30 text-[#473E5B] shadow-sm transition-all" data-layer="context" type="button">
+<span class="w-2 h-2 rounded-full bg-[#605678]"></span>
+<span class="">Omission Notes</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+</div>
+<!-- Sample Article Reading Stream with Highlight Injectors -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Text Body Container (8 cols) -->
+<div class="lg:col-span-8 space-y-space-md">
+<div class="flex items-center justify-between text-[#5D544C] font-data-mono text-data-mono pb-space-xs bg-[#EFE8DF] px-space-sm py-1 rounded border border-[#E2D9CE]">
+<span class="">Source: Global Energy Sentinel Dispatch • Published Oct 14, 2025</span>
+<span class="">Deconstruction Confidence: 99.4%</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-[#241E19] leading-tight">
+              Ministers Conclude Heated Summit With Historic Carbon Accord
+            </h3>
+<!-- Parsed Longform Editorial Flow -->
+<div class="font-body-editorial text-body-editorial text-[#241E19] space-y-space-md leading-relaxed">
+<p class="">
+                In what diplomatic aides labeled a 
+                <span class="px-1 py-0.5 rounded bg-[#C27803]/15 text-[#925500] border-b border-[#C27803]/30 transition-opacity" data-token="opinion">“monumental, generational victory,”</span>
+                representatives from 
+                <span class="px-1 py-0.5 rounded bg-[#426E54]/15 text-[#2C523C] font-medium border-b border-[#426E54]/30 transition-opacity" data-token="facts">42 member delegations approved a 15% reduction target by 2030</span>, 
+                yielding to intense public demonstrations that had 
+                <span class="px-1 py-0.5 rounded bg-[#B84E34]/15 text-[#8E341D] italic border-b border-[#B84E34]/30 transition-opacity" data-token="emotion">paralyzed the capital with panic and outrage</span>.
+              </p>
+<p class="">
+                Rather than framing the compromise as a shared covenant, dissenters argued that the administration was 
+                <span class="px-1 py-0.5 rounded bg-[#6E5544]/15 text-[#543E30] border-b border-[#6E5544]/30 transition-opacity" data-token="framing">“recklessly caving to fringe agitators at the expense of sovereign energy security,”</span>
+                even as official audits confirmed the treaty commits 
+                <span class="px-1 py-0.5 rounded bg-[#426E54]/15 text-[#2C523C] font-medium border-b border-[#426E54]/30 transition-opacity" data-token="facts">$14.2 billion in sovereign credit guarantees</span>.
+              </p>
+<p class="">
+                Market observers warned of a 
+                <span class="px-1 py-0.5 rounded bg-[#B84E34]/15 text-[#8E341D] italic border-b border-[#B84E34]/30 transition-opacity" data-token="emotion">“catastrophic industrial shockwave”</span>
+                that would strangle domestic manufacturing. However, independent econometric models indicate the net fiscal drag will remain beneath 
+                <span class="px-1 py-0.5 rounded bg-[#426E54]/15 text-[#2C523C] font-medium border-b border-[#426E54]/30 transition-opacity" data-token="facts">0.18% of GDP annually across the first quadrennium</span>.
+              </p>
+<!-- Injected Contextual Annotation Box -->
+<div class="p-space-md rounded-lg bg-[#EFE8DF] border border-[#D8CFC4] shadow-sm flex items-start gap-space-sm transition-opacity" data-token="context">
+<span class="material-symbols-outlined text-[#605678] shrink-0 mt-0.5">info</span>
+<div>
+<span class="font-label-prominent text-label-prominent uppercase tracking-wider text-[#473E5B] block mb-1">
+                    Systemic Omission Detected (Layer 5)
+                  </span>
+<p class="font-ui-body text-ui-body text-[#5D544C]">
+                    This reporting entirely omits that the 15% target adopts the identical statutory language passed in the 2021 Bipartisan Energy Infrastructure baseline, which was already enacted into federal statute four years earlier.
+                  </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Real-Time Dynamic Telemetry Inspector (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<div class="bg-[#EFE8DF] border border-[#D8CFC4] rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-prominent text-label-prominent uppercase text-[#241E19] font-semibold">Reader Perception Matrix</span>
+<span class="material-symbols-outlined text-[#8C4A27] text-[18px]">psychology</span>
+</div>
+<!-- Dial Visualizations -->
+<div class="space-y-space-sm">
+<div>
+<div class="flex justify-between font-label-micro text-label-micro uppercase mb-1">
+<span class="text-[#5D544C]">Empirical Density</span>
+<span class="font-data-mono text-[#2C523C] font-bold" id="metric-facts">High (38%)</span>
+</div>
+<div class="w-full h-1.5 bg-[#E2D9CE] rounded-full overflow-hidden">
+<div class="h-full bg-[#426E54] transition-all duration-300" id="bar-facts" style="width: 78%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-micro text-label-micro uppercase mb-1">
+<span class="text-[#5D544C]">Emotional Agitation Index</span>
+<span class="font-data-mono text-[#8E341D] font-bold" id="metric-emotion">Elevated (64/100)</span>
+</div>
+<div class="w-full h-1.5 bg-[#E2D9CE] rounded-full overflow-hidden">
+<div class="h-full bg-[#B84E34] transition-all duration-300" id="bar-emotion" style="width: 64%;"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-micro text-label-micro uppercase mb-1">
+<span class="text-[#5D544C]">Cognitive Bias Priming</span>
+<span class="font-data-mono text-[#543E30] font-bold" id="metric-framing">Adversarial Frame</span>
+</div>
+<div class="w-full h-1.5 bg-[#E2D9CE] rounded-full overflow-hidden">
+<div class="h-full bg-[#6E5544] transition-all duration-300" id="bar-framing" style="width: 55%;"></div>
+</div>
+</div>
+</div>
+<!-- Contextual Insight Chip -->
+<div class="mt-space-md p-2.5 rounded bg-[#FAF7F2] border border-[#E2D9CE] font-ui-body text-ui-body text-[#5D544C] flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#8C4A27]">speed</span>
+<span class="">Active Reading Mode: <strong>Synchronous Decomposition</strong></span>
+</div>
+</div>
+<!-- Analytical Methodology Card -->
+<div class="bg-[#EFE8DF] border border-[#D8CFC4] rounded-xl p-space-md shadow-sm">
+<span class="font-label-micro text-label-micro uppercase text-[#5D544C] tracking-wider block mb-1">Neural Model Diagnostics</span>
+<p class="font-data-mono text-data-mono text-[#5D544C] mb-space-sm leading-relaxed">
+                Token Weights: 1,482 embeddings analyzed via Optical Decomposition Engine v4.2. Latency: 42ms.
+              </p>
+<div class="flex items-center gap-2 font-data-mono text-data-mono text-[#675d53]">
+<span class="w-2 h-2 rounded-full bg-[#426E54]"></span>
+<span class="">Self-Reflective Validation Active</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ETHICAL MANIFESTO & PHILOSOPHICAL FOUNDATION -->
+<div class="max-w-6xl mx-auto mt-space-xl">
+<div class="bg-[#EFE8DF] border border-[#D8CFC4] rounded-xl p-space-lg shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg">
+<div class="max-w-3xl">
+<div class="flex items-center gap-space-xs mb-space-xs">
+<span class="material-symbols-outlined text-[#8C4A27] text-[22px]">balance</span>
+<span class="font-label-prominent text-label-prominent uppercase tracking-wider text-[#8C4A27]">PERSPECTA Epistemic Rigor Charter</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-[#241E19] mb-space-xs">
+            Why Multi-Layer Analysis Matters Over Simplistic “Truth Scores”
+          </h3>
+<p class="font-body-editorial text-body-editorial text-[#5D544C] italic">
+            Binary “true vs false” fact-checking fundamentally fails modern civic discourse. A news story can be constructed exclusively of verified, 100% factual statements—yet still profoundly mislead through selective omissions, visceral adjectives, and adversarial psychological framing. True literacy requires decomposing the entire linguistic spectrum.
+          </p>
+</div>
+<div class="shrink-0 flex flex-col items-start gap-space-xs">
+<a class="px-5 py-2.5 rounded-full bg-[#8C4A27] text-[#FAF7F2] font-ui-medium text-ui-medium hover:bg-[#72391C] transition-all shadow-sm flex items-center gap-2" href="#">
+<span class="">Read Academic Whitepaper</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+<span class="font-data-mono text-data-mono text-[#5D544C] px-1">DOI: 10.1038/s41586-025-perspecta</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Sandbox Script -->
+<script>
+    (function() {
+      const toggles = document.querySelectorAll('.layer-toggle');
+      const resetBtn = document.getElementById('reset-filters');
+      const isolateFactsBtn = document.getElementById('isolate-facts');
+      
+      const layerStates = {
+        facts: true,
+        opinion: true,
+        framing: true,
+        emotion: true,
+        context: true
+      };
+
+      function updateTokens() {
+        Object.keys(layerStates).forEach(layer => {
+          const elements = document.querySelectorAll(`[data-token="${layer}"]`);
+          const isActive = layerStates[layer];
+          elements.forEach(el => {
+            if (isActive) {
+              el.classList.remove('opacity-20', 'blur-[0.5px]', 'grayscale');
+            } else {
+              el.classList.add('opacity-20', 'blur-[0.5px]', 'grayscale');
+            }
+          });
+
+          // Update toggle pill style
+          const btn = document.querySelector(`[data-layer="${layer}"]`);
+          if (btn) {
+            const icon = btn.querySelector('.material-symbols-outlined');
+            if (isActive) {
+              btn.classList.remove('opacity-40', 'bg-[#FAF7F2]', 'border-[#D8CFC4]');
+              if (icon) icon.textContent = 'check';
+            } else {
+              btn.classList.add('opacity-40', 'bg-[#FAF7F2]', 'border-[#D8CFC4]');
+              if (icon) icon.textContent = 'close';
+            }
+          }
+        });
+
+        // Dynamic metrics update
+        const metricEmotion = document.getElementById('metric-emotion');
+        const barEmotion = document.getElementById('bar-emotion');
+        if (metricEmotion && barEmotion) {
+          if (!layerStates.emotion) {
+            metricEmotion.textContent = 'Neutralized (0/100)';
+            metricEmotion.className = 'font-data-mono text-[#5D544C] font-bold';
+            barEmotion.style.width = '0%';
+          } else {
+            metricEmotion.textContent = 'Elevated (64/100)';
+            metricEmotion.className = 'font-data-mono text-[#8E341D] font-bold';
+            barEmotion.style.width = '64%';
+          }
+        }
+
+        const metricFraming = document.getElementById('metric-framing');
+        const barFraming = document.getElementById('bar-framing');
+        if (metricFraming && barFraming) {
+          if (!layerStates.framing) {
+            metricFraming.textContent = 'Unframed Telemetry';
+            metricFraming.className = 'font-data-mono text-[#5D544C] font-bold';
+            barFraming.style.width = '10%';
+          } else {
+            metricFraming.textContent = 'Adversarial Frame';
+            metricFraming.className = 'font-data-mono text-[#543E30] font-bold';
+            barFraming.style.width = '55%';
+          }
+        }
+      }
+
+      toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          const layer = toggle.getAttribute('data-layer');
+          layerStates[layer] = !layerStates[layer];
+          updateTokens();
+        });
+      });
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          Object.keys(layerStates).forEach(key => layerStates[key] = true);
+          updateTokens();
+        });
+      }
+
+      if (isolateFactsBtn) {
+        isolateFactsBtn.addEventListener('click', () => {
+          layerStates.facts = true;
+          layerStates.opinion = false;
+          layerStates.framing = false;
+          layerStates.emotion = false;
+          layerStates.context = false;
+          updateTokens();
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-[#EFE8DF] border-t border-[#D8CFC4] py-space-xl"><div class="w-full px-margin"><div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg pb-space-lg mb-space-lg border-b border-[#D8CFC4]/60"><div class="max-w-xl"><div class="flex items-center gap-space-sm mb-space-xs"><span class="font-headline-sm text-headline-sm text-[#241E19]">PERSPECTA</span><span class="font-label-micro text-label-micro uppercase text-[#5D544C] tracking-wider">Epistemic Rigor Engine</span></div><p class="font-body-editorial text-body-editorial text-[#5D544C] italic">PERSPECTA identifies language patterns and narrative structures. It does not determine factual truth or score bias.</p></div><nav class="flex flex-wrap items-center gap-space-md" data-active-classes="text-[#241E19] font-ui-medium"><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="methodology" href="#">Methodology</a><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="taxonomy" href="#">Taxonomy</a><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="open-dataset" href="#">Open Dataset</a><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="ethics" href="#">Ethics &amp; Independence</a></nav></div><div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm font-data-mono text-data-mono text-[#5D544C]"><p class="">© 2025 PERSPECTA Systems Inc. All rights reserved.</p><p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#8C4A27]"></span><span class="">Optical Framing Framework v4.2 • Broadside Precision Core</span></p></div></div></footer>
+</body></html>

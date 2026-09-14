@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-newsreader: 'Newsreader', Georgia, serif;
+    --font-hanken: 'Hanken Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  html {
+    background-color: #F7F3EE;
+    color: #241E19;
+    font-family: var(--font-hanken);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: #F9EFEA;
+    color: #9E4A28;
+  }
+
+  /* Archival Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F7F3EE;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D8CFC4;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #BDB3A6;
+  }
+}
+
+/* Tactile Broadsheet Utility Classes */
+.newspaper-double-rule {
+  border-top: 3px double #D8CFC4;
+}
+
+.newspaper-single-rule {
+  border-top: 1px solid #D8CFC4;
+}
+
+.newspaper-column-rule {
+  border-right: 1px solid #E2D9CE;
+}
+
+.archival-dropcap::first-letter {
+  font-family: var(--font-newsreader);
+  font-size: 3.5rem;
+  line-height: 2.75rem;
+  float: left;
+  margin-right: 0.6rem;
+  margin-top: 0.15rem;
+  color: #9E4A28;
+  font-weight: 500;
+}
+
+/* Category Highlighter Pen Styles */
+.highlight-attribution {
+  background-color: #FDF6EC;
+  border-bottom: 2px solid #8C531B;
+  color: #5C320A;
+}
+
+.highlight-evaluative {
+  background-color: #F9EFEA;
+  border-bottom: 2px solid #9E4A28;
+  color: #682910;
+}
+
+.highlight-certainty {
+  background-color: #FAF3EA;
+  border-bottom: 2px solid #A66B24;
+  color: #694112;
+}
+
+.highlight-claims {
+  background-color: #EEF0F8;
+  border-bottom: 2px solid #434D80;
+  color: #293054;
+}
+
+.highlight-primacy {
+  background-color: #EBF1EE;
+  border-bottom: 2px solid #3B6B56;
+  color: #224234;
+}
+
+.highlight-omission {
+  background-color: #ECF1F6;
+  border-bottom: 2px solid #3C567A;
+  color: #24354D;
+}
+
+.highlight-emotional {
+  background-color: #F6ECF0;
+  border-bottom: 2px solid #7D374B;
+  color: #541F2F;
+}
+
+/* Active Highlight Glow */
+.highlight-active {
+  box-shadow: 0 0 0 2px #9E4A28;
+  font-weight: 500;
+}

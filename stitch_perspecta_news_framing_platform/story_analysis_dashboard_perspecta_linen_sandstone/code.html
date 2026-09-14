@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "tertiary": "#A66B24",
+        "on-tertiary-container": "#4E2E05",
+        "surface": "#F7F3EE",
+        "surface-tint": "#9E4A28",
+        "on-surface": "#241E19",
+        "on-secondary-container": "#1E4736",
+        "error-container": "#F7EDF1",
+        "outline": "#88726B",
+        "surface-container-high": "#EFE8DF",
+        "on-error-container": "#7D374B",
+        "inverse-on-surface": "#FAF7F2",
+        "on-secondary": "#ffffff",
+        "primary-fixed-dim": "#FFDBCE",
+        "inverse-surface": "#241E19",
+        "background": "#F7F3EE",
+        "tertiary-fixed": "#F9F2E7",
+        "primary-fixed": "#F9EFEA",
+        "secondary-fixed": "#EBF2ED",
+        "error": "#7D374B",
+        "surface-dim": "#E5DCD1",
+        "on-background": "#241E19",
+        "on-primary-fixed-variant": "#9E4A28",
+        "on-primary": "#ffffff",
+        "surface-container-lowest": "#FAF7F2",
+        "tertiary-container": "#F9F2E7",
+        "secondary-container": "#EBF2ED",
+        "surface-container-highest": "#E8DFD4",
+        "on-tertiary-fixed-variant": "#A66B24",
+        "tertiary-fixed-dim": "#ECD5B3",
+        "surface-container": "#EFE8DF",
+        "inverse-primary": "#FFB59A",
+        "on-error": "#ffffff",
+        "surface-variant": "#E8DFD4",
+        "secondary": "#3B6B56",
+        "secondary-fixed-dim": "#C3DCD0",
+        "primary": "#9E4A28",
+        "on-secondary-fixed-variant": "#3B6B56",
+        "surface-bright": "#FAF7F2",
+        "on-surface-variant": "#5D544C",
+        "outline-variant": "#D8CFC4",
+        "on-secondary-fixed": "#163427",
+        "primary-container": "#F9EFEA",
+        "on-primary-container": "#9E4A28",
+        "on-primary-fixed": "#4E1D0A",
+        "on-tertiary-fixed": "#3E2204",
+        "on-tertiary": "#ffffff",
+        "surface-container-low": "#F2ECE3"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.125rem",
+        "lg": "0.25rem",
+        "xl": "0.5rem",
+        "full": "0.75rem"
+      },
+      "spacing": {
+        "space-md": "1rem",
+        "space-xs": "0.25rem",
+        "space-sm": "0.5rem",
+        "gutter": "1.5rem",
+        "margin": "2rem",
+        "space-lg": "1.5rem",
+        "space-xl": "2.5rem"
+      },
+      "fontFamily": {
+        "headline-lg": ["Newsreader", "serif"],
+        "ui-body": ["Plus Jakarta Sans", "sans-serif"],
+        "body-default": ["Newsreader", "serif"],
+        "display-lg": ["Newsreader", "serif"],
+        "ui-medium": ["Plus Jakarta Sans", "sans-serif"],
+        "headline-sm": ["Newsreader", "serif"],
+        "data-mono": ["Hanken Grotesk", "sans-serif"],
+        "headline-xl": ["Newsreader", "serif"],
+        "display-lg-mobile": ["Newsreader", "serif"],
+        "body-editorial": ["Newsreader", "serif"],
+        "headline-xl-mobile": ["Newsreader", "serif"],
+        "label-prominent": ["Hanken Grotesk", "sans-serif"],
+        "label-micro": ["Hanken Grotesk", "sans-serif"]
+      },
+      "fontSize": {
+        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+        "ui-body": ["14px", {"lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+        "body-default": ["16px", {"lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400"}],
+        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+        "ui-medium": ["14px", {"lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "500"}],
+        "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "500"}],
+        "data-mono": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+        "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+        "body-editorial": ["18px", {"lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "400"}],
+        "headline-xl-mobile": ["26px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+        "label-prominent": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+        "label-micro": ["11px", {"lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600"}]
+      }
+    }
+  }
+}</script></head><body class="bg-surface font-ui-body text-ui-body text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-outline-variant/60 shadow-[0_1px_6px_rgba(36,30,25,0.03)]"><div class="h-16 w-full px-margin flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md shrink-0"><img alt="PERSPECTA Prism Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UinaB6Zs31S1tnWh5uAau38-w7e5XvomfoOztVIZYJs6KPCjk3SQQIvQ3Cjs1nerIXmkk3JHXxUocVTi7xTP41kPR5Lz7peg0ei9p7ojkkmruukXKLu5P8lKxBz4X4KaaSOuouQEprwakgWDC79DgKRQtU_Q0VqaWBRdOKk0ZJQmWCFH2ni5dmk4FODsX4yIM9GuiYo39ygkSJbav1KV6oAfc0tbKu7K34ycMlVm3696JLKEiyqWPxnjag"/><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface">PERSPECTA</span><span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-micro text-label-micro uppercase tracking-wider ml-1 border border-outline-variant/40">Perspective Intelligence</span></div></div><nav class="hidden lg:flex items-center gap-1 bg-surface-container-low p-1 rounded-full border border-outline-variant/50" data-active-classes="bg-surface-container-lowest text-on-surface font-ui-medium"><a aria-current="page" class="px-4 py-1.5 rounded-full transition-colors bg-surface-container-lowest text-on-surface font-ui-medium shadow-xs" data-path="analyze" href="#">Analyze</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="compare" href="#">Compare</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="prism-framework" href="#">Prism Framework</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="how-it-works" href="#">How It Works</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="relative hidden xl:block"><button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-high border border-outline-variant/70 font-ui-medium text-ui-medium text-on-surface hover:bg-surface-container-highest hover:text-on-surface transition-colors" type="button"><span class="font-label-micro text-label-micro uppercase text-on-surface-variant">Sample:</span><span>Climate Accord 2025</span><span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span></button></div><a class="hidden md:inline-block font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="about-model" href="#" title="Analytical architecture transparency notes">About the Model</a><button class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#241E19] text-[#FAF7F2] hover:bg-[#3D332B] font-ui-medium text-ui-medium transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span>New Analysis</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Utility Context Bar -->
+<section class="w-full bg-surface-container-low border-b border-outline-variant/50 px-margin py-space-md">
+<div class="max-w-[1400px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<nav aria-label="Breadcrumb" class="flex items-center gap-space-xs font-data-mono text-data-mono text-on-surface-variant">
+<span class="hover:text-on-surface cursor-pointer transition-colors">Analysis</span>
+<span class="text-outline-variant">/</span>
+<span class="hover:text-on-surface cursor-pointer transition-colors">Politics &amp; Policy</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-ui-medium">The Climate Package Bill</span>
+</nav>
+<div class="flex items-center gap-space-md font-data-mono text-data-mono text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Dual-Stream Synced Engine</span>
+</span>
+<span class="text-outline-variant">•</span>
+<span>Run ID: <strong class="text-on-surface font-ui-medium">PRX-9041A</strong></span>
+</div>
+</div>
+</section>
+<!-- Editorial Metadata & Overview Header -->
+<header class="w-full px-margin pt-space-lg pb-space-md">
+<div class="max-w-[1400px] mx-auto flex flex-col xl:flex-row xl:items-end justify-between gap-space-lg">
+<div class="max-w-3xl">
+<div class="flex items-center gap-space-sm mb-space-xs">
+<span class="px-2.5 py-0.5 rounded-full bg-[#F9EFEA] text-[#9E4A28] border border-[#D8CFC4]/70 font-label-micro uppercase tracking-wider font-semibold">Linguistic Dissection</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">Article Spectrum Index: 0.74 Divergence</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-[#241E19] tracking-tight leading-none mb-space-xs">
+          Story Analysis
+        </h1>
+<p class="font-ui-body text-ui-body text-on-surface-variant flex flex-wrap items-center gap-x-space-sm gap-y-1">
+<span>Source: <strong class="font-ui-medium text-on-surface">Major Wire Service</strong></span>
+<span class="text-outline-variant">•</span>
+<span>Published: <time datetime="2025-05-12T14:30">3 hours ago</time></span>
+<span class="text-outline-variant">•</span>
+<span>Length: 680 words</span>
+<span class="text-outline-variant">•</span>
+<span class="text-secondary font-ui-medium">Model Precision: 98.4%</span>
+</p>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex items-center gap-space-xs shrink-0 self-start xl:self-end">
+<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-ui-medium text-ui-medium transition-all border border-outline-variant/60 shadow-xs" id="exportBriefBtn">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+<span>Export Dossier</span>
+</button>
+<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest font-ui-medium text-ui-medium transition-all border border-outline-variant/60 shadow-xs" id="toggleDensityBtn">
+<span class="material-symbols-outlined text-[18px]">vertical_split</span>
+<span>Sync Views</span>
+</button>
+</div>
+</div>
+</header>
+<!-- 4 Analytical Category Metric Cards -->
+<section class="w-full px-margin py-space-sm">
+<div class="max-w-[1400px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- 1. Factual Claims -->
+<article class="p-space-md rounded-xl bg-surface-container-lowest border border-outline-variant/70 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 right-0 h-1 bg-secondary"></div>
+<div class="flex items-center justify-between gap-space-xs mb-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-[#EBF2ED] text-[#1E4736] border border-[#C3DCD0] font-label-micro uppercase tracking-wider flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            Empirical
+          </span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">48% of text</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface font-semibold mb-1">
+          12 Factual Claims
+        </div>
+<p class="font-ui-body text-ui-body text-on-surface-variant line-clamp-2">
+          Empirical statements with verifiable references and primary agency quotes.
+        </p>
+</article>
+<!-- 2. Opinions -->
+<article class="p-space-md rounded-xl bg-surface-container-lowest border border-outline-variant/70 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+<div class="flex items-center justify-between gap-space-xs mb-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-[#F9F2E7] text-[#A66B24] border border-[#ECD5B3] font-label-micro uppercase tracking-wider flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+            Evaluative
+          </span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">16% of text</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface font-semibold mb-1">
+          4 Opinions
+        </div>
+<p class="font-ui-body text-ui-body text-on-surface-variant line-clamp-2">
+          Evaluative assertions, speculation, and unsourced value judgments.
+        </p>
+</article>
+<!-- 3. Framing Signals -->
+<article class="p-space-md rounded-xl bg-surface-container-lowest border border-outline-variant/70 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>
+<div class="flex items-center justify-between gap-space-xs mb-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-[#F9EFEA] text-[#9E4A28] border border-[#FFDBCE] font-label-micro uppercase tracking-wider flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+            Perspective
+          </span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">24% of text</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface font-semibold mb-1">
+          6 Framing Signals
+        </div>
+<p class="font-ui-body text-ui-body text-on-surface-variant line-clamp-2">
+          Narrative emphasis, pacing cues, temporal anchors, and lexical connotation.
+        </p>
+</article>
+<!-- 4. Emotional Expressions -->
+<article class="p-space-md rounded-xl bg-surface-container-lowest border border-outline-variant/70 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 left-0 right-0 h-1 bg-error"></div>
+<div class="flex items-center justify-between gap-space-xs mb-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-[#F7EDF1] text-[#7D374B] border border-[#E9C6D3] font-label-micro uppercase tracking-wider flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+            Affective
+          </span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">12% of text</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-on-surface font-semibold mb-1">
+          3 Emotional Words
+        </div>
+<p class="font-ui-body text-ui-body text-on-surface-variant line-clamp-2">
+          Affective vocabulary and dramatic descriptors shaping visceral reaction.
+        </p>
+</article>
+</div>
+</section>
+<!-- Spectrum Perspective Divergence Bar -->
+<section class="w-full px-margin py-space-sm">
+<div class="max-w-[1400px] mx-auto bg-surface-container-low rounded-xl p-space-md border border-outline-variant/70 shadow-xs">
+<div class="flex items-center justify-between mb-space-xs font-label-prominent text-label-prominent">
+<span class="text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">grain</span>
+          DISSECTION RATIO &amp; RHETORICAL WEIGHT
+        </span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">Sample Depth: 25 Syntactic Nodes</span>
+</div>
+<!-- Segmented Track Bar -->
+<div class="h-2.5 w-full rounded-full bg-[#E5DCD1] flex gap-1 overflow-hidden p-0.5">
+<div class="h-full bg-secondary rounded-full" style="width: 48%" title="Facts: 48%"></div>
+<div class="h-full bg-tertiary rounded-full" style="width: 16%" title="Opinions: 16%"></div>
+<div class="h-full bg-primary rounded-full" style="width: 24%" title="Framing: 24%"></div>
+<div class="h-full bg-error rounded-full" style="width: 12%" title="Emotion: 12%"></div>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-space-xs mt-space-xs font-data-mono text-data-mono text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-secondary"></span> 48% Verified Claims</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-tertiary"></span> 16% Evaluative Opinions</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-primary"></span> 24% Framing Connotations</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-error"></span> 12% Affective Vocabulary</span>
+</div>
+</div>
+</section>
+<!-- Interactive Filter Chips Row -->
+<nav aria-label="Analytical Filters" class="w-full px-margin py-space-sm">
+<div class="max-w-[1400px] mx-auto flex items-center gap-space-xs overflow-x-auto pb-1" id="filterContainer">
+<button class="filter-btn active px-4 py-1.5 rounded-full bg-[#241E19] text-[#FAF7F2] font-ui-medium text-ui-medium shrink-0 transition-all shadow-xs" data-filter="all">
+        Show All (25)
+      </button>
+<button class="filter-btn px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/70 text-on-surface hover:bg-surface-container-highest font-ui-medium text-ui-medium shrink-0 transition-all flex items-center gap-1.5" data-filter="fact">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+        Factual Claims (12)
+      </button>
+<button class="filter-btn px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/70 text-on-surface hover:bg-surface-container-highest font-ui-medium text-ui-medium shrink-0 transition-all flex items-center gap-1.5" data-filter="opinion">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+        Opinions (4)
+      </button>
+<button class="filter-btn px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/70 text-on-surface hover:bg-surface-container-highest font-ui-medium text-ui-medium shrink-0 transition-all flex items-center gap-1.5" data-filter="framing">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+        Framing Signals (6)
+      </button>
+<button class="filter-btn px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/70 text-on-surface hover:bg-surface-container-highest font-ui-medium text-ui-medium shrink-0 transition-all flex items-center gap-1.5" data-filter="emotion">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+        Emotional Language (3)
+      </button>
+<button class="filter-btn px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/70 text-on-surface hover:bg-surface-container-highest font-ui-medium text-ui-medium shrink-0 transition-all flex items-center gap-1.5" data-filter="context">
+<span class="w-2 h-2 rounded-full bg-[#9E4A28]"></span>
+        Missing Context (2)
+      </button>
+</div>
+</nav>
+<!-- MAIN WORKBENCH: Dual-Column Reading & Explanation Workbench (60% Left / 40% Right Sticky) -->
+<main class="w-full px-margin py-space-md mb-space-xl">
+<div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT SECTION — Editorial Reading Layout (60% / 7 cols on lg, 7 cols on xl) -->
+<section class="lg:col-span-7 xl:col-span-7 bg-surface-container-lowest p-space-lg md:p-space-xl rounded-2xl border border-outline-variant/70 shadow-xs relative">
+<!-- Reading Header Strip -->
+<div class="flex items-center justify-between pb-space-md mb-space-lg bg-surface-container-low px-space-md py-space-xs rounded-lg border border-outline-variant/50">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-primary">menu_book</span>
+<span class="font-label-prominent text-label-prominent uppercase tracking-wider text-on-surface">Original Monitored Broadside</span>
+</div>
+<div class="flex items-center gap-space-xs font-data-mono text-data-mono text-on-surface-variant">
+<span>Font: Newsreader 18pt</span>
+<span class="text-outline-variant">•</span>
+<button class="text-primary hover:underline font-ui-medium" id="toggleHighlights">Toggle Markings</button>
+</div>
+</div>
+<!-- Article Headline -->
+<h2 class="font-headline-xl text-headline-xl text-[#241E19] leading-tight mb-space-lg tracking-normal">
+          Government Announces Sweeping National Energy Transition Framework
+        </h2>
+<!-- Broadsheet Body Text with Interactive Mark Elements -->
+<article class="font-body-editorial text-body-editorial text-[#241E19] space-y-space-lg leading-[1.85]" id="articleStream">
+<!-- Paragraph 1 -->
+<p class="relative">
+            The government 
+            <mark class="annotation-mark active-mark inline-block cursor-pointer px-1.5 py-0.5 rounded transition-all bg-[#F9EFEA] text-[#9E4A28] font-medium ring-2 ring-primary border border-[#FFDBCE]" data-category="framing" data-confidence="Medium • Lexical Semantics" data-connotation="Suggests procrastination or yielding to external pressure." data-explanation="This wording may imply that the action was delayed, overdue, or resisted, which subtly influences how the reader perceives the government's timeliness and competence, rather than stating the chronological timeline neutrally." data-id="mark-finally" data-label="FRAMING" data-neutral="announced today, following a scheduled six-month review" data-quote="finally" data-segments="2" role="button" tabindex="0">finally</mark>
+            announced its new policy after months of 
+            <mark class="annotation-mark inline-block cursor-pointer px-1.5 py-0.5 rounded transition-all bg-[#F9EFEA]/80 text-[#9E4A28] font-medium border border-[#FFDBCE]/70" data-category="framing" data-confidence="High • Frequency Metric" data-connotation="Depicts an embattled executive cornered by civil watchdogs." data-explanation="Frames external response as an escalating, irresistible tide, potentially exaggerating the consensus level of public or regulatory dissatisfaction." data-id="mark-mounting" data-label="FRAMING" data-neutral="public statements and stakeholder reviews" data-quote="mounting criticism" data-segments="3" role="button" tabindex="0">mounting criticism</mark>
+            from environmental watchdogs. During the press briefing, opposition leaders called the decision 
+            <mark class="annotation-mark inline-block cursor-pointer px-1.5 py-0.5 rounded transition-all bg-[#F7EDF1] text-[#7D374B] font-medium border border-[#E9C6D3]" data-category="emotion" data-confidence="High • Lexical Affect Dictionary" data-connotation="Characterizes policymakers as negligent or indifferent to danger." data-explanation="High-valence affective adjective introduced without empirical context or probability model, aiming to trigger immediate risk aversion in reader cognition." data-id="mark-reckless" data-label="EMOTION" data-neutral="risky, contentious, fiscally debated" data-quote="reckless" data-segments="3" role="button" tabindex="0">reckless</mark>, 
+            citing unprecedented costs for working families, while administration supporters described it as a 
+            <mark class="annotation-mark inline-block cursor-pointer px-1.5 py-0.5 rounded transition-all bg-[#F9F2E7] text-[#A66B24] font-medium border border-[#ECD5B3]" data-category="opinion" data-confidence="Medium • Evaluative Assertion" data-connotation="Elevates policy to landmark monumental milestone." data-explanation="An evaluative honorific projecting long-term retrospective significance onto an initiative whose actual implementation results are yet unmeasured." data-id="mark-historic" data-label="OPINION" data-neutral="major, comprehensive, large-scale" data-quote="historic" data-segments="2" role="button" tabindex="0">historic</mark> 
+            move toward global decarbonization leadership.
+          </p>
+<!-- Paragraph 2 (Factual claim + Context) -->
+<p class="relative">
+            Under the statutory blueprint unveiled at 10:00 AM EST, 
+            <mark class="annotation-mark inline-block cursor-pointer px-1.5 py-0.5 rounded transition-all bg-[#EBF2ED] text-[#1E4736] font-medium border border-[#C3DCD0]" data-category="fact" data-confidence="High • Primary Statutory Match" data-connotation="Direct measurement without value-laden vocabulary." data-explanation="Empirical assertion specifying a precise timeline, metric, and targeted industrial sector verifiable against statutory text Section 4(a)." data-id="mark-fact-target" data-label="FACTUAL CLAIM" data-neutral="Target established in Section 4(a) regulatory codification." data-quote="coal-fired power generation will be phased down by 45% by 2032" data-segments="3" role="button" tabindex="0">coal-fired power generation will be phased down by 45% by 2032</mark>, 
+            supported by a $140 billion public-private loan facility. Notably, the announcement omitted that 
+            <mark class="annotation-mark inline-block cursor-pointer px-1.5 py-0.5 rounded transition-all bg-surface-container-high text-[#241E19] font-medium underline decoration-primary border border-outline-variant/60" data-category="context" data-confidence="High • Historical Audit Baseline" data-connotation="Presents funding commitment as guaranteed delivery." data-explanation="The text omits historical disbursement friction rates from prior clean energy programs (GAO-24-11), potentially misleading readers regarding execution feasibility." data-id="mark-context-funding" data-label="MISSING CONTEXT" data-neutral="Subject to annual congressional appropriation tranches." data-quote="three previous federal loan programs failed to disburse allocated capital" data-segments="3" role="button" tabindex="0">three previous federal loan programs failed to disburse allocated capital</mark> 
+            due to inter-state grid licensing disputes and jurisdictional reviews.
+          </p>
+<!-- Paragraph 3 -->
+<p class="relative">
+            Industrial labor coalitions expressed reserved skepticism, noting that the timeline leaves tens of thousands of grid mechanics in economic limbo. Yet trade officials insisted the transition plan represents 
+            <mark class="annotation-mark inline-block cursor-pointer px-1.5 py-0.5 rounded transition-all bg-[#F9F2E7] text-[#A66B24] font-medium border border-[#ECD5B3]" data-category="opinion" data-confidence="High • Teleological Rhetoric" data-connotation="Frames dissent as resistance to inevitable progress." data-explanation="Teleological language that frames political policy as natural destiny, preemptively discounting legitimate transitional welfare counterarguments." data-id="mark-inevitable" data-label="OPINION" data-neutral="the chosen framework among proposed alternatives" data-quote="an inevitable step for civilization" data-segments="3" role="button" tabindex="0">an inevitable step for civilization</mark>, 
+            assuring regional governors that emergency energy subsidies would safeguard low-income households during winter peaks.
+          </p>
+</article>
+<!-- Document Transparency Stamp -->
+<div class="mt-space-xl pt-space-md bg-surface-container-low p-space-md rounded-xl border border-outline-variant/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm font-data-mono text-data-mono text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+<span>Parsing Engine: Lexical-BERT v8.1 • Temperature 0.0</span>
+</div>
+<div class="flex items-center gap-3">
+<a class="text-primary hover:underline" href="#">Raw JSON Schema</a>
+<span>•</span>
+<a class="text-primary hover:underline" href="#">Audit Trail</a>
+</div>
+</div>
+</section>
+<!-- RIGHT SECTION — Interactive Explanation Panel (Inspector Card - 40% / 5 cols) -->
+<aside class="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-20 space-y-space-md">
+<!-- Main Inspector Card -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/70 shadow-sm p-space-lg transition-all duration-300 relative overflow-hidden" id="inspectorPanel">
+<!-- Accent Top Bar -->
+<div class="absolute top-0 left-0 right-0 h-1.5 bg-primary transition-colors duration-300" id="inspectorAccentBar"></div>
+<!-- Header & Category Badge -->
+<div class="flex items-center justify-between gap-space-sm mb-space-md">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-[#F9EFEA] text-[#9E4A28] border border-[#FFDBCE] font-label-micro uppercase tracking-wider flex items-center gap-1.5 font-semibold" id="inspectorBadge">
+<span class="material-symbols-outlined text-[14px]">filter_center_focus</span>
+<span>FRAMING SIGNAL</span>
+</span>
+<span class="font-data-mono text-data-mono text-on-surface-variant">Token #4</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high border border-outline-variant/50 flex items-center justify-center text-on-surface transition-colors" id="prevMarkBtn" title="Previous annotation">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high border border-outline-variant/50 flex items-center justify-center text-on-surface transition-colors" id="nextMarkBtn" title="Next annotation">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Selected Phrase Display -->
+<div class="mb-space-md bg-surface-container-low p-space-md rounded-xl border border-outline-variant/50">
+<span class="font-label-micro text-label-micro uppercase text-on-surface-variant tracking-wider block mb-1">Selected Syntactic Unit</span>
+<blockquote class="font-headline-lg text-headline-lg text-[#241E19] italic leading-snug" id="inspectorQuote">
+              “finally”
+            </blockquote>
+</div>
+<!-- Inspector Tabs -->
+<div class="flex items-center gap-1 bg-surface-container p-1 rounded-lg mb-space-md border border-outline-variant/60">
+<button class="inspector-tab active flex-1 py-1.5 rounded-md bg-surface-container-lowest font-ui-medium text-ui-medium text-on-surface shadow-xs transition-all border border-outline-variant/40" data-tab="explanation">
+              Explanation
+            </button>
+<button class="inspector-tab flex-1 py-1.5 rounded-md font-ui-medium text-ui-medium text-on-surface-variant hover:text-on-surface transition-all" data-tab="alternatives">
+              Alternatives
+            </button>
+<button class="inspector-tab flex-1 py-1.5 rounded-md font-ui-medium text-ui-medium text-on-surface-variant hover:text-on-surface transition-all" data-tab="corroboration">
+              Corroboration
+            </button>
+</div>
+<!-- Tab Content: Explanation -->
+<div class="tab-panel space-y-space-md" id="tab-explanation">
+<div>
+<h3 class="font-label-prominent text-label-prominent uppercase tracking-wider text-on-surface-variant mb-1.5 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">psychology_alt</span>
+                Why was this highlighted?
+              </h3>
+<p class="font-body-default text-body-default text-[#241E19] leading-relaxed" id="inspectorExplanation">
+                This wording may imply that the action was delayed, overdue, or resisted, which subtly influences how the reader perceives the government's timeliness and competence, rather than stating the chronological timeline neutrally.
+              </p>
+</div>
+<!-- Linguistic Analysis Breakdown -->
+<div class="p-space-md bg-surface-container-low rounded-xl border border-outline-variant/50 space-y-space-sm">
+<div class="font-label-prominent text-label-prominent uppercase tracking-wider text-on-surface">
+                Linguistic Vector Analysis
+              </div>
+<ul class="space-y-space-xs font-ui-body text-ui-body text-on-surface">
+<li class="flex items-start gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0"></span>
+<div>
+<span class="font-ui-medium text-on-surface">Connotation: </span>
+<span class="text-on-surface-variant" id="inspectorConnotation">Suggests procrastination or yielding to external pressure.</span>
+</div>
+</li>
+<li class="flex items-start gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mt-2 shrink-0"></span>
+<div>
+<span class="font-ui-medium text-on-surface">Alternative Neutral Phrasing: </span>
+<span class="text-on-surface-variant italic" id="inspectorNeutral">‘announced today’, ‘following a scheduled six-month review’.</span>
+</div>
+</li>
+</ul>
+</div>
+<!-- Confidence Indicator -->
+<div class="bg-surface-container-low p-space-md rounded-xl border border-outline-variant/50 flex items-center justify-between">
+<div>
+<span class="font-label-micro text-label-micro uppercase text-on-surface-variant block mb-1 tracking-wider">Classification Rigor</span>
+<span class="font-data-mono text-data-mono font-semibold text-on-surface" id="inspectorConfidenceLabel">
+                  Medium • Lexical Semantics
+                </span>
+</div>
+<div class="flex items-center gap-1" id="confidenceBars">
+<span class="w-4 h-2 rounded bg-primary"></span>
+<span class="w-4 h-2 rounded bg-primary"></span>
+<span class="w-4 h-2 rounded bg-surface-container-highest"></span>
+</div>
+</div>
+</div>
+<!-- Tab Content: Alternatives -->
+<div class="tab-panel hidden space-y-space-md" id="tab-alternatives">
+<div class="p-space-md bg-surface-container-low rounded-xl border border-outline-variant/50">
+<div class="font-label-prominent text-label-prominent text-on-surface mb-2">Neutral Framing Replacement</div>
+<p class="font-body-default text-body-default text-on-surface-variant mb-3">
+                “The government announced its new policy on Thursday, concluding a six-month stakeholder review...”
+              </p>
+<div class="flex items-center justify-between text-data-mono font-data-mono text-on-surface-variant">
+<span>Rhetorical delta: -84% Affective Load</span>
+<button class="text-primary hover:underline font-ui-medium">Simulate Swap</button>
+</div>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-xl border border-outline-variant/50">
+<div class="font-label-prominent text-label-prominent text-on-surface mb-2">Alternate Wire Coverage</div>
+<ul class="space-y-2 font-ui-body text-ui-body text-on-surface-variant">
+<li class="flex items-center justify-between">
+<span>Agence Eco: “Cabinet delivers long-planned mandate”</span>
+<span class="font-data-mono text-secondary">Neutral</span>
+</li>
+<li class="flex items-center justify-between">
+<span>Policy Tribune: “After delay, energy bill released”</span>
+<span class="font-data-mono text-primary">Framing</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Tab Content: Corroboration -->
+<div class="tab-panel hidden space-y-space-md" id="tab-corroboration">
+<div class="p-space-md bg-surface-container-low rounded-xl border border-outline-variant/50">
+<div class="font-label-prominent text-label-prominent text-on-surface mb-2">Cross-Reference Sources</div>
+<div class="space-y-2 font-ui-body text-ui-body">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest border border-outline-variant/40">
+<div>
+<div class="font-ui-medium text-on-surface">Official Gazette Reg #409</div>
+<div class="text-data-mono text-on-surface-variant">Original Press Release • 10:00 AM</div>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-lowest border border-outline-variant/40">
+<div>
+<div class="font-ui-medium text-on-surface">DOE Regulatory Docket 2025-C</div>
+<div class="text-data-mono text-on-surface-variant">Statutory Timeline Document</div>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Base Neutral Educational Disclaimer -->
+<footer class="mt-space-lg pt-space-md bg-surface-container-high/70 border-t border-outline-variant/50 -mx-space-lg -mb-space-lg p-space-md flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant shrink-0 mt-0.5">balance</span>
+<p class="font-body-editorial text-body-default text-on-surface-variant italic leading-normal">
+              PERSPECTA identifies language patterns and narrative structures. It does not determine factual truth or instruct users what to believe.
+            </p>
+</footer>
+</div>
+<!-- Comparative Multi-Source Perspective Map Mini-Card -->
+<div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/70 shadow-xs p-space-md">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">device_hub</span>
+<span class="font-label-prominent text-label-prominent uppercase tracking-wider text-on-surface">Perspective Distribution</span>
+</div>
+<span class="font-data-mono text-data-mono text-on-surface-variant">14 Major Outlets</span>
+</div>
+<!-- Mini Distribution Sparkline Chart -->
+<div class="p-space-sm bg-surface-container-low rounded-lg border border-outline-variant/40 space-y-2">
+<div class="flex items-center justify-between text-data-mono font-data-mono text-on-surface-variant">
+<span>Pro-Transition Urgency</span>
+<span class="text-on-surface font-ui-medium">54%</span>
+</div>
+<div class="h-1.5 w-full bg-[#E5DCD1] rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 54%"></div>
+</div>
+<div class="flex items-center justify-between text-data-mono font-data-mono text-on-surface-variant pt-1">
+<span>Fiscal Concern &amp; Inflation Risk</span>
+<span class="text-on-surface font-ui-medium">32%</span>
+</div>
+<div class="h-1.5 w-full bg-[#E5DCD1] rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 32%"></div>
+</div>
+<div class="flex items-center justify-between text-data-mono font-data-mono text-on-surface-variant pt-1">
+<span>Strict Neutral Regulatory Recital</span>
+<span class="text-on-surface font-ui-medium">14%</span>
+</div>
+<div class="h-1.5 w-full bg-[#E5DCD1] rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 14%"></div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+<!-- Inline Interaction Behavior -->
+<script>
+  (function() {
+    const marks = Array.from(document.querySelectorAll('.annotation-mark'));
+    const quoteEl = document.getElementById('inspectorQuote');
+    const badgeEl = document.getElementById('inspectorBadge');
+    const accentEl = document.getElementById('inspectorAccentBar');
+    const explanationEl = document.getElementById('inspectorExplanation');
+    const connotationEl = document.getElementById('inspectorConnotation');
+    const neutralEl = document.getElementById('inspectorNeutral');
+    const confidenceLabelEl = document.getElementById('inspectorConfidenceLabel');
+    const confidenceBarsEl = document.getElementById('confidenceBars');
+    const filterBtns = Array.from(document.querySelectorAll('.filter-btn'));
+    const tabBtns = Array.from(document.querySelectorAll('.inspector-tab'));
+    const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
+    const prevBtn = document.getElementById('prevMarkBtn');
+    const nextBtn = document.getElementById('nextMarkBtn');
+
+    let currentIndex = 0;
+
+    const categoryThemes = {
+      framing: {
+        badgeText: 'FRAMING SIGNAL',
+        icon: 'filter_center_focus',
+        accentBg: 'bg-primary',
+        badgeClass: 'bg-[#F9EFEA] text-[#9E4A28] border border-[#FFDBCE]'
+      },
+      emotion: {
+        badgeText: 'EMOTIONAL LANGUAGE',
+        icon: 'sentiment_dissatisfied',
+        accentBg: 'bg-error',
+        badgeClass: 'bg-[#F7EDF1] text-[#7D374B] border border-[#E9C6D3]'
+      },
+      opinion: {
+        badgeText: 'EVALUATIVE OPINION',
+        icon: 'rate_review',
+        accentBg: 'bg-tertiary',
+        badgeClass: 'bg-[#F9F2E7] text-[#A66B24] border border-[#ECD5B3]'
+      },
+      fact: {
+        badgeText: 'FACTUAL CLAIM',
+        icon: 'verified',
+        accentBg: 'bg-secondary',
+        badgeClass: 'bg-[#EBF2ED] text-[#1E4736] border border-[#C3DCD0]'
+      },
+      context: {
+        badgeText: 'MISSING CONTEXT',
+        icon: 'manage_search',
+        accentBg: 'bg-primary',
+        badgeClass: 'bg-surface-container-high text-[#241E19] border border-outline-variant'
+      }
+    };
+
+    function updateInspector(el) {
+      if (!el) return;
+      marks.forEach(m => m.classList.remove('active-mark', 'ring-2', 'ring-primary', 'ring-secondary', 'ring-error', 'ring-tertiary'));
+      el.classList.add('active-mark');
+
+      const cat = el.dataset.category || 'framing';
+      const cfg = categoryThemes[cat] || categoryThemes.framing;
+
+      if (cat === 'framing') el.classList.add('ring-2', 'ring-primary');
+      else if (cat === 'fact') el.classList.add('ring-2', 'ring-secondary');
+      else if (cat === 'opinion') el.classList.add('ring-2', 'ring-tertiary');
+      else if (cat === 'emotion') el.classList.add('ring-2', 'ring-error');
+
+      // Update quote & texts
+      quoteEl.innerHTML = '&ldquo;' + (el.dataset.quote || el.innerText) + '&rdquo;';
+      explanationEl.textContent = el.dataset.explanation || '';
+      connotationEl.textContent = el.dataset.connotation || 'Not specified.';
+      neutralEl.textContent = el.dataset.neutral || 'None suggested.';
+      confidenceLabelEl.textContent = el.dataset.confidence || 'Standard Confidence';
+
+      // Update Accent bar & badge
+      accentEl.className = 'absolute top-0 left-0 right-0 h-1.5 transition-colors duration-300 ' + cfg.accentBg;
+      badgeEl.className = 'px-2.5 py-1 rounded-full font-label-micro uppercase tracking-wider flex items-center gap-1.5 font-semibold transition-colors ' + cfg.badgeClass;
+      badgeEl.innerHTML = '<span class="material-symbols-outlined text-[14px]">' + cfg.icon + '</span><span>' + cfg.badgeText + '</span>';
+
+      // Update confidence segments
+      const segs = parseInt(el.dataset.segments || '2', 10);
+      confidenceBarsEl.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const bar = document.createElement('span');
+        bar.className = 'w-4 h-2 rounded ' + (i < segs ? cfg.accentBg : 'bg-surface-container-highest');
+        confidenceBarsEl.appendChild(bar);
+      }
+    }
+
+    // Attach click listeners to marks
+    marks.forEach((mark, index) => {
+      mark.addEventListener('click', () => {
+        currentIndex = index;
+        updateInspector(mark);
+      });
+      mark.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          currentIndex = index;
+          updateInspector(mark);
+        }
+      });
+    });
+
+    // Navigation buttons
+    prevBtn?.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + marks.length) % marks.length;
+      updateInspector(marks[currentIndex]);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % marks.length;
+      updateInspector(marks[currentIndex]);
+    });
+
+    // Filter Chips
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active', 'bg-[#241E19]', 'text-[#FAF7F2]');
+          b.classList.add('bg-surface-container-high', 'text-on-surface');
+        });
+        btn.classList.add('active', 'bg-[#241E19]', 'text-[#FAF7F2]');
+        btn.classList.remove('bg-surface-container-high', 'text-on-surface');
+
+        const filter = btn.dataset.filter;
+        marks.forEach(m => {
+          if (filter === 'all' || m.dataset.category === filter) {
+            m.style.opacity = '1';
+            m.style.filter = 'none';
+          } else {
+            m.style.opacity = '0.3';
+            m.style.filter = 'grayscale(80%)';
+          }
+        });
+
+        // Set active inspector to first matching
+        const firstVisible = marks.find(m => filter === 'all' || m.dataset.category === filter);
+        if (firstVisible) {
+          currentIndex = marks.indexOf(firstVisible);
+          updateInspector(firstVisible);
+        }
+      });
+    });
+
+    // Inspector Tab toggles
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => {
+          b.classList.remove('active', 'bg-surface-container-lowest', 'text-on-surface', 'shadow-xs', 'border', 'border-outline-variant/40');
+          b.classList.add('text-on-surface-variant');
+        });
+        btn.classList.add('active', 'bg-surface-container-lowest', 'text-on-surface', 'shadow-xs', 'border', 'border-outline-variant/40');
+        btn.classList.remove('text-on-surface-variant');
+
+        const target = btn.dataset.tab;
+        tabPanels.forEach(panel => {
+          if (panel.id === 'tab-' + target) {
+            panel.classList.remove('hidden');
+          } else {
+            panel.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // Toggle Highlights button
+    const toggleHighlightsBtn = document.getElementById('toggleHighlights');
+    let highlightsEnabled = true;
+    toggleHighlightsBtn?.addEventListener('click', () => {
+      highlightsEnabled = !highlightsEnabled;
+      marks.forEach(m => {
+        if (!highlightsEnabled) {
+          m.dataset.origBg = m.style.backgroundColor;
+          m.classList.add('bg-transparent', '!border-transparent');
+        } else {
+          m.classList.remove('bg-transparent', '!border-transparent');
+        }
+      });
+      toggleHighlightsBtn.textContent = highlightsEnabled ? 'Toggle Markings' : 'Restore Markings';
+    });
+
+    // Quick Toast on Export
+    document.getElementById('exportBriefBtn')?.addEventListener('click', () => {
+      const btn = document.getElementById('exportBriefBtn');
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span><span>Dossier Compiled</span>';
+      setTimeout(() => {
+        btn.innerHTML = origText;
+      }, 2000);
+    });
+
+    // Initialize first mark
+    if (marks.length > 0) {
+      updateInspector(marks[0]);
+    }
+  })();
+</script></main><footer class="w-full bg-[#EFE8DF] border-t border-outline-variant/60 py-space-xl"><div class="w-full px-margin"><div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg pb-space-lg mb-space-lg"><div class="max-w-xl"><div class="flex items-center gap-space-sm mb-space-xs"><span class="font-headline-sm text-headline-sm text-[#241E19]">PERSPECTA</span><span class="font-label-micro text-label-micro uppercase text-on-surface-variant tracking-wider">Epistemic Rigor Engine</span></div><p class="font-body-editorial text-body-editorial text-on-surface-variant italic">PERSPECTA identifies language patterns and narrative structures. It does not determine factual truth or score bias.</p></div><nav class="flex flex-wrap items-center gap-space-md" data-active-classes="text-on-surface font-ui-medium"><a class="font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="methodology" href="#">Methodology</a><a class="font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="taxonomy" href="#">Taxonomy</a><a class="font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="open-dataset" href="#">Open Dataset</a><a class="font-ui-body text-ui-body text-on-surface-variant hover:text-on-surface transition-colors" data-path="ethics" href="#">Ethics &amp; Independence</a></nav></div><div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm font-data-mono text-data-mono text-on-surface-variant"><p>© 2025 PERSPECTA Systems Inc. All rights reserved.</p><p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>Optical Framing Framework v4.2 • Broadside Precision Core</span></p></div></div></footer></body></html>

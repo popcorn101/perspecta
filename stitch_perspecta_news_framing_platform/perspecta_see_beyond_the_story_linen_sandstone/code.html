@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "on-error-container": "#93000a",
+        "on-secondary-container": "#6d6359",
+        "background": "#F7F3EE",
+        "surface-container-high": "#EFE8DF",
+        "on-error": "#ffffff",
+        "on-primary-fixed": "#380d00",
+        "secondary": "#675d53",
+        "on-primary-fixed-variant": "#7a2f0f",
+        "primary-container": "#9e4a28",
+        "on-surface-variant": "#5D544C",
+        "on-background": "#241E19",
+        "on-secondary-fixed": "#211a13",
+        "secondary-fixed": "#efe0d4",
+        "tertiary-fixed-dim": "#9fd2b8",
+        "on-primary-container": "#ffd6c9",
+        "outline-variant": "#D8CFC4",
+        "on-secondary-fixed-variant": "#4e453c",
+        "on-tertiary-fixed-variant": "#1e4f3c",
+        "primary-fixed-dim": "#ffb59a",
+        "on-primary": "#ffffff",
+        "on-tertiary": "#ffffff",
+        "surface-bright": "#FAF7F2",
+        "surface-variant": "#E6DDD2",
+        "primary-fixed": "#ffdbcf",
+        "tertiary-container": "#3c6c57",
+        "error": "#7D374B",
+        "surface-container-lowest": "#FAF7F2",
+        "inverse-primary": "#ffb59a",
+        "inverse-surface": "#241E19",
+        "on-secondary": "#ffffff",
+        "inverse-on-surface": "#F7F3EE",
+        "secondary-fixed-dim": "#d2c4b8",
+        "on-tertiary-fixed": "#002115",
+        "primary": "#9E4A28",
+        "error-container": "#f8e6eb",
+        "surface-dim": "#E6DDD2",
+        "tertiary-fixed": "#baeed3",
+        "on-tertiary-container": "#b7ebd0",
+        "surface-tint": "#9E4A28",
+        "surface-container-highest": "#E6DDD2",
+        "outline": "#88726b",
+        "tertiary": "#A66B24",
+        "earth-sage": "#3B6B56",
+        "earth-amber": "#A66B24",
+        "earth-terracotta": "#9E4A28",
+        "earth-plum": "#7D374B",
+        "on-surface": "#241E19",
+        "surface-container": "#EFE8DF",
+        "secondary-container": "#EFE8DF",
+        "surface-container-low": "#F2EBE1",
+        "surface": "#F7F3EE"
+      },
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.375rem",
+        "xl": "0.5rem",
+        "full": "9999px"
+      },
+      "spacing": {
+        "space-md": "1rem",
+        "space-xs": "0.25rem",
+        "space-sm": "0.5rem",
+        "gutter": "1.5rem",
+        "margin": "2rem",
+        "space-lg": "1.5rem",
+        "space-xl": "2.5rem"
+      },
+      "fontFamily": {
+        "headline-lg": ["Newsreader", "serif"],
+        "ui-body": ["Hanken Grotesk", "sans-serif"],
+        "body-default": ["Newsreader", "serif"],
+        "display-lg": ["Newsreader", "serif"],
+        "ui-medium": ["Hanken Grotesk", "sans-serif"],
+        "headline-sm": ["Newsreader", "serif"],
+        "data-mono": ["Hanken Grotesk", "monospace"],
+        "headline-xl": ["Newsreader", "serif"],
+        "display-lg-mobile": ["Newsreader", "serif"],
+        "body-editorial": ["Newsreader", "serif"],
+        "headline-xl-mobile": ["Newsreader", "serif"],
+        "label-prominent": ["Hanken Grotesk", "sans-serif"],
+        "label-micro": ["Hanken Grotesk", "sans-serif"]
+      },
+      "fontSize": {
+        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+        "ui-body": ["14px", {"lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+        "body-default": ["16px", {"lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400"}],
+        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+        "ui-medium": ["14px", {"lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "500"}],
+        "headline-sm": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "500"}],
+        "data-mono": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+        "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+        "body-editorial": ["18px", {"lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "400"}],
+        "headline-xl-mobile": ["26px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+        "label-prominent": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+        "label-micro": ["11px", {"lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600"}]
+      }
+    }
+  }
+}</script></head><body class="bg-[#F7F3EE] font-ui-body text-ui-body text-[#241E19] antialiased"><header class="fixed top-0 w-full z-50 bg-[#F7F3EE]/95 backdrop-blur-md border-b border-[#E2D9CE] shadow-[0_1px_6px_rgba(36,30,25,0.03)]"><div class="h-16 w-full px-margin flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md shrink-0"><img alt="PERSPECTA Prism Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UinaB6Zs31S1tnWh5uAau38-w7e5XvomfoOztVIZYJs6KPCjk3SQQIvQ3Cjs1nerIXmkk3JHXxUocVTi7xTP41kPR5Lz7peg0ei9p7ojkkmruukXKLu5P8lKxBz4X4KaaSOuouQEprwakgWDC79DgKRQtU_Q0VqaWBRdOKk0ZJQmWCFH2ni5dmk4FODsX4yIM9GuiYo39ygkSJbav1KV6oAfc0tbKu7K34ycMlVm3696JLKEiyqWPxnjag"/><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm tracking-tight text-[#241E19]">PERSPECTA</span><span class="px-2 py-0.5 rounded-full bg-[#EFE8DF] text-[#5D544C] border border-[#E2D9CE] font-label-micro text-label-micro uppercase tracking-wider ml-1">Perspective Intelligence</span></div></div><nav class="hidden lg:flex items-center gap-1 bg-[#EFE8DF]/80 border border-[#E2D9CE] p-1 rounded-full"><a aria-current="page" class="px-4 py-1.5 rounded-full transition-colors bg-[#FAF7F2] text-[#241E19] font-ui-medium shadow-sm" data-path="analyze" href="#">Analyze</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="compare" href="#">Compare</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="prism-framework" href="#">Perspecta Framework</a><a class="px-4 py-1.5 rounded-full font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="how-it-works" href="#">How It Works</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="relative hidden xl:block"><button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#EFE8DF] border border-[#E2D9CE] font-ui-medium text-ui-medium text-[#241E19] hover:bg-[#E6DDD2] transition-colors" type="button"><span class="font-label-micro text-label-micro uppercase text-[#7C7167]">Sample:</span><span class="">Climate Accord 2025</span><span class="material-symbols-outlined text-[16px] text-[#7C7167]">expand_more</span></button></div><a class="hidden md:inline-block font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="about-model" href="#" title="Analytical architecture transparency notes">About the Model</a><button class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#9E4A28] text-[#FAF7F2] hover:bg-[#8B3E20] font-ui-medium text-ui-medium transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span class="">New Analysis</span></button><div class="w-8 h-8 rounded-full bg-[#EFE8DF] border border-[#D8CFC4] flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[#9E4A28] text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-[#F7F3EE] min-h-screen"><div class="flex flex-col w-full">
+<section class="relative w-full overflow-hidden bg-[#F7F3EE] py-space-xl lg:py-24 border-b border-[#E2D9CE]/60">
+<div class="absolute -top-24 right-1/4 w-96 h-96 rounded-full bg-[#9E4A28]/5 blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 -left-20 w-80 h-80 rounded-full bg-[#A66B24]/5 blur-3xl pointer-events-none"></div>
+<div class="w-full max-w-7xl mx-auto px-gutter lg:px-margin flex flex-col items-center text-center relative z-10">
+<div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EFE8DF] border border-[#E2D9CE] shadow-sm mb-6">
+<span class="w-1.5 h-1.5 rounded-full bg-[#9E4A28]"></span>
+<span class="font-label-micro text-label-micro text-[#5D544C] uppercase tracking-widest">
+          EDITORIAL INTELLIGENCE • LINGUISTIC FRAMING
+        </span>
+</div>
+<h1 class="font-display-lg text-display-lg lg:text-[68px] lg:leading-[76px] text-[#241E19] max-w-4xl tracking-tight mb-6">
+        See beyond the story.
+      </h1>
+<p class="font-body-editorial text-body-editorial text-[#5D544C] max-w-2xl text-center mb-12">
+        Understand how language, framing, and perspective shape the news you read. No bias scores, no political judgment — just transparent textual deconstruction.
+      </p>
+<div class="w-full max-w-4xl bg-[#FAF7F2] border border-[#D8CFC4] rounded-xl shadow-[0_4px_24px_rgba(36,30,25,0.05),0_1px_4px_rgba(36,30,25,0.03)] overflow-hidden text-left transition-all duration-300">
+<div class="bg-[#EFE8DF] border-b border-[#E2D9CE] px-space-md py-space-sm flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="font-label-micro text-label-micro text-[#7C7167] uppercase font-semibold">Presets:</span>
+<div class="flex flex-wrap items-center gap-1.5" id="preset-container">
+<button class="px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8CFC4] hover:bg-[#E6DDD2] text-[#241E19] font-data-mono text-data-mono transition-colors" onclick="applyPreset('climate')" type="button">
+                Climate Accord
+              </button>
+<button class="px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8CFC4] hover:bg-[#E6DDD2] text-[#241E19] font-data-mono text-data-mono transition-colors" onclick="applyPreset('antitrust')" type="button">
+                Antitrust Hearing
+              </button>
+<button class="px-2.5 py-1 rounded-full bg-[#FAF7F2] border border-[#D8CFC4] hover:bg-[#E6DDD2] text-[#241E19] font-data-mono text-data-mono transition-colors" onclick="applyPreset('trade')" type="button">
+                Global Trade Summit
+              </button>
+</div>
+</div>
+<div class="flex items-center gap-1 text-[#5D544C] font-data-mono text-data-mono">
+<span class="material-symbols-outlined text-[15px] text-[#A66B24]">auto_awesome</span>
+<span class="">Prism NLP Model 4.2</span>
+</div>
+</div>
+<div class="p-space-md lg:p-space-lg relative bg-[#FAF7F2]">
+<textarea class="w-full bg-transparent resize-none font-body-editorial text-body-editorial text-[#241E19] placeholder:text-[#7C7167]/70 focus:outline-none" id="article-input" placeholder="Paste a headline, full article text, or enter an article URL to deconstruct its framing..." rows="4"></textarea>
+</div>
+<div class="bg-[#FAF7F2] border-t border-[#E2D9CE] px-space-md lg:px-space-lg py-space-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-[#3B6B56] animate-pulse"></span>
+<span class="font-data-mono text-data-mono text-[#5D544C]" id="parser-status">
+              Ready for syntax &amp; rhetoric deconstruction
+            </span>
+</div>
+<button class="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-[#9E4A28] text-[#FAF7F2] hover:bg-[#8B3E20] transition-all duration-300 shadow-sm" id="analyze-trigger" onclick="triggerAnalysisFlash()" type="button">
+<span class="font-ui-medium text-ui-medium tracking-tight">Unveil the Story</span>
+<span class="material-symbols-outlined text-[18px] transition-transform duration-300 group-hover:translate-x-0.5">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 text-left">
+<div class="bg-[#FAF7F2] border border-[#E2D9CE] p-5 rounded-lg shadow-sm hover:border-[#D8CFC4] hover:shadow transition-all">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#3B6B56]"></span>
+<h2 class="font-label-prominent text-label-prominent tracking-wider text-[#3B6B56] uppercase">Facts</h2>
+</div>
+<p class="font-ui-body text-ui-body text-[#5D544C]">
+            Extract verifiable assertions, timelines, quantitative data, and empirical citations.
+          </p>
+</div>
+<div class="bg-[#FAF7F2] border border-[#E2D9CE] p-5 rounded-lg shadow-sm hover:border-[#D8CFC4] hover:shadow transition-all">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#A66B24]"></span>
+<h2 class="font-label-prominent text-label-prominent tracking-wider text-[#A66B24] uppercase">Opinions</h2>
+</div>
+<p class="font-ui-body text-ui-body text-[#5D544C]">
+            Distinguish subjective assertions, editorial commentary, and unsourced value judgments.
+          </p>
+</div>
+<div class="bg-[#FAF7F2] border border-[#E2D9CE] p-5 rounded-lg shadow-sm hover:border-[#D8CFC4] hover:shadow transition-all">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#9E4A28]"></span>
+<h2 class="font-label-prominent text-label-prominent tracking-wider text-[#9E4A28] uppercase">Framing</h2>
+</div>
+<p class="font-ui-body text-ui-body text-[#5D544C]">
+            Map narrative angles, agency attribution, problem definitions, and semantic connotations.
+          </p>
+</div>
+<div class="bg-[#FAF7F2] border border-[#E2D9CE] p-5 rounded-lg shadow-sm hover:border-[#D8CFC4] hover:shadow transition-all">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#7D374B]"></span>
+<h2 class="font-label-prominent text-label-prominent tracking-wider text-[#7D374B] uppercase">Emotion</h2>
+</div>
+<p class="font-ui-body text-ui-body text-[#5D544C]">
+            Surface emotionally charged rhetoric, evaluative weight, and affective sentiment cues.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full bg-[#F2EBE1] py-space-xl lg:py-24 border-b border-[#E2D9CE]/60">
+<div class="w-full max-w-7xl mx-auto px-gutter lg:px-margin">
+<div class="text-center max-w-3xl mx-auto mb-16">
+<span class="font-label-micro text-label-micro text-[#9E4A28] uppercase tracking-widest mb-2 block font-semibold">
+          OPTICAL DECONSTRUCTION ARCHITECTURE
+        </span>
+<h2 class="font-headline-xl text-headline-xl text-[#241E19] mb-4">
+          One text enters. Five lenses illuminate.
+        </h2>
+<p class="font-body-editorial text-body-editorial text-[#5D544C]">
+          Much like an optical prism splits composite white light into distinct wavelengths, PERSPECTA separates monolithic reporting into readable analytical layers.
+        </p>
+</div>
+<div class="relative bg-[#FAF7F2] border border-[#D8CFC4] rounded-xl p-6 lg:p-12 shadow-sm">
+<div class="w-full flex flex-col xl:flex-row items-center justify-between gap-8 lg:gap-12">
+<div class="w-full xl:w-1/4 flex flex-col gap-4">
+<div class="flex items-center gap-2 text-[#241E19]">
+<span class="material-symbols-outlined text-[20px] text-[#7C7167]">article</span>
+<span class="font-label-prominent text-label-prominent uppercase tracking-wider text-[#241E19]">Incoming Monolithic Beam</span>
+</div>
+<div class="bg-[#EFE8DF] border border-[#E2D9CE] p-4 rounded-lg shadow-sm">
+<span class="font-label-micro text-label-micro text-[#7C7167] block mb-1 font-semibold tracking-wider">RAW REUTERS FEED // 14:02 UTC</span>
+<p class="font-body-default text-body-default text-[#241E19] italic">
+                “Ministers reluctantly consented to punitive regulatory quotas following marathon closed-door deliberations.”
+              </p>
+</div>
+<p class="font-ui-body text-ui-body text-[#5D544C]">
+              Every sentence embeds latent choices: syntactic agency, weighted adjectives, and contextual omission.
+            </p>
+</div>
+<div class="w-full xl:w-2/4 flex items-center justify-center relative min-h-[340px]">
+<svg class="w-full h-72 max-w-md lg:max-w-lg" fill="none" viewbox="0 0 540 300" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="beamIn" x1="0%" x2="100%" y1="50%" y2="50%">
+<stop offset="0%" stop-color="#7C7167" stop-opacity="0.1"></stop>
+<stop offset="100%" stop-color="#241E19" stop-opacity="0.9"></stop>
+</lineargradient>
+<lineargradient id="gradFacts" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#9FD2B8"></stop>
+<stop offset="100%" stop-color="#3B6B56"></stop>
+</lineargradient>
+<lineargradient id="gradOpinions" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#E2B883"></stop>
+<stop offset="100%" stop-color="#A66B24"></stop>
+</lineargradient>
+<lineargradient id="gradFraming" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#D98A6C"></stop>
+<stop offset="100%" stop-color="#9E4A28"></stop>
+</lineargradient>
+<lineargradient id="gradEmotion" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#B87388"></stop>
+<stop offset="100%" stop-color="#7D374B"></stop>
+</lineargradient>
+<lineargradient id="gradContext" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#B8ADA0"></stop>
+<stop offset="100%" stop-color="#5D544C"></stop>
+</lineargradient>
+</defs>
+<line stroke="url(#beamIn)" stroke-linecap="round" stroke-width="4" x1="20" x2="215" y1="150" y2="150"></line>
+<circle cx="110" cy="150" fill="#241E19" r="3"></circle>
+<text fill="#5D544C" font-family="Hanken Grotesk" font-size="10" font-weight="600" letter-spacing="0.05em" x="60" y="138">RAW TEXT</text>
+<polygon fill="#FAF7F2" fill-opacity="0.95" points="220,50 300,220 140,220" stroke="#D8CFC4" stroke-width="1.5"></polygon>
+<polygon fill="#EFE8DF" fill-opacity="0.4" points="220,55 292,215 148,215"></polygon>
+<path d="M 220 70 L 235 150 L 205 180 Z" fill="#E6DDD2" fill-opacity="0.6"></path>
+<path d="M 245 140 C 310 130, 420 50, 520 40" fill="none" stroke="url(#gradFacts)" stroke-linecap="round" stroke-width="3"></path>
+<path d="M 248 145 C 320 140, 420 95, 520 95" fill="none" stroke="url(#gradOpinions)" stroke-linecap="round" stroke-width="3"></path>
+<path d="M 250 150 C 330 150, 420 150, 520 150" fill="none" stroke="url(#gradFraming)" stroke-linecap="round" stroke-width="3.5"></path>
+<path d="M 248 155 C 320 160, 420 205, 520 205" fill="none" stroke="url(#gradEmotion)" stroke-linecap="round" stroke-width="3"></path>
+<path d="M 245 160 C 310 170, 420 250, 520 260" fill="none" stroke="url(#gradContext)" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="520" cy="40" fill="#3B6B56" r="4"></circle>
+<circle cx="520" cy="95" fill="#A66B24" r="4"></circle>
+<circle cx="520" cy="150" fill="#9E4A28" r="4"></circle>
+<circle cx="520" cy="205" fill="#7D374B" r="4"></circle>
+<circle cx="520" cy="260" fill="#5D544C" r="4"></circle>
+</svg>
+</div>
+<div class="w-full xl:w-1/4 flex flex-col gap-3 text-left">
+<div class="p-2.5 rounded-lg bg-[#EFE8DF] border border-[#E2D9CE] flex items-start gap-2.5">
+<span class="w-2 h-2 rounded-full bg-[#3B6B56] mt-1.5 shrink-0"></span>
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#3B6B56] block font-bold">1. Empirical Facts</span>
+<span class="font-data-mono text-data-mono text-[#5D544C]">Ministers met; regulatory quotas established.</span>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-[#EFE8DF] border border-[#E2D9CE] flex items-start gap-2.5">
+<span class="w-2 h-2 rounded-full bg-[#A66B24] mt-1.5 shrink-0"></span>
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#A66B24] block font-bold">2. Subjective Weight</span>
+<span class="font-data-mono text-data-mono text-[#5D544C]">“Reluctantly” infers internal emotional friction.</span>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-[#EFE8DF] border border-[#E2D9CE] flex items-start gap-2.5">
+<span class="w-2 h-2 rounded-full bg-[#9E4A28] mt-1.5 shrink-0"></span>
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#9E4A28] block font-bold">3. Narrative Framing</span>
+<span class="font-data-mono text-data-mono text-[#5D544C]">“Punitive” frames systemic policy as an aggressive penalty.</span>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-[#EFE8DF] border border-[#E2D9CE] flex items-start gap-2.5">
+<span class="w-2 h-2 rounded-full bg-[#7D374B] mt-1.5 shrink-0"></span>
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#7D374B] block font-bold">4. Evaluative Emotion</span>
+<span class="font-data-mono text-data-mono text-[#5D544C]">“Marathon closed-door” evokes exhaustion &amp; secrecy.</span>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-[#EFE8DF] border border-[#E2D9CE] flex items-start gap-2.5">
+<span class="w-2 h-2 rounded-full bg-[#5D544C] mt-1.5 shrink-0"></span>
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#5D544C] block font-bold">5. Omitted Context</span>
+<span class="font-data-mono text-data-mono text-[#7C7167]">Does not cite previous 3-year statutory deadlines.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full bg-[#F7F3EE] py-space-xl lg:py-24 border-b border-[#E2D9CE]/60">
+<div class="w-full max-w-5xl mx-auto px-gutter lg:px-margin">
+<div class="text-left mb-10">
+<span class="font-label-micro text-label-micro text-[#A66B24] uppercase tracking-widest block mb-2 font-semibold">
+          LABORATORY MICRO-EXPERIMENT
+        </span>
+<h2 class="font-headline-xl text-headline-xl text-[#241E19] mb-3">
+          Small lexical shifts, vast reality divergence.
+        </h2>
+<p class="font-body-editorial text-body-editorial text-[#5D544C]">
+          Toggle between three real-world news framing variants of the same diplomatic negotiation to observe how subtle phrase architecture directs public perception.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-2 mb-6">
+<button class="px-4 py-2 rounded-full font-ui-medium text-ui-medium bg-[#9E4A28] text-[#FAF7F2] shadow-sm transition-colors" id="btn-opt-1" onclick="selectPhraseOption(1)" type="button">
+          Angle A: Consensus Framing
+        </button>
+<button class="px-4 py-2 rounded-full font-ui-medium text-ui-medium bg-[#EFE8DF] border border-[#E2D9CE] hover:bg-[#E6DDD2] text-[#241E19] transition-colors" id="btn-opt-2" onclick="selectPhraseOption(2)" type="button">
+          Angle B: Conflict &amp; Surrender
+        </button>
+<button class="px-4 py-2 rounded-full font-ui-medium text-ui-medium bg-[#EFE8DF] border border-[#E2D9CE] hover:bg-[#E6DDD2] text-[#241E19] transition-colors" id="btn-opt-3" onclick="selectPhraseOption(3)" type="button">
+          Angle C: Weary Reluctance
+        </button>
+</div>
+<div class="bg-[#FAF7F2] border border-[#D8CFC4] rounded-xl p-6 lg:p-8 shadow-sm">
+<div class="font-label-micro text-label-micro uppercase text-[#7C7167] mb-3 flex items-center justify-between">
+<span class="">Comparative Sentence Preview</span>
+<span class="font-data-mono text-data-mono text-[#3B6B56]" id="reading-sentiment">NEUTRALITY INDEX: BALANCED</span>
+</div>
+<div class="min-h-[90px] flex items-center mb-8">
+<p class="font-headline-lg text-headline-lg text-[#241E19] leading-relaxed" id="phrase-display">
+            The committee <span class="bg-[#3B6B56]/15 text-[#3B6B56] px-1.5 py-0.5 rounded font-medium">brokered a consensus</span> on the revised carbon timeline.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 bg-[#EFE8DF] border-t border-[#E2D9CE] -mx-6 -mb-6 p-6 rounded-b-xl">
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#7C7167] block mb-1">Narrative Tone</span>
+<p class="font-ui-medium text-ui-medium text-[#241E19]" id="tone-desc">Constructive, institutional victory</p>
+<p class="font-data-mono text-data-mono text-[#5D544C] mt-1" id="tone-sub">Agency attributed equally to all stakeholders.</p>
+</div>
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#7C7167] block mb-1">Primary Mechanism</span>
+<p class="font-ui-medium text-ui-medium text-[#241E19]" id="mech-desc">Legitimizing verb selection</p>
+<p class="font-data-mono text-data-mono text-[#5D544C] mt-1" id="mech-sub">Connotes diplomatic maturity and goodwill.</p>
+</div>
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#7C7167] block mb-1">Perspective Spectrum</span>
+<div class="w-full bg-[#E6DDD2] h-2 rounded-full mt-2 overflow-hidden flex border border-[#D8CFC4]">
+<div class="bg-[#3B6B56] h-full transition-all duration-500" id="bar-facts" style="width: 55%"></div>
+<div class="bg-[#9E4A28] h-full transition-all duration-500" id="bar-framing" style="width: 25%"></div>
+<div class="bg-[#7D374B] h-full transition-all duration-500" id="bar-emotion" style="width: 20%"></div>
+</div>
+<div class="flex justify-between font-data-mono text-[10px] text-[#7C7167] mt-1">
+<span class="">Facts: 55%</span>
+<span class="">Framing: 25%</span>
+<span class="">Emotion: 20%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full bg-[#F7F3EE] py-space-xl lg:py-24 border-b border-[#E2D9CE]/60">
+<div class="w-full max-w-7xl mx-auto px-gutter lg:px-margin">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+<div class="lg:col-span-7 bg-[#FAF7F2] border border-[#D8CFC4] rounded-xl p-8 lg:p-10 shadow-sm flex flex-col justify-between">
+<div>
+<span class="font-label-micro text-label-micro uppercase text-[#9E4A28] tracking-widest block mb-4 font-semibold">
+              EDITORIAL PROVENANCE
+            </span>
+<h3 class="font-headline-xl text-headline-xl text-[#241E19] mb-4">
+              The Architecture of Rigorous Reading
+            </h3>
+<p class="font-body-editorial text-body-editorial text-[#5D544C] mb-6">
+              Modern journalism unfolds in high-velocity algorithmic environments where emotional resonance is rewarded over semantic nuance. PERSPECTA provides an anchor of contemplative analysis — breaking paragraphs down to structural intent.
+            </p>
+</div>
+<div class="grid grid-cols-3 gap-4 pt-6 bg-[#EFE8DF] border-t border-[#E2D9CE] -mx-8 -mb-8 p-8 rounded-b-xl">
+<div>
+<span class="font-headline-lg text-headline-lg text-[#241E19] block">1.8M+</span>
+<span class="font-label-micro text-label-micro text-[#7C7167] uppercase">Phrasal Ingests</span>
+</div>
+<div>
+<span class="font-headline-lg text-headline-lg text-[#241E19] block">0%</span>
+<span class="font-label-micro text-label-micro text-[#7C7167] uppercase">Biased Scoring</span>
+</div>
+<div>
+<span class="font-headline-lg text-headline-lg text-[#241E19] block">100%</span>
+<span class="font-label-micro text-label-micro text-[#7C7167] uppercase">Epistemic Openness</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-5 bg-[#E6DDD2] rounded-xl overflow-hidden border border-[#D8CFC4] shadow-sm flex flex-col relative min-h-[360px]">
+<div class="w-full h-full min-h-[360px] bg-cover bg-center flex flex-col justify-end p-8" data-alt="An austere architectural close-up of a high-end European research library with classical wooden desks, morning sunlight cutting through a triangular glass prism skylight, creating soft spectral refractions across open archival volumes, rendered in warm ivory, cream, slate, and charcoal palette with quiet intellectual dignity." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCiRz8fZwhI9ZQmfZ87Ovlaq3bEhI3w9YDXDLMFsMviPWTXxgaTtdzZ46xL1rpbVIYsqRaAfiDs-lXwyGDUmOIaE99tC_2E90C3j-F8gNRkFx2vlphoXZj9a6bzwjhFz4AOdUXZkqkCAS-KqcWpq1RA97RLVOEgh7U2rbqB1K9XUAOMquxkXQ1-cmOB3k4HcX-Y0S8EYxUL2X3nNPq-4WPBX9cvDfgYWgT07PBrVAtR9Vh8wo4gvN5zTg");'>
+<div class="bg-[#FAF7F2]/95 backdrop-blur-md p-5 rounded-lg border border-[#E2D9CE] shadow-sm">
+<span class="font-label-micro text-label-micro uppercase text-[#7C7167] tracking-wider block mb-1 font-semibold">
+                ARCHIVAL METHODOLOGY
+              </span>
+<p class="font-body-default text-body-default text-[#241E19] italic">
+                “Language is not a neutral glass through which we perceive events, but a lens that crafts the event itself.”
+              </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="w-full bg-[#E6DDD2]/60 py-space-xl lg:py-20 border-b border-[#D8CFC4]">
+<div class="w-full max-w-4xl mx-auto px-gutter lg:px-margin text-center">
+<span class="material-symbols-outlined text-[32px] text-[#9E4A28] mb-4">format_quote</span>
+<blockquote class="font-headline-lg text-headline-lg text-[#241E19] italic font-body-editorial mb-6 leading-relaxed">
+        “PERSPECTA does not tell you whether a story is ‘true’ or ‘false.’ We illuminate how it was built, so you can decide for yourself.”
+      </blockquote>
+<div class="flex items-center justify-center gap-3">
+<span class="w-8 h-[1px] bg-[#88726b]"></span>
+<span class="font-label-micro text-label-micro uppercase tracking-widest text-[#5D544C]">The Perspecta Standard for Epistemic Integrity</span>
+<span class="w-8 h-[1px] bg-[#88726b]"></span>
+</div>
+</div>
+</section>
+<script>
+    const samplePresets = {
+      climate: "Ministers finalized an emergency pact on carbon tariffs following twenty hours of combative negotiations behind closed doors.",
+      antitrust: "Regulators aggressively confronted tech executives regarding exclusionary store policies, citing anti-competitive monopolistic behaviors.",
+      trade: "Trade representatives quietly celebrated an incremental agreement, framing the outcome as an indispensable stabilizing victory for global markets."
+    };
+
+    function applyPreset(type) {
+      const textarea = document.getElementById('article-input');
+      const status = document.getElementById('parser-status');
+      if (textarea && samplePresets[type]) {
+        textarea.value = samplePresets[type];
+        if (status) {
+          status.innerText = "Preset applied: Ready for dissection (" + type.toUpperCase() + ")";
+        }
+      }
+    }
+
+    function triggerAnalysisFlash() {
+      const textarea = document.getElementById('article-input');
+      const status = document.getElementById('parser-status');
+      if (!textarea.value.trim()) {
+        textarea.value = "The commission unveiled its legislative framework on artificial intelligence today, balancing safety provisions with economic competitiveness.";
+      }
+      status.innerHTML = "<span class='text-[#9E4A28] font-medium'>Parsing syntactic framing vectors &bull; Extracting entities...</span>";
+      setTimeout(() => {
+        status.innerHTML = "<span class='text-[#3B6B56] font-medium'>Analysis complete &bull; 4 dimensions identified</span>";
+      }, 700);
+    }
+
+    const phraseVariants = {
+      1: {
+        text: 'The committee <span class="bg-[#3B6B56]/15 text-[#3B6B56] px-1.5 py-0.5 rounded font-medium">brokered a consensus</span> on the revised carbon timeline.',
+        sentiment: 'NEUTRALITY INDEX: BALANCED',
+        sentimentClass: 'text-[#3B6B56]',
+        tone: 'Constructive, institutional victory',
+        toneSub: 'Agency attributed equally to all stakeholders.',
+        mech: 'Legitimizing verb selection',
+        mechSub: 'Connotes diplomatic maturity and goodwill.',
+        facts: '55%',
+        framing: '25%',
+        emotion: '20%'
+      },
+      2: {
+        text: 'The committee <span class="bg-[#7D374B]/15 text-[#7D374B] px-1.5 py-0.5 rounded font-medium">surrendered under pressure</span> on the revised carbon timeline.',
+        sentiment: 'NEUTRALITY INDEX: ADVERSARIAL',
+        sentimentClass: 'text-[#7D374B]',
+        tone: 'Defeat, capitulation, weak leadership',
+        toneSub: 'Depicts negotiations as a zero-sum hostile siege.',
+        mech: 'Combatative agency attribution',
+        mechSub: 'Framed through defeatist terminology.',
+        facts: '35%',
+        framing: '45%',
+        emotion: '20%'
+      },
+      3: {
+        text: 'The committee <span class="bg-[#A66B24]/15 text-[#A66B24] px-1.5 py-0.5 rounded font-medium">finally agreed</span> on the revised carbon timeline.',
+        sentiment: 'NEUTRALITY INDEX: WEARY SKEPTICISM',
+        sentimentClass: 'text-[#A66B24]',
+        tone: 'Exhaustion, overdue begrudging compromise',
+        toneSub: 'Presumes unstated bureaucratic foot-dragging.',
+        mech: 'Temporal adverbial insinuation',
+        mechSub: 'The word "finally" injects impatience.',
+        facts: '45%',
+        framing: '35%',
+        emotion: '20%'
+      }
+    };
+
+    function selectPhraseOption(id) {
+      for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById('btn-opt-' + i);
+        if (i === id) {
+          btn.className = 'px-4 py-2 rounded-full font-ui-medium text-ui-medium bg-[#9E4A28] text-[#FAF7F2] shadow-sm transition-colors';
+        } else {
+          btn.className = 'px-4 py-2 rounded-full font-ui-medium text-ui-medium bg-[#EFE8DF] border border-[#E2D9CE] hover:bg-[#E6DDD2] text-[#241E19] transition-colors';
+        }
+      }
+
+      const data = phraseVariants[id];
+      const phraseDisplay = document.getElementById('phrase-display');
+      const readingSentiment = document.getElementById('reading-sentiment');
+      const toneDesc = document.getElementById('tone-desc');
+      const toneSub = document.getElementById('tone-sub');
+      const mechDesc = document.getElementById('mech-desc');
+      const mechSub = document.getElementById('mech-sub');
+      const barFacts = document.getElementById('bar-facts');
+      const barFraming = document.getElementById('bar-framing');
+      const barEmotion = document.getElementById('bar-emotion');
+
+      if (phraseDisplay) phraseDisplay.innerHTML = data.text;
+      if (readingSentiment) {
+        readingSentiment.innerText = data.sentiment;
+        readingSentiment.className = 'font-data-mono text-data-mono ' + data.sentimentClass;
+      }
+      if (toneDesc) toneDesc.innerText = data.tone;
+      if (toneSub) toneSub.innerText = data.toneSub;
+      if (mechDesc) mechDesc.innerText = data.mech;
+      if (mechSub) mechSub.innerText = data.mechSub;
+
+      if (barFacts) barFacts.style.width = data.facts;
+      if (barFraming) barFraming.style.width = data.framing;
+      if (barEmotion) barEmotion.style.width = data.emotion;
+    }
+  </script>
+</div></main><footer class="w-full bg-[#EFE8DF] border-t border-[#D8CFC4] py-space-xl"><div class="w-full px-margin"><div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg pb-space-lg mb-space-lg border-b border-[#E2D9CE]"><div class="max-w-xl"><div class="flex items-center gap-space-sm mb-space-xs"><span class="font-headline-sm text-headline-sm text-[#241E19]">PERSPECTA</span><span class="font-label-micro text-label-micro uppercase text-[#7C7167] tracking-wider font-semibold">Epistemic Rigor Engine</span></div><p class="font-body-editorial text-body-editorial text-[#5D544C] italic">PERSPECTA identifies language patterns and narrative structures. It does not determine factual truth or score bias.</p></div><nav class="flex flex-wrap items-center gap-space-md" data-active-classes="text-[#241E19] font-ui-medium"><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="methodology" href="#">Methodology</a><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="taxonomy" href="#">Taxonomy</a><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="open-dataset" href="#">Open Dataset</a><a class="font-ui-body text-ui-body text-[#5D544C] hover:text-[#241E19] transition-colors" data-path="ethics" href="#">Ethics &amp; Independence</a></nav></div><div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm font-data-mono text-data-mono text-[#7C7167]"><p class="">© 2025 PERSPECTA Systems Inc. All rights reserved.</p><p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#3B6B56]"></span><span class="">Optical Framing Framework v4.2 • Broadside Precision Core</span></p></div></div></footer>
+</body></html>
