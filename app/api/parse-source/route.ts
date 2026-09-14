@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pdfParse = require('pdf-parse');
 import mammoth from 'mammoth';
 
 export const runtime = 'nodejs';
 
-
 // 5 MB upload limit
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -183,6 +181,40 @@ export async function POST(req: NextRequest) {
         extractedText = buffer.toString('utf-8');
       } else if (fileExt === 'pdf') {
         try {
+          // Polyfill DOMMatrix for PDF.js in headless Node / Vercel serverless environments if needed
+          if (typeof globalThis.DOMMatrix === 'undefined') {
+            class DOMMatrixPolyfill {
+              a = 1; b = 0; c = 0; d = 1; e = 0; f = 0;
+              m11 = 1; m12 = 0; m13 = 0; m14 = 0;
+              m21 = 0; m22 = 1; m23 = 0; m24 = 0;
+              m31 = 0; m32 = 0; m33 = 1; m34 = 0;
+              m41 = 0; m42 = 0; m43 = 0; m44 = 1;
+              is2D = true;
+              isIdentity = true;
+              constructor(init?: any) {
+                if (typeof init === 'string') return;
+                if (Array.isArray(init)) {
+                  this.a = init[0] ?? 1;
+                  this.b = init[1] ?? 0;
+                  this.c = init[2] ?? 0;
+                  this.d = init[3] ?? 1;
+                  this.e = init[4] ?? 0;
+                  this.f = init[5] ?? 0;
+                }
+              }
+              multiply() { return this; }
+              translate() { return this; }
+              scale() { return this; }
+              rotate() { return this; }
+              transformPoint(point: any) { return point; }
+              inverse() { return this; }
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (globalThis as any).DOMMatrix = DOMMatrixPolyfill;
+          }
+
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
+          const pdfParse = require('pdf-parse');
           const pdfData = await pdfParse(buffer);
           extractedText = pdfData.text || '';
         } catch (pdfErr: any) {
