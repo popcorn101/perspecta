@@ -386,16 +386,14 @@ export function analyzeArticleWithHeuristics(article: ArticleInput): ArticleAnal
     }
   }
 
-  // 2. If few signals found, run generic indicators
-  if (foundSignals.length < 3) {
-    const generic = extractGenericSignals(article.text);
-    for (const g of generic) {
-      if (!foundSignals.some((s) => s.quoted_text.includes(g.quoted_text) || g.quoted_text.includes(s.quoted_text))) {
-        foundSignals.push({
-          ...g,
-          id: `sig-${article.id}-${sigId++}`,
-        });
-      }
+  // 2. Always blend domain patterns with generic linguistic indicators to guarantee high signal density
+  const generic = extractGenericSignals(article.text);
+  for (const g of generic) {
+    if (!foundSignals.some((s) => s.quoted_text.toLowerCase().includes(g.quoted_text.toLowerCase()) || g.quoted_text.toLowerCase().includes(s.quoted_text.toLowerCase()))) {
+      foundSignals.push({
+        ...g,
+        id: `sig-${article.id}-${sigId++}`,
+      });
     }
   }
 

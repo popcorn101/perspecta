@@ -11,10 +11,13 @@ import {
   analyzeArticleWithHeuristics,
   generateComparativeFindings,
 } from '@/lib/mock-engine';
+import { persistAnalysisRun } from '@/lib/supabase';
 
 export const runtime = 'nodejs';
 
+
 export async function POST(req: NextRequest) {
+  const startTime = Date.now();
   try {
     const rawBody = await req.json();
     const validationResult = AnalysisRequestSchema.safeParse(rawBody);
@@ -144,6 +147,22 @@ Respond strictly with valid JSON conforming to this schema:
             });
           }
 
+          const latencyMs = Date.now() - startTime;
+
+          // Asynchronously persist to Supabase for historical evaluation traces
+          for (let i = 0; i < articles.length; i++) {
+            const originalArt = articles[i];
+            const matchingAnalysis = verifiedArticles.find((va) => va.article_id === originalArt.id);
+            if (matchingAnalysis) {
+              persistAnalysisRun({
+                article: originalArt,
+                signals: matchingAnalysis.signals,
+                model: modelName,
+                latencyMs,
+              }).catch((e) => console.warn('Background Supabase persistence error:', e));
+            }
+          }
+
           const analysisPayload: AnalysisResponse = {
             articles: verifiedArticles,
             comparative_findings: parsedContent.comparative_findings || [],
@@ -174,6 +193,21 @@ Respond strictly with valid JSON conforming to this schema:
     });
 
     const comparativeFindings = generateComparativeFindings(analyzedArticles);
+    const latencyMs = Date.now() - startTime;
+
+    // Asynchronously persist heuristic analysis run
+    for (let i = 0; i < articles.length; i++) {
+      const originalArt = articles[i];
+      const matchingAnalysis = analyzedArticles[i];
+      if (matchingAnalysis) {
+        persistAnalysisRun({
+          article: originalArt,
+          signals: matchingAnalysis.signals,
+          model: 'prism-heuristic-engine-v4',
+          latencyMs,
+        }).catch((e) => console.warn('Background Supabase persistence error:', e));
+      }
+    }
 
     const payload: AnalysisResponse = {
       articles: analyzedArticles,

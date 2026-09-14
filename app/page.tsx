@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   AnalysisResponse,
   ArticleInput,
@@ -14,22 +14,17 @@ import { InputSection } from '@/components/InputSection';
 import { ComparisonMatrix } from '@/components/ComparisonMatrix';
 import { ArticleViewer } from '@/components/ArticleViewer';
 import { InspectionDrawer } from '@/components/InspectionDrawer';
+import { StoryAnalysisDashboard } from '@/components/StoryAnalysisDashboard';
 import { FrameworkGuide } from '@/components/FrameworkGuide';
 import { ObservabilityModal } from '@/components/ObservabilityModal';
-import {
-  Layers,
-  BookOpen,
-  ShieldCheck,
-  Sparkles,
-  ArrowUpRight,
-  Search,
-} from 'lucide-react';
 
 export default function Home() {
+  const [currentView, setCurrentView] = useState<'analysis' | 'compare'>('analysis');
   const [activeDemoId, setActiveDemoId] = useState<string>('space-mission-launch');
   const [articles, setArticles] = useState<ArticleInput[]>(
     DEMO_CASES[0].articles
   );
+  const [selectedArticleIndex, setSelectedArticleIndex] = useState<number>(0);
   const [analysis, setAnalysis] = useState<AnalysisResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedSignal, setSelectedSignal] = useState<FramingSignal | null>(null);
@@ -56,9 +51,10 @@ export default function Home() {
         setAnalysis(data);
 
         // Preselect the first signal if available for immediate inspection demo
-        if (data.articles[0]?.signals[0]) {
-          setSelectedSignal(data.articles[0].signals[0]);
-          setSelectedPublisher(data.articles[0].publisher);
+        const activeArticleAnalysis = data.articles[selectedArticleIndex] || data.articles[0];
+        if (activeArticleAnalysis?.signals[0]) {
+          setSelectedSignal(activeArticleAnalysis.signals[0]);
+          setSelectedPublisher(activeArticleAnalysis.publisher);
         }
       } else {
         console.error('Failed to analyze articles');
@@ -68,7 +64,7 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [selectedArticleIndex]);
 
   // Initial load: analyze first demo case immediately
   useEffect(() => {
@@ -79,6 +75,7 @@ export default function Home() {
   const handleSelectDemo = (demo: DemoCase) => {
     setActiveDemoId(demo.id);
     setArticles(demo.articles);
+    setSelectedArticleIndex(0);
     handleAnalyze(demo.articles);
   };
 
@@ -90,10 +87,39 @@ export default function Home() {
     setSelectedPublisher(publisher);
   };
 
+  const currentArticle = articles[selectedArticleIndex] || articles[0];
+  const currentAnalysis =
+    analysis?.articles.find((a) => a.article_id === currentArticle?.id) ||
+    analysis?.articles[selectedArticleIndex] ||
+    analysis?.articles[0];
+
+  // For cycling through signals in inspector
+  const currentArticleSignals = currentAnalysis?.signals || [];
+  const currentSignalIndex = useMemo(() => {
+    if (!selectedSignal) return -1;
+    return currentArticleSignals.findIndex((s) => s.quoted_text === selectedSignal.quoted_text);
+  }, [selectedSignal, currentArticleSignals]);
+
+  const handleNextSignal = () => {
+    if (currentArticleSignals.length === 0) return;
+    const nextIdx = (currentSignalIndex + 1) % currentArticleSignals.length;
+    setSelectedSignal(currentArticleSignals[nextIdx]);
+    setSelectedPublisher(currentArticle.publisher);
+  };
+
+  const handlePrevSignal = () => {
+    if (currentArticleSignals.length === 0) return;
+    const prevIdx = (currentSignalIndex - 1 + currentArticleSignals.length) % currentArticleSignals.length;
+    setSelectedSignal(currentArticleSignals[prevIdx]);
+    setSelectedPublisher(currentArticle.publisher);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F3EE] text-[#241E19]">
-      {/* Masthead Header */}
+      {/* Masthead Header with Top-Level View Tabs */}
       <Masthead
+        currentView={currentView}
+        onChangeView={setCurrentView}
         onOpenObservability={() => setIsObservabilityOpen(true)}
         onOpenFramework={() => setIsFrameworkOpen(true)}
         activeDemoId={activeDemoId}
@@ -105,7 +131,7 @@ export default function Home() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 space-y-8">
-        {/* Input and Demo Loader Workspace */}
+        {/* Ingestion Workspace */}
         <section>
           <InputSection
             articles={articles}
@@ -117,8 +143,72 @@ export default function Home() {
           />
         </section>
 
-        {/* Framing Decomposition Results */}
-        {analysis && (
+        {/* View 1: Primary Story Analysis Dashboard (Linen & Sandstone reference layout) */}
+        {analysis && currentView === 'analysis' && currentArticle && (
+          <section className="space-y-8 animate-fadeIn">
+            {/* Perspective Switcher if multiple articles are loaded */}
+            {articles.length > 1 && (
+              <div className="flex items-center gap-2 bg-[#EFE8DF] p-1.5 rounded-xl border border-[#D8CFC4]/70 max-w-fit">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#7C7167] px-2">
+                  Select Article View:
+                </span>
+                {articles.map((art, idx) => (
+                  <button
+                    key={art.id}
+                    onClick={() => {
+                      setSelectedArticleIndex(idx);
+                      const artAna = analysis.articles[idx];
+                      if (artAna?.signals[0]) {
+                        setSelectedSignal(artAna.signals[0]);
+                        setSelectedPublisher(art.publisher);
+                      }
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                      selectedArticleIndex === idx
+                        ? 'bg-[#FAF7F2] text-[#241E19] shadow-xs'
+                        : 'text-[#5D544C] hover:text-[#241E19]'
+                    }`}
+                  >
+                    Perspective {idx + 1}: {art.publisher || 'Source'}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Split Screen Workbench (60% Left Story Analysis / 40% Right Inspector) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Left 7 Columns: Story Analysis Dashboard */}
+              <div className="lg:col-span-7 xl:col-span-8">
+                <StoryAnalysisDashboard
+                  article={currentArticle}
+                  analysis={currentAnalysis}
+                  selectedSignal={selectedSignal}
+                  onSelectSignal={(sig) =>
+                    handleSelectSignalWithPublisher(sig, currentArticle.publisher)
+                  }
+                  activeCategoryFilter={activeCategoryFilter}
+                  onSelectCategoryFilter={setActiveCategoryFilter}
+                />
+              </div>
+
+              {/* Right 5 Columns: Sticky Inspector Panel */}
+              <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24">
+                <InspectionDrawer
+                  signal={selectedSignal}
+                  onClose={() => setSelectedSignal(null)}
+                  publisherName={selectedPublisher}
+                  totalSignalsCount={currentArticleSignals.length}
+                  currentIndex={currentSignalIndex}
+                  onPrev={handlePrevSignal}
+                  onNext={handleNextSignal}
+                />
+              </aside>
+            </div>
+          </section>
+        )}
+
+        {/* View 2: Dedicated Compare Perspectives Broadsheet Matrix */}
+        {analysis && currentView === 'compare' && (
           <section className="space-y-8 animate-fadeIn">
             {/* Multi-Source Comparative Matrix */}
             <ComparisonMatrix
@@ -127,17 +217,17 @@ export default function Home() {
               onSelectCategoryFilter={setActiveCategoryFilter}
             />
 
-            {/* Side-by-Side Broadsheet Columns */}
+            {/* Multi-Column Side-by-Side Broadsheets */}
             <div>
               <div className="flex items-center justify-between mb-3 border-b border-[#D8CFC4] pb-2">
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[#9E4A28]" />
                   <h3 className="font-serif text-lg font-medium text-[#241E19] uppercase tracking-wider">
-                    Verbatim Signal Decomposition
+                    Synchronized Comparative Broadside
                   </h3>
                 </div>
-                <span className="text-xs text-[#7C7167] italic">
-                  Click any colored phrase to inspect framing taxonomy
+                <span className="text-xs text-[#7C7167] italic font-mono">
+                  Multi-perspective alignment across {articles.length} publications
                 </span>
               </div>
 
@@ -151,9 +241,9 @@ export default function Home() {
                 }`}
               >
                 {articles.map((art, idx) => {
-                  const artAnalysis = analysis.articles.find(
-                    (a) => a.article_id === art.id
-                  ) || analysis.articles[idx];
+                  const artAnalysis =
+                    analysis.articles.find((a) => a.article_id === art.id) ||
+                    analysis.articles[idx];
 
                   return (
                     <ArticleViewer
@@ -175,12 +265,16 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Signal Inspector Drawer */}
+            {/* Drawer at bottom for Compare View */}
             <section className="sticky bottom-4 z-30 max-w-4xl mx-auto">
               <InspectionDrawer
                 signal={selectedSignal}
                 onClose={() => setSelectedSignal(null)}
                 publisherName={selectedPublisher}
+                totalSignalsCount={currentArticleSignals.length}
+                currentIndex={currentSignalIndex}
+                onPrev={handlePrevSignal}
+                onNext={handleNextSignal}
               />
             </section>
           </section>
@@ -195,9 +289,9 @@ export default function Home() {
               PERSPECTA
             </span>
             <span className="mx-2 text-[#D8CFC4]">•</span>
-            <span>Platform for Media Literacy & Framing Analysis</span>
+            <span>Platform for Media Literacy &amp; Framing Analysis</span>
             <p className="text-[11px] text-[#7C7167] mt-0.5">
-              Built on the 7-dimension PRISM framing rubric with deterministic quote verification.
+              Built on the 7-dimension PRISM framing rubric with deterministic quote verification and Supabase trace monitoring.
             </p>
           </div>
 
@@ -216,7 +310,7 @@ export default function Home() {
               Strict Guardrails
             </button>
             <span className="text-[#D8CFC4]">•</span>
-            <span className="text-[#7C7167]">Vercel Ready</span>
+            <span className="text-[#7C7167]">Vercel &amp; Supabase Ready</span>
           </div>
         </div>
       </footer>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
     "cheerio": "^1.2.0",
     "clsx": "^2.1.1",
     "groq-sdk": "^1.6.0",

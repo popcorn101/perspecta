@@ -117,14 +117,25 @@ STRICT GUARDRAILS:
 2. You are NOT a truth oracle or fake-news detector.
 3. Every detected signal MUST be an EXACT VERBATIM substring copied directly from the article text.
    - If the quote does not appear verbatim in the source text, it will be automatically rejected.
-4. For each signal:
-   - "quoted_text": Exact verbatim excerpt (2 to 12 words).
+4. HIGH MULTI-SIGNAL DENSITY REQUIREMENT:
+   - Perform a deep, fine-grained textual dissection. Do NOT provide sparse or minimal tags.
+   - Aim for high signal density (extract at least 8 to 18 distinct framing signals across the article text).
+   - Ensure comprehensive coverage across ALL 7 PRISM categories:
+     a. "attribution": anonymous sourcing ("officials close to"), passive voice ("it was decided"), generalized attribution ("critics argue").
+     b. "evaluative": value-laden adjectives/adverbs ("finally", "mounting criticism", "reckless", "historic triumph", "desperate gamble").
+     c. "certainty": unearned certainty ("guaranteed to", "will inevitably") or speculative modal hedging ("could potentially", "suspects").
+     d. "claims": empirical assertions, economic projections, percentages ("38 percent", "$140 billion") made without cited primary datasets.
+     e. "primacy": structural positioning, headline primacy, what is granted lead billing vs. buried in the final paragraph.
+     f. "omission": contextual blind spots, trade-offs or counterfactuals evident from broader news coverage that the author excluded.
+     g. "emotional": affective vocabulary provoking visceral fear, panic, euphoric pride, or moral outrage ("jubilant", "ecocide", "chaos", "nightmare").
+5. For each signal:
+   - "quoted_text": Exact verbatim excerpt (from 1 word up to 10 words).
    - "category": One of ["attribution", "evaluative", "certainty", "claims", "primacy", "omission", "emotional"].
    - "explanation": Neutral, matter-of-fact breakdown explaining how this specific phrase or framing structure influences reader perception. DO NOT express moral judgments.
-   - "confidence": Float between 0.65 and 0.98.
+   - "confidence": Float between 0.70 and 0.98.
    - "alternative_phrasing": A neutral, strictly descriptive rewrite of the quote.
-   - "framing_effect": Brief phrase on the perceptual impact (e.g., "Amplifies urgency", "Distances responsibility", "Primes negative sentiment").
+   - "framing_effect": Brief phrase on the perceptual impact (e.g., "Amplifies urgency", "Distances responsibility", "Primes negative sentiment", "Elevates event to monumental milestone").
 
 For cross-article comparative findings:
-- Identify how the outlets framed the same central event with contrasting emphasis, tone, chosen actors, and omitted context.
+- Contrast how the outlets framed the same central event with contrasting narrative emphasis, tone, chosen actors, and omitted context.
 `;
