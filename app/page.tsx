@@ -89,17 +89,13 @@ export default function Home() {
     }
   }, [selectedArticleIndex]);
 
-  // Initial load: analyze first demo case immediately
-  useEffect(() => {
-    handleAnalyze(DEMO_CASES[0].articles);
-  }, [handleAnalyze]);
-
-  // Handle selecting curated demo case
+  // Handle selecting curated demo case (loads text into desk without auto-submitting analysis)
   const handleSelectDemo = (demo: DemoCase) => {
     setActiveDemoId(demo.id);
     setArticles(demo.articles);
     setSelectedArticleIndex(0);
-    handleAnalyze(demo.articles);
+    setAnalysis(null);
+    setSelectedSignal(null);
   };
 
   const handleSelectSignalWithPublisher = (
@@ -180,6 +176,21 @@ export default function Home() {
             >
               Retry Analysis
             </button>
+          </div>
+        )}
+
+        {/* Initial Prompt State (Before User Clicks Analyze) */}
+        {!analysis && !isLoading && (
+          <div className="bg-[#FAF7F2] border border-[#D8CFC4] rounded-2xl p-10 text-center space-y-3 shadow-paper-sm">
+            <div className="w-12 h-12 rounded-full bg-[#EFE8DF] border border-[#D8CFC4] flex items-center justify-center mx-auto text-[#9E4A28]">
+              <span className="font-serif text-2xl font-bold">P</span>
+            </div>
+            <h4 className="font-serif text-xl font-medium text-[#241E19]">
+              Newsroom Workspace Ready
+            </h4>
+            <p className="text-xs text-[#5D544C] max-w-md mx-auto leading-relaxed">
+              Verify or customize your publication inputs above, then click <strong className="text-[#9E4A28]">&ldquo;Analyze Framing with PRISM&rdquo;</strong> to deconstruct rhetorical signals and stream traces to observability.
+            </p>
           </div>
         )}
 
