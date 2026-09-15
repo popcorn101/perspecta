@@ -34,6 +34,7 @@ interface InspectionDrawerProps {
   signal: FramingSignal | null;
   onClose: () => void;
   publisherName?: string;
+  articleTitle?: string;
   totalSignalsCount?: number;
   currentIndex?: number;
   onPrev?: () => void;
@@ -44,6 +45,7 @@ export const InspectionDrawer: React.FC<InspectionDrawerProps> = ({
   signal,
   onClose,
   publisherName,
+  articleTitle,
   totalSignalsCount = 1,
   currentIndex = 0,
   onPrev,
@@ -74,6 +76,8 @@ export const InspectionDrawer: React.FC<InspectionDrawerProps> = ({
           quote: signal.quoted_text,
           category: signal.category,
           context: signal.explanation,
+          articleTitle: articleTitle || '',
+          articlePublisher: publisherName || '',
         }),
       });
 

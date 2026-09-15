@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
+  Sparkles,
 } from 'lucide-react';
 
 interface InputSectionProps {
@@ -256,57 +257,125 @@ export const InputSection: React.FC<InputSectionProps> = ({
     }
   };
 
+  const handleTriggerAnalysis = async () => {
+    let updatedArticles = [...articles];
+    let hasFetchError = false;
+
+    for (const art of articles) {
+      const state = getArticleState(art.id, art.text);
+      if (state.mode === 'url' && state.urlInput.trim() && !state.successMessage) {
+        updateArticleState(art.id, { loading: true, error: null });
+        try {
+          const response = await fetch('/api/parse-source', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: state.urlInput.trim() }),
+          });
+          const data = await response.json();
+          if (response.ok && data.text) {
+            updatedArticles = updatedArticles.map((a) =>
+              a.id === art.id
+                ? {
+                    ...a,
+                    title: data.title || a.title || 'Extracted Web Article',
+                    publisher: data.publisher || a.publisher || 'Web Source',
+                    text: data.text,
+                    url: data.source || state.urlInput.trim(),
+                  }
+                : a
+            );
+            const words = data.text.trim().split(/\s+/).length;
+            updateArticleState(art.id, {
+              loading: false,
+              error: null,
+              successMessage: `Successfully extracted ${words} words from webpage.`,
+              wordCount: words,
+            });
+          } else {
+            hasFetchError = true;
+            updateArticleState(art.id, {
+              loading: false,
+              error: data.error || 'Could not fetch text from URL. Please paste text directly.',
+            });
+          }
+        } catch (e: any) {
+          hasFetchError = true;
+          updateArticleState(art.id, {
+            loading: false,
+            error: e.message || 'Error fetching URL.',
+          });
+        }
+      }
+    }
+
+    if (hasFetchError) return;
+    setArticles(updatedArticles);
+    onAnalyze();
+  };
+
   return (
-    <div id="tour-source-input" className="bg-[#FAF7F2] border border-[#D8CFC4] rounded p-6 shadow-paper-sm space-y-6">
-      {/* Top Controls: Tabs & Curated Demo Loader */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2D9CE] pb-4">
-        {/* Tab Switcher */}
-        <div className="flex items-center gap-1 bg-[#EFE8DF] p-1 rounded">
+    <div className="bg-[#FAF7F2] border border-[#D8CFC4] rounded-2xl p-6 shadow-sm space-y-6">
+      {/* Top Header: Ingestion Strategy & Mode Switching */}
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E2D9CE] pb-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Layers className="w-5 h-5 text-[#9E4A28]" />
+            <h2 className="font-serif text-xl font-bold tracking-tight text-[#241E19]">
+              Editorial Ingestion Desk
+            </h2>
+          </div>
+          <p className="text-xs text-[#5D544C]">
+            Supply one or more news sources to decompose framing signals, examine omitted perspectives, and benchmark live web corroboration.
+          </p>
+        </div>
+
+        {/* Multi-source vs Single Source Toggle */}
+        <div className="flex items-center bg-[#EAE2D7] p-1 rounded-lg text-xs">
           <button
             onClick={() => handleSwitchTab('multi')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-md font-medium transition-all ${
               activeTab === 'multi'
-                ? 'bg-[#FAF7F2] text-[#241E19] shadow-sm'
-                : 'text-[#5D544C] hover:text-[#241E19]'
+                ? 'bg-[#FAF7F2] text-[#241E19] shadow-xs'
+                : 'text-[#7C7167] hover:text-[#241E19]'
             }`}
           >
-            <Layers className="w-3.5 h-3.5 text-[#9E4A28]" />
-            <span>Compare Multiple Sources (Recommended)</span>
+            Multi-Source Comparison ({articles.length})
           </button>
           <button
             onClick={() => handleSwitchTab('single')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-md font-medium transition-all ${
               activeTab === 'single'
-                ? 'bg-[#FAF7F2] text-[#241E19] shadow-sm'
-                : 'text-[#5D544C] hover:text-[#241E19]'
+                ? 'bg-[#FAF7F2] text-[#241E19] shadow-xs'
+                : 'text-[#7C7167] hover:text-[#241E19]'
             }`}
           >
-            <FileText className="w-3.5 h-3.5 text-[#5D544C]" />
-            <span>Inspect Single Article</span>
+            Single Story Deep Dive
           </button>
         </div>
+      </div>
 
-        {/* Curated Demo Dossier Buttons */}
-        <div id="tour-demo-selector" className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-bold text-[#7C7167] uppercase tracking-wider">
-            Curated Demos:
+      {/* Preset Demo Articles Selector */}
+      <div className="flex items-center justify-between bg-[#F2ECE4] border border-[#DDD4C7] rounded-xl px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-[#9E4A28]" />
+          <span className="text-xs font-serif font-medium text-[#241E19]">
+            Load Curated Cross-Publication Demo Case:
           </span>
+        </div>
+        <div className="flex items-center gap-1.5 overflow-x-auto">
           {DEMO_CASES.map((demo) => {
             const isSelected = activeDemoId === demo.id;
             return (
               <button
                 key={demo.id}
-                onClick={() => {
-                  onSelectDemo(demo);
-                  if (activeTab === 'single') setActiveTab('multi');
-                }}
-                className={`px-2.5 py-1 text-xs rounded border transition-all ${
+                onClick={() => onSelectDemo(demo)}
+                className={`text-xs px-2.5 py-1 rounded transition-all whitespace-nowrap ${
                   isSelected
-                    ? 'bg-[#9E4A28] text-white border-[#9E4A28] font-medium shadow-sm'
-                    : 'bg-[#F7F3EE] text-[#5D544C] border-[#D8CFC4] hover:bg-[#EFE8DF]'
+                    ? 'bg-[#9E4A28] text-white font-medium shadow-xs'
+                    : 'bg-[#FAF7F2] text-[#5D544C] hover:text-[#241E19] border border-[#D8CFC4]'
                 }`}
               >
-                {demo.title.split(' ')[0]} Launch
+                {demo.title}
               </button>
             );
           })}
@@ -315,12 +384,12 @@ export const InputSection: React.FC<InputSectionProps> = ({
 
       {/* Side-by-side Article Text Input Cards */}
       <div
-        className={`grid gap-5 ${
+        className={`grid gap-4 ${
           articles.length === 1
             ? 'grid-cols-1'
             : articles.length === 2
             ? 'grid-cols-1 md:grid-cols-2'
-            : 'grid-cols-1 lg:grid-cols-3'
+            : 'grid-cols-1 md:grid-cols-3'
         }`}
       >
         {articles.map((art, idx) => {
@@ -330,19 +399,24 @@ export const InputSection: React.FC<InputSectionProps> = ({
           return (
             <div
               key={art.id}
-              className="bg-[#F7F3EE] border border-[#D8CFC4] rounded p-4 flex flex-col justify-between space-y-3 relative"
+              className="bg-white border border-[#D8CFC4] rounded-xl p-4 flex flex-col space-y-3 relative shadow-xs"
             >
               {/* Header with Perspective Index & Input Mode Selectors */}
-              <div className="flex items-center justify-between border-b border-[#E2D9CE] pb-2">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-[#9E4A28]">
-                  Perspective {idx + 1}
-                </span>
+              <div className="flex items-center justify-between border-b border-[#EAE2D7] pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#EAE2D7] text-[#9E4A28] flex items-center justify-center font-mono font-bold text-[11px]">
+                    {idx + 1}
+                  </span>
+                  <span className="text-xs font-serif font-semibold text-[#241E19]">
+                    Perspective {idx + 1}
+                  </span>
+                </div>
 
                 {articles.length > 1 && (
                   <button
                     onClick={() => handleRemoveArticle(art.id)}
-                    className="text-[#7C7167] hover:text-[#9E4A28] p-1 transition-colors"
-                    title="Remove this perspective"
+                    className="text-[#7C7167] hover:text-red-600 transition-colors p-1"
+                    title="Remove Perspective Slot"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -350,7 +424,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
               </div>
 
               {/* Ingestion Mode Toggle Tabs */}
-              <div className="flex items-center gap-1 bg-[#EAE2D7] p-0.5 rounded text-[11px] font-medium text-[#5D544C]">
+              <div className="flex items-center bg-[#EAE2D7] p-0.5 rounded text-[11px] font-medium text-[#7C7167]">
                 <button
                   type="button"
                   onClick={() => updateArticleState(art.id, { mode: 'paste' })}
@@ -372,8 +446,8 @@ export const InputSection: React.FC<InputSectionProps> = ({
                       : 'hover:text-[#241E19]'
                   }`}
                 >
-                  <Globe className="w-3 h-3 text-[#9E4A28]" />
-                  <span>Import URL</span>
+                  <Link className="w-3 h-3 text-[#9E4A28]" />
+                  <span>Web URL</span>
                 </button>
                 <button
                   type="button"
@@ -582,7 +656,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
 
           <button
             id="tour-analyze-btn"
-            onClick={onAnalyze}
+            onClick={handleTriggerAnalysis}
             disabled={isLoading || articles.some((a) => !a.text.trim())}
             className="bg-[#9E4A28] hover:bg-[#B85934] disabled:opacity-50 text-[#FAF7F2] font-semibold text-xs uppercase tracking-wider px-6 py-2.5 rounded shadow-sm flex items-center gap-2 transition-all cursor-pointer"
           >

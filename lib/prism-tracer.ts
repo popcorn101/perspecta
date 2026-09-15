@@ -9,7 +9,7 @@ const PRISM_HOST =
 const PRISM_PROJECT_ID =
   process.env.PRISMTRACE_PROJECT_ID || '06b0abd9-4df1-40f0-87ff-c33212e3a973';
 const PRISM_API_KEY =
-  process.env.PRISMTRACE_API_KEY || 'pt-sk-b1b4b8a16763406f999f1b2098c30621';
+  process.env.PRISMTRACE_API_KEY || 'pt-sk-03c944d694954cac8a5f9357887e73f4';
 
 export interface SendPrismTraceParams {
   model: string;
@@ -123,7 +123,7 @@ export async function sendPrismTrace({
         'X-PRISMtrace-Key': PRISM_API_KEY,
       },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(12000),
     });
 
     if (!res.ok) {

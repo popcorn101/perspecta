@@ -115,6 +115,40 @@ async function searchWebSources(query: string) {
   }
 }
 
+const STOP_WORDS = new Set([
+  'a', 'an', 'the', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'from',
+  'as', 'is', 'was', 'are', 'were', 'been', 'be', 'have', 'has', 'had', 'do',
+  'does', 'did', 'over', 'against', 'into', 'through', 'during', 'before',
+  'after', 'above', 'below', 'under', 'following', 'that', 'this', 'these',
+  'those', 'and', 'or', 'but', 'if', 'while', 'because', 'such', 'regarding',
+  'alleged', 'allegedly', 'reportedly', 'according'
+]);
+
+function buildSearchQuery(title: string, quote: string): string {
+  const cleanTitle = (title || '')
+    .replace(/\s*[-|–—:]\s*(The Hindu|Times of India|NDTV|Indian Express|Hindustan Times|BBC|Reuters|CNN|Livemint|Scroll|Wire|Deccan Herald|News18|India Today).*$/i, '')
+    .replace(/[^a-zA-Z0-9\s]/g, ' ')
+    .trim();
+
+  const titleWords = cleanTitle
+    .split(/\s+/)
+    .filter((w) => w.length > 1 && !STOP_WORDS.has(w.toLowerCase()));
+
+  if (titleWords.length >= 3) {
+    return titleWords.slice(0, 6).join(' ');
+  }
+
+  const cleanQuote = (quote || '')
+    .replace(/[^a-zA-Z0-9\s]/g, ' ')
+    .trim();
+  const quoteWords = cleanQuote
+    .split(/\s+/)
+    .filter((w) => w.length > 2 && !STOP_WORDS.has(w.toLowerCase()));
+
+  const combined = Array.from(new Set([...titleWords, ...quoteWords]));
+  return (combined.length > 0 ? combined.slice(0, 6).join(' ') : cleanQuote.slice(0, 70)).trim();
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => null);
@@ -127,60 +161,78 @@ export async function POST(req: NextRequest) {
 
     const quote = String(body.quote).trim();
     const context = body.context ? String(body.context).trim() : '';
+    const rawTitle = body.articleTitle ? String(body.articleTitle).trim() : '';
+    const publisher = body.articlePublisher ? String(body.articlePublisher).trim() : '';
 
-    // Formulate a compact search query
-    const searchQuery = `${quote}`.slice(0, 80).trim();
-    const cacheKey = searchQuery.toLowerCase();
+    // Formulate a high-relevance search query using key subject terms
+    const searchQuery = buildSearchQuery(rawTitle, quote);
+    const cacheKey = `${searchQuery}_${rawTitle}`.toLowerCase();
 
     // Check cache first (0 tokens spent!)
     if (corroborationCache.has(cacheKey)) {
       return NextResponse.json(corroborationCache.get(cacheKey));
     }
 
-    // 1. Fetch live web results
-    const webSources = await searchWebSources(searchQuery);
+    // 1. Fetch live web results with intelligent fallback
+    let webSources = await searchWebSources(searchQuery);
+
+    // If specific combination returned 0 results, retry with cleaned raw title or quote
+    if (webSources.length === 0 && rawTitle) {
+      const fallbackQuery = rawTitle.slice(0, 70).replace(/["'“”‘’]/g, ' ').trim();
+      webSources = await searchWebSources(fallbackQuery);
+    }
 
     const groqKey = process.env.GROQ_API_KEY?.trim();
     let verdict: 'corroborated' | 'contested' | 'unverified' = 'unverified';
     let summary = '';
 
-    // 2. Token-efficient synthesis using llama-3.1-8b-instant (15x cheaper & lighter than 70B!)
+    // 2. Token-efficient synthesis using qwen/qwen3.8-27b
     if (groqKey && !groqKey.includes('gsk_...')) {
       try {
         const groq = new Groq({ apiKey: groqKey });
-        // Use high-throughput lightweight 8B model to save tokens and avoid quota limits
-        const fastModel = 'llama-3.1-8b-instant';
+        const candidateModels = ['qwen/qwen3.8-27b', 'groq/compound-mini'];
 
-        const completion = await groq.chat.completions.create({
-          model: fastModel,
-          temperature: 0.1,
-          max_tokens: 150, // Hard limit to save tokens
-          response_format: { type: 'json_object' },
-          messages: [
-            {
-              role: 'system',
-              content: `You are PERSPECTA's Empirical Corroboration Engine.
-Synthesize if the excerpt is corroborated, contested, or unverified based on search results. Do not express political bias.
+        for (const fastModel of candidateModels) {
+          try {
+            const completion = await groq.chat.completions.create({
+              model: fastModel,
+              temperature: 0.1,
+              max_tokens: 180, // Hard limit to save tokens
+              response_format: { type: 'json_object' },
+              messages: [
+                {
+                  role: 'system',
+                  content: `You are PERSPECTA's Empirical Corroboration Engine.
+Synthesize if the excerpt is corroborated, contested, or unverified based on the live search results. Do not express political bias.
 JSON schema:
 {
   "verdict": "corroborated" | "contested" | "unverified",
-  "summary": "1 concise sentence explaining what live news/records state."
+  "summary": "1 concise sentence explaining what live news/records state regarding this topic."
 }`,
-            },
-            {
-              role: 'user',
-              content: `Quote: "${quote}"
+                },
+                {
+                  role: 'user',
+                  content: `Article Topic: ${rawTitle || 'News Topic'}
+Claim/Excerpt Under Review: "${quote}"
+Context: ${context || 'Editorial framing analysis'}
 Search snippets:
 ${webSources.map((s, i) => `${i + 1}. [${s.domain}] ${s.snippet}`).join('\n')}`,
-            },
-          ],
-        });
+                },
+              ],
+            });
 
-        const parsed = JSON.parse(completion.choices[0]?.message?.content || '{}');
-        verdict = parsed.verdict || 'unverified';
-        summary = parsed.summary || '';
+            const parsed = JSON.parse(completion.choices[0]?.message?.content || '{}');
+            if (parsed.verdict || parsed.summary) {
+              verdict = parsed.verdict || 'unverified';
+              summary = parsed.summary || '';
+              break;
+            }
+          } catch (modelErr) {
+            console.warn(`Corroboration synthesis with ${fastModel} failed, trying next:`, modelErr);
+          }
+        }
       } catch (llmErr) {
-        console.warn('Groq fast corroboration error, falling back to zero-token heuristic:', llmErr);
+        console.warn('Groq fast corroboration error, falling back to heuristic:', llmErr);
       }
     }
 

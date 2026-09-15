@@ -30,6 +30,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedSignal, setSelectedSignal] = useState<FramingSignal | null>(null);
   const [selectedPublisher, setSelectedPublisher] = useState<string>('');
+  const [selectedArticleTitle, setSelectedArticleTitle] = useState<string>('');
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<
     PrismCategory | 'all'
   >('all');
@@ -100,10 +101,12 @@ export default function Home() {
 
   const handleSelectSignalWithPublisher = (
     signal: FramingSignal,
-    publisher: string
+    publisher: string,
+    title?: string
   ) => {
     setSelectedSignal(signal);
     setSelectedPublisher(publisher);
+    if (title) setSelectedArticleTitle(title);
   };
 
   const currentArticle = articles[selectedArticleIndex] || articles[0];
@@ -235,7 +238,7 @@ export default function Home() {
                   analysis={currentAnalysis}
                   selectedSignal={selectedSignal}
                   onSelectSignal={(sig) =>
-                    handleSelectSignalWithPublisher(sig, currentArticle.publisher)
+                    handleSelectSignalWithPublisher(sig, currentArticle.publisher, currentArticle.title)
                   }
                   activeCategoryFilter={activeCategoryFilter}
                   onSelectCategoryFilter={setActiveCategoryFilter}
@@ -248,6 +251,7 @@ export default function Home() {
                   signal={selectedSignal}
                   onClose={() => setSelectedSignal(null)}
                   publisherName={selectedPublisher}
+                  articleTitle={selectedArticleTitle || currentArticle?.title}
                   totalSignalsCount={currentArticleSignals.length}
                   currentIndex={currentSignalIndex}
                   onPrev={handlePrevSignal}
@@ -305,7 +309,8 @@ export default function Home() {
                       onSelectSignal={(sig) =>
                         handleSelectSignalWithPublisher(
                           sig,
-                          art.publisher || `Perspective ${idx + 1}`
+                          art.publisher || `Perspective ${idx + 1}`,
+                          art.title
                         )
                       }
                       activeCategoryFilter={activeCategoryFilter}
@@ -322,6 +327,7 @@ export default function Home() {
                 signal={selectedSignal}
                 onClose={() => setSelectedSignal(null)}
                 publisherName={selectedPublisher}
+                articleTitle={selectedArticleTitle || currentArticle?.title}
                 totalSignalsCount={currentArticleSignals.length}
                 currentIndex={currentSignalIndex}
                 onPrev={handlePrevSignal}

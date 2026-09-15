@@ -49,7 +49,8 @@ export async function POST(req: NextRequest) {
             [
               requestedModel,
               'qwen/qwen3.8-27b',
-              'qwen/qwen3.6-27b',
+              'openai/gpt-oss-20b',
+              'openai/gpt-oss-120b',
               'llama-3.3-70b-versatile',
               'llama-3.1-8b-instant',
             ].filter(Boolean) as string[]
@@ -117,10 +118,13 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
           // VERIFICATION LAYER: Check every signal against source text
           const verifiedArticles: ArticleAnalysis[] = [];
 
-          for (const rawArt of parsedContent.articles || []) {
-            const originalArticle = articles.find(
-              (a) => a.id === rawArt.article_id
-            );
+          for (let artIdx = 0; artIdx < (parsedContent.articles || []).length; artIdx++) {
+            const rawArt = parsedContent.articles[artIdx];
+            // Robust matching: by id, or positional index fallback
+            const originalArticle =
+              articles.find((a) => a.id === rawArt.article_id) ||
+              articles[artIdx] ||
+              articles[0];
             if (!originalArticle) continue;
 
             const verifiedSignals: FramingSignal[] = [];
@@ -145,10 +149,17 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
               }
             }
 
+            // Fallback to heuristic signals if LLM paraphrased rather than exact verbatim
+            if (verifiedSignals.length === 0) {
+              const heuristicRun = analyzeArticleWithHeuristics(originalArticle);
+              verifiedSignals.push(...heuristicRun.signals);
+              totalVerified += heuristicRun.signals.length;
+            }
+
             verifiedArticles.push({
               article_id: originalArticle.id,
-              title: originalArticle.title || rawArt.title,
-              publisher: originalArticle.publisher || rawArt.publisher,
+              title: originalArticle.title || rawArt.title || 'Untitled Article',
+              publisher: originalArticle.publisher || rawArt.publisher || 'Source Perspective',
               primary_framing: rawArt.primary_framing || 'General Framing',
               dominant_tone: rawArt.dominant_tone || 'Standard',
               highlighted_actors: rawArt.highlighted_actors || [],
@@ -157,48 +168,58 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
             });
           }
 
-          const latencyMs = Date.now() - startTime;
+          if (verifiedArticles.length > 0) {
+            const latencyMs = Date.now() - startTime;
 
-          // Asynchronously persist to Supabase and PRISM Observability
-          for (let i = 0; i < articles.length; i++) {
-            const originalArt = articles[i];
-            const matchingAnalysis = verifiedArticles.find((va) => va.article_id === originalArt.id);
-            if (matchingAnalysis) {
-              persistAnalysisRun({
-                article: originalArt,
-                signals: matchingAnalysis.signals,
-                model: modelName,
-                latencyMs,
-              }).catch((e) => console.warn('Background Supabase persistence error:', e));
+            // Await Supabase and PRISM Observability so serverless does not kill execution prematurely
+            const tracePromises: Promise<any>[] = [];
+            for (let i = 0; i < articles.length; i++) {
+              const originalArt = articles[i];
+              const matchingAnalysis =
+                verifiedArticles.find((va) => va.article_id === originalArt.id) ||
+                verifiedArticles[i];
+              if (matchingAnalysis) {
+                tracePromises.push(
+                  persistAnalysisRun({
+                    article: originalArt,
+                    signals: matchingAnalysis.signals,
+                    model: modelName,
+                    latencyMs,
+                  }).catch((e) => console.warn('Background Supabase persistence error:', e))
+                );
 
-              sendPrismTrace({
-                model: modelName,
-                articleTitle: originalArt.title || 'Untitled Article',
-                publisher: originalArt.publisher || 'Unknown Publisher',
-                inputText: originalArt.text,
-                outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
-                latencyMs,
-                signalsCount: matchingAnalysis.signals.length,
-                verifiedCount: matchingAnalysis.signals.length,
-                primaryFraming: matchingAnalysis.primary_framing,
-                dominantTone: matchingAnalysis.dominant_tone,
-              }).catch((e) => console.warn('Background PRISM trace error:', e));
+                tracePromises.push(
+                  sendPrismTrace({
+                    model: modelName,
+                    articleTitle: originalArt.title || 'Untitled Article',
+                    publisher: originalArt.publisher || 'Unknown Publisher',
+                    inputText: originalArt.text,
+                    outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
+                    latencyMs,
+                    signalsCount: matchingAnalysis.signals.length,
+                    verifiedCount: matchingAnalysis.signals.length,
+                    primaryFraming: matchingAnalysis.primary_framing,
+                    dominantTone: matchingAnalysis.dominant_tone,
+                  }).catch((e) => console.warn('Background PRISM trace error:', e))
+                );
+              }
             }
+            await Promise.allSettled(tracePromises);
+
+            const analysisPayload: AnalysisResponse = {
+              articles: verifiedArticles,
+              comparative_findings: parsedContent.comparative_findings || [],
+              summary:
+                parsedContent.summary ||
+                `Comparative analysis of ${verifiedArticles.length} coverage perspectives completed using ${modelName}.`,
+              timestamp: new Date().toISOString(),
+              verified_signal_count: totalVerified,
+              rejected_signal_count: totalRejected,
+              source: 'llm',
+            };
+
+            return NextResponse.json(analysisPayload);
           }
-
-          const analysisPayload: AnalysisResponse = {
-            articles: verifiedArticles,
-            comparative_findings: parsedContent.comparative_findings || [],
-            summary:
-              parsedContent.summary ||
-              `Comparative analysis of ${verifiedArticles.length} coverage perspectives completed using ${modelName}.`,
-            timestamp: new Date().toISOString(),
-            verified_signal_count: totalVerified,
-            rejected_signal_count: totalRejected,
-            source: 'llm',
-          };
-
-          return NextResponse.json(analysisPayload);
         }
       } catch (err) {
         console.error(
@@ -218,32 +239,38 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
     const comparativeFindings = generateComparativeFindings(analyzedArticles);
     const latencyMs = Date.now() - startTime;
 
-    // Asynchronously persist heuristic analysis run
+    // Await Supabase and PRISM Observability traces for heuristic run
+    const heuristicTracePromises: Promise<any>[] = [];
     for (let i = 0; i < articles.length; i++) {
       const originalArt = articles[i];
       const matchingAnalysis = analyzedArticles[i];
       if (matchingAnalysis) {
-        persistAnalysisRun({
-          article: originalArt,
-          signals: matchingAnalysis.signals,
-          model: 'prism-heuristic-engine-v4',
-          latencyMs,
-        }).catch((e) => console.warn('Background Supabase persistence error:', e));
+        heuristicTracePromises.push(
+          persistAnalysisRun({
+            article: originalArt,
+            signals: matchingAnalysis.signals,
+            model: 'prism-heuristic-engine-v4',
+            latencyMs,
+          }).catch((e) => console.warn('Background Supabase persistence error:', e))
+        );
 
-        sendPrismTrace({
-          model: 'prism-heuristic-engine-v4',
-          articleTitle: originalArt.title || 'Untitled Article',
-          publisher: originalArt.publisher || 'Unknown Publisher',
-          inputText: originalArt.text,
-          outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
-          latencyMs,
-          signalsCount: matchingAnalysis.signals.length,
-          verifiedCount: matchingAnalysis.signals.length,
-          primaryFraming: matchingAnalysis.primary_framing,
-          dominantTone: matchingAnalysis.dominant_tone,
-        }).catch((e) => console.warn('Background PRISM trace error:', e));
+        heuristicTracePromises.push(
+          sendPrismTrace({
+            model: 'prism-heuristic-engine-v4',
+            articleTitle: originalArt.title || 'Untitled Article',
+            publisher: originalArt.publisher || 'Unknown Publisher',
+            inputText: originalArt.text,
+            outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
+            latencyMs,
+            signalsCount: matchingAnalysis.signals.length,
+            verifiedCount: matchingAnalysis.signals.length,
+            primaryFraming: matchingAnalysis.primary_framing,
+            dominantTone: matchingAnalysis.dominant_tone,
+          }).catch((e) => console.warn('Background PRISM trace error:', e))
+        );
       }
     }
+    await Promise.allSettled(heuristicTracePromises);
 
     const payload: AnalysisResponse = {
       articles: analyzedArticles,
