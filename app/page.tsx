@@ -17,6 +17,7 @@ import { InspectionDrawer } from '@/components/InspectionDrawer';
 import { StoryAnalysisDashboard } from '@/components/StoryAnalysisDashboard';
 import { FrameworkGuide } from '@/components/FrameworkGuide';
 import { ObservabilityModal } from '@/components/ObservabilityModal';
+import { OnboardingTour } from '@/components/OnboardingTour';
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<'analysis' | 'compare'>('analysis');
@@ -34,8 +35,23 @@ export default function Home() {
   >('all');
   const [isFrameworkOpen, setIsFrameworkOpen] = useState<boolean>(false);
   const [isObservabilityOpen, setIsObservabilityOpen] = useState<boolean>(false);
+  const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
 
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+  // Auto-launch tour on first visit
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const tourSeen = localStorage.getItem('perspecta_tour_completed');
+      if (!tourSeen) {
+        // Launch after brief delay for initial render
+        const timer = setTimeout(() => {
+          setIsTourOpen(true);
+        }, 800);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
 
   // Trigger framing analysis
   const handleAnalyze = useCallback(async (articlesToAnalyze: ArticleInput[]) => {
@@ -129,6 +145,7 @@ export default function Home() {
         onChangeView={setCurrentView}
         onOpenObservability={() => setIsObservabilityOpen(true)}
         onOpenFramework={() => setIsFrameworkOpen(true)}
+        onStartTour={() => setIsTourOpen(true)}
         activeDemoId={activeDemoId}
         onSelectDemo={(id) => {
           const d = DEMO_CASES.find((item) => item.id === id);
@@ -215,7 +232,7 @@ export default function Home() {
               </div>
 
               {/* Right 5 Columns: Sticky Inspector Panel */}
-              <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24">
+              <aside id="tour-inspector-drawer" className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24">
                 <InspectionDrawer
                   signal={selectedSignal}
                   onClose={() => setSelectedSignal(null)}
@@ -350,6 +367,11 @@ export default function Home() {
         sourceType={analysis?.source}
         verifiedCount={analysis?.verified_signal_count}
         rejectedCount={analysis?.rejected_signal_count}
+      />
+
+      <OnboardingTour
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
       />
     </div>
   );

@@ -306,7 +306,7 @@ export const StoryAnalysisDashboard: React.FC<StoryAnalysisDashboardProps> = ({
       </nav>
 
       {/* Article Monitored Broadside View */}
-      <article className="bg-[#FAF7F2] p-6 sm:p-8 rounded-2xl border border-[#D8CFC4] shadow-paper-sm relative">
+      <article id="tour-article-reader" className="bg-[#FAF7F2] p-6 sm:p-8 rounded-2xl border border-[#D8CFC4] shadow-paper-sm relative">
         <div className="flex items-center justify-between pb-3 mb-6 border-b border-[#E2D9CE] text-xs font-mono text-[#7C7167]">
           <span className="uppercase font-bold tracking-wider text-[#241E19]">
             Original Monitored Broadside

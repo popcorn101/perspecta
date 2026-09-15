@@ -1,13 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Newspaper, ShieldCheck, BookOpen, Layers, BarChart3 } from 'lucide-react';
+import { Newspaper, ShieldCheck, BookOpen, Layers, BarChart3, Sparkles } from 'lucide-react';
 
 interface MastheadProps {
   currentView: 'analysis' | 'compare';
   onChangeView: (view: 'analysis' | 'compare') => void;
   onOpenObservability: () => void;
   onOpenFramework: () => void;
+  onStartTour?: () => void;
   activeDemoId?: string;
   onSelectDemo?: (demoId: string) => void;
 }
@@ -17,6 +18,7 @@ export const Masthead: React.FC<MastheadProps> = ({
   onChangeView,
   onOpenObservability,
   onOpenFramework,
+  onStartTour,
 }) => {
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -41,6 +43,19 @@ export const Masthead: React.FC<MastheadProps> = ({
           </div>
 
           <div className="flex items-center gap-4 mt-1 sm:mt-0">
+            {onStartTour && (
+              <>
+                <button
+                  onClick={onStartTour}
+                  className="flex items-center gap-1.5 text-[#9E4A28] hover:text-[#742A2A] font-medium transition-colors py-0.5"
+                  title="Guided Spotlight Tour"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#9E4A28]" />
+                  <span>How PERSPECTA Works</span>
+                </button>
+                <span className="text-[#D8CFC4]">|</span>
+              </>
+            )}
             <button
               onClick={onOpenFramework}
               className="flex items-center gap-1.5 hover:text-[#9E4A28] transition-colors py-0.5"
@@ -88,6 +103,7 @@ export const Masthead: React.FC<MastheadProps> = ({
             </button>
 
             <button
+              id="tour-compare-tab"
               onClick={() => onChangeView('compare')}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
                 currentView === 'compare'

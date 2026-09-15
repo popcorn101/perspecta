@@ -16,13 +16,47 @@ export interface WebCorroborationResult {
   }>;
 }
 
+import { tavily } from '@tavily/core';
+
 // In-memory cache to save 100% of tokens on repeated queries
 const corroborationCache = new Map<string, WebCorroborationResult>();
 
 /**
- * Searches the web via public search endpoints and extracts relevant editorial evidence.
+ * Searches the web via Tavily Search API or fallback search scraper and extracts relevant editorial evidence.
  */
 async function searchWebSources(query: string) {
+  const tavilyApiKey = process.env.TAVILY_API_KEY?.trim();
+
+  // 1. Tavily AI Search (Preferred agentic search)
+  if (tavilyApiKey && !tavilyApiKey.includes('tvly-...')) {
+    try {
+      const tvly = tavily({ apiKey: tavilyApiKey });
+      const searchResults = await tvly.search(query, {
+        topic: 'news',
+        maxResults: 3,
+        searchDepth: 'basic',
+      });
+
+      if (searchResults && searchResults.results && searchResults.results.length > 0) {
+        return searchResults.results.map((r: any) => {
+          let domain = '';
+          try {
+            domain = new URL(r.url).hostname.replace(/^www\./, '');
+          } catch {}
+          return {
+            title: r.title || 'Referenced Source',
+            url: r.url,
+            snippet: r.content || '',
+            domain: domain || 'news-source',
+          };
+        });
+      }
+    } catch (tavilyErr) {
+      console.warn('Tavily Search API encountered error, falling back to web scraper:', tavilyErr);
+    }
+  }
+
+  // 2. Resilient Fallback Search Scraper
   try {
     const encoded = encodeURIComponent(query);
     const searchUrl = `https://html.duckduckgo.com/html/?q=${encoded}`;

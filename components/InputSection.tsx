@@ -257,7 +257,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
   };
 
   return (
-    <div className="bg-[#FAF7F2] border border-[#D8CFC4] rounded p-6 shadow-paper-sm space-y-6">
+    <div id="tour-source-input" className="bg-[#FAF7F2] border border-[#D8CFC4] rounded p-6 shadow-paper-sm space-y-6">
       {/* Top Controls: Tabs & Curated Demo Loader */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E2D9CE] pb-4">
         {/* Tab Switcher */}
@@ -287,7 +287,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
         </div>
 
         {/* Curated Demo Dossier Buttons */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div id="tour-demo-selector" className="flex flex-wrap items-center gap-2">
           <span className="text-[11px] font-bold text-[#7C7167] uppercase tracking-wider">
             Curated Demos:
           </span>
@@ -581,6 +581,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
           </button>
 
           <button
+            id="tour-analyze-btn"
             onClick={onAnalyze}
             disabled={isLoading || articles.some((a) => !a.text.trim())}
             className="bg-[#9E4A28] hover:bg-[#B85934] disabled:opacity-50 text-[#FAF7F2] font-semibold text-xs uppercase tracking-wider px-6 py-2.5 rounded shadow-sm flex items-center gap-2 transition-all cursor-pointer"
