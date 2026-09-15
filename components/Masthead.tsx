@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Newspaper, ShieldCheck, BookOpen, Layers, BarChart3, Sparkles } from 'lucide-react';
+import { Newspaper, ShieldCheck, BookOpen, Layers, BarChart3, Sparkles, Sun, Moon } from 'lucide-react';
 
 interface MastheadProps {
   currentView: 'analysis' | 'compare';
@@ -11,6 +11,8 @@ interface MastheadProps {
   onStartTour?: () => void;
   activeDemoId?: string;
   onSelectDemo?: (demoId: string) => void;
+  isDarkMode?: boolean;
+  onToggleTheme?: () => void;
 }
 
 export const Masthead: React.FC<MastheadProps> = ({
@@ -19,6 +21,8 @@ export const Masthead: React.FC<MastheadProps> = ({
   onOpenObservability,
   onOpenFramework,
   onStartTour,
+  isDarkMode,
+  onToggleTheme,
 }) => {
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -71,6 +75,28 @@ export const Masthead: React.FC<MastheadProps> = ({
               <ShieldCheck className="w-3.5 h-3.5 text-[#3B6B56]" />
               <span>Guardrails & Telemetry</span>
             </button>
+            {onToggleTheme && (
+              <>
+                <span className="text-[#D8CFC4]">|</span>
+                <button
+                  onClick={onToggleTheme}
+                  className="flex items-center gap-1.5 hover:text-[#9E4A28] transition-colors py-0.5"
+                  title={isDarkMode ? 'Switch to Linen Light Mode' : 'Switch to Charcoal Dark Mode'}
+                >
+                  {isDarkMode ? (
+                    <>
+                      <Sun className="w-3.5 h-3.5 text-[#E6A23C]" />
+                      <span className="text-[#E6A23C] font-medium">Light</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="w-3.5 h-3.5 text-[#7C7167]" />
+                      <span>Dark</span>
+                    </>
+                  )}
+                </button>
+              </>
+            )}
           </div>
         </div>
 

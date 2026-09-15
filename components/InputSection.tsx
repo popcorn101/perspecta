@@ -314,7 +314,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
   };
 
   return (
-    <div className="bg-[#FAF7F2] border border-[#D8CFC4] rounded-2xl p-6 shadow-sm space-y-6">
+    <div id="tour-source-input" className="bg-[#FAF7F2] border border-[#D8CFC4] rounded-2xl p-6 shadow-sm space-y-6">
       {/* Top Header: Ingestion Strategy & Mode Switching */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E2D9CE] pb-4">
         <div>
@@ -355,7 +355,7 @@ export const InputSection: React.FC<InputSectionProps> = ({
       </div>
 
       {/* Preset Demo Articles Selector */}
-      <div className="flex items-center justify-between bg-[#F2ECE4] border border-[#DDD4C7] rounded-xl px-4 py-2.5">
+      <div id="tour-demo-selector" className="flex items-center justify-between bg-[#F2ECE4] border border-[#DDD4C7] rounded-xl px-4 py-2.5">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-[#9E4A28]" />
           <span className="text-xs font-serif font-medium text-[#241E19]">

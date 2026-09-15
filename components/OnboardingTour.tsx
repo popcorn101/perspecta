@@ -74,15 +74,32 @@ export const OnboardingTour: React.FC<OnboardingTourProps> = ({ isOpen, onClose 
       },
     ];
 
+    const validSteps = steps.filter((step) => {
+      if (!step.element) return true;
+      if (typeof step.element === 'string') {
+        const el = document.querySelector(step.element);
+        return !!el;
+      }
+      return true;
+    });
+
+    if (validSteps.length === 0) {
+      onClose();
+      return;
+    }
+
+    const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+
     const driverObj = driver({
       showProgress: true,
       animate: true,
-      overlayColor: '#1F2421',
-      overlayOpacity: 0.75,
+      overlayColor: isDark ? '#000000' : '#1F2421',
+      overlayOpacity: isDark ? 0.82 : 0.75,
+      popoverClass: isDark ? 'perspecta-tour-dark' : 'perspecta-tour-light',
       nextBtnText: 'Next →',
       prevBtnText: '← Back',
       doneBtnText: 'Finish Tour',
-      steps,
+      steps: validSteps,
       onDestroyStarted: () => {
         if (typeof window !== 'undefined') {
           localStorage.setItem('perspecta_tour_completed', 'true');

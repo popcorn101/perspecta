@@ -37,8 +37,39 @@ export default function Home() {
   const [isFrameworkOpen, setIsFrameworkOpen] = useState<boolean>(false);
   const [isObservabilityOpen, setIsObservabilityOpen] = useState<boolean>(false);
   const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+  // Initialize theme from localStorage or system preference
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('perspecta_theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const shouldBeDark = saved === 'dark' || (!saved && prefersDark);
+      setIsDarkMode(shouldBeDark);
+      if (shouldBeDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => {
+      const next = !prev;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('perspecta_theme', next ? 'dark' : 'light');
+        if (next) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+      return next;
+    });
+  };
 
   // Auto-launch tour on first visit
   useEffect(() => {
@@ -136,20 +167,33 @@ export default function Home() {
     setSelectedPublisher(currentArticle.publisher);
   };
 
+  const handleStartTour = () => {
+    // If analysis hasn't run yet, analyze current articles so article reader & inspector drawer
+    // exist in the DOM, allowing the full 6-step spotlight tour to focus on all elements smoothly!
+    if (!analysis) {
+      handleAnalyze(articles);
+    }
+    setTimeout(() => {
+      setIsTourOpen(true);
+    }, 450);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F3EE] text-[#241E19]">
+    <div className="min-h-screen flex flex-col bg-[#F7F3EE] dark:bg-[#121518] text-[#241E19] dark:text-[#ECE7DF] transition-colors duration-200">
       {/* Masthead Header with Top-Level View Tabs */}
       <Masthead
         currentView={currentView}
         onChangeView={setCurrentView}
         onOpenObservability={() => setIsObservabilityOpen(true)}
         onOpenFramework={() => setIsFrameworkOpen(true)}
-        onStartTour={() => setIsTourOpen(true)}
+        onStartTour={handleStartTour}
         activeDemoId={activeDemoId}
         onSelectDemo={(id) => {
           const d = DEMO_CASES.find((item) => item.id === id);
           if (d) handleSelectDemo(d);
         }}
+        isDarkMode={isDarkMode}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Main Container */}

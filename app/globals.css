@@ -193,3 +193,184 @@
   font-family: monospace !important;
   color: #7C7167 !important;
 }
+
+/* ==========================================================================
+   Tactile Dark Broadsheet Mode
+   ========================================================================== */
+html.dark {
+  background-color: #121518 !important;
+  color: #ECE7DF !important;
+}
+
+html.dark ::selection {
+  background-color: #3E2419 !important;
+  color: #F8B495 !important;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #121518 !important;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #2C343B !important;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3B464F !important;
+}
+
+/* Surface backgrounds and text in dark mode */
+.dark body,
+.dark .bg-\[\#F7F3EE\] {
+  background-color: #121518 !important;
+  color: #ECE7DF !important;
+}
+
+.dark .bg-\[\#FAF7F2\] {
+  background-color: #181C20 !important;
+}
+
+.dark .bg-\[\#EFE8DF\],
+.dark .bg-\[\#EAE2D7\],
+.dark .bg-\[\#F2ECE4\] {
+  background-color: #20262B !important;
+}
+
+.dark .text-\[\#241E19\] {
+  color: #F0ECE4 !important;
+}
+
+.dark .text-\[\#5D544C\] {
+  color: #B3AAA0 !important;
+}
+
+.dark .text-\[\#7C7167\] {
+  color: #8E857C !important;
+}
+
+.dark .border-\[\#D8CFC4\],
+.dark .border-\[\#E2D9CE\],
+.dark .border-\[\#DDD4C7\],
+.dark .border-\[\#D8CFC4\]\/50,
+.dark .border-\[\#D8CFC4\]\/70,
+.dark .border-\[\#D8CFC4\]\/80 {
+  border-color: #2C353D !important;
+}
+
+.dark header {
+  background-color: #181C20 !important;
+  border-bottom-color: #2C353D !important;
+}
+
+.dark aside,
+.dark article,
+.dark .shadow-sm,
+.dark .shadow-xs,
+.dark .shadow-paper-sm {
+  border-color: #2C353D !important;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #14171A !important;
+  color: #F0ECE4 !important;
+  border-color: #323C45 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #6C7680 !important;
+}
+
+/* Dark mode category highlights for maximum contrast */
+.dark .highlight-attribution {
+  background-color: rgba(192, 86, 33, 0.28) !important;
+  border-bottom-color: #E67E38 !important;
+  color: #F8C291 !important;
+}
+
+.dark .highlight-evaluative {
+  background-color: rgba(197, 48, 48, 0.28) !important;
+  border-bottom-color: #E55039 !important;
+  color: #FCA5A5 !important;
+}
+
+.dark .highlight-certainty {
+  background-color: rgba(214, 158, 46, 0.28) !important;
+  border-bottom-color: #F6B93B !important;
+  color: #FDE68A !important;
+}
+
+.dark .highlight-claims {
+  background-color: rgba(49, 130, 206, 0.28) !important;
+  border-bottom-color: #4A69BD !important;
+  color: #BFDBFE !important;
+}
+
+.dark .highlight-primacy {
+  background-color: rgba(47, 133, 90, 0.28) !important;
+  border-bottom-color: #78E08F !important;
+  color: #BBF7D0 !important;
+}
+
+.dark .highlight-omission {
+  background-color: rgba(100, 116, 139, 0.32) !important;
+  border-bottom-color: #94A3B8 !important;
+  color: #E2E8F0 !important;
+}
+
+.dark .highlight-emotional {
+  background-color: rgba(184, 50, 128, 0.28) !important;
+  border-bottom-color: #E056FD !important;
+  color: #FBCFE8 !important;
+}
+
+/* Dark mode Driver.js spotlight popover */
+.dark .driver-popover,
+.perspecta-tour-dark.driver-popover {
+  background-color: #181C20 !important;
+  color: #ECE7DF !important;
+  border: 1px solid #3B464F !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75) !important;
+}
+
+.dark .driver-popover-title,
+.perspecta-tour-dark .driver-popover-title {
+  color: #F0ECE4 !important;
+  border-bottom-color: #2C353D !important;
+}
+
+.dark .driver-popover-description,
+.perspecta-tour-dark .driver-popover-description {
+  color: #B3AAA0 !important;
+}
+
+.dark .driver-popover-prev-btn,
+.perspecta-tour-dark .driver-popover-prev-btn {
+  background-color: #22282E !important;
+  color: #ECE7DF !important;
+  border-color: #3B464F !important;
+}
+
+.dark .driver-popover-prev-btn:hover,
+.perspecta-tour-dark .driver-popover-prev-btn:hover {
+  background-color: #2C353D !important;
+  color: #FFFFFF !important;
+}
+
+.dark .driver-popover-next-btn,
+.perspecta-tour-dark .driver-popover-next-btn {
+  background-color: #C05621 !important;
+  color: #FFFFFF !important;
+}
+
+.dark .driver-popover-next-btn:hover,
+.perspecta-tour-dark .driver-popover-next-btn:hover {
+  background-color: #DD6B20 !important;
+}
+
+.dark .driver-popover-progress-text,
+.perspecta-tour-dark .driver-popover-progress-text {
+  color: #8E857C !important;
+}
