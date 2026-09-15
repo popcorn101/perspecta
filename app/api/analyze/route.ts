@@ -180,6 +180,8 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
                 latencyMs,
                 signalsCount: matchingAnalysis.signals.length,
                 verifiedCount: matchingAnalysis.signals.length,
+                primaryFraming: matchingAnalysis.primary_framing,
+                dominantTone: matchingAnalysis.dominant_tone,
               }).catch((e) => console.warn('Background PRISM trace error:', e));
             }
           }
@@ -237,6 +239,8 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
           latencyMs,
           signalsCount: matchingAnalysis.signals.length,
           verifiedCount: matchingAnalysis.signals.length,
+          primaryFraming: matchingAnalysis.primary_framing,
+          dominantTone: matchingAnalysis.dominant_tone,
         }).catch((e) => console.warn('Background PRISM trace error:', e));
       }
     }
