@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
 
     const { articles } = validationResult.data;
     const groqApiKey = (process.env.GROQ_API_KEY || '').trim();
+    const runSessionId = `perspecta-session-${Date.now()}`;
     let totalVerified = 0;
     let totalRejected = 0;
 
@@ -200,6 +201,7 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
                     verifiedCount: matchingAnalysis.signals.length,
                     primaryFraming: matchingAnalysis.primary_framing,
                     dominantTone: matchingAnalysis.dominant_tone,
+                    sessionId: runSessionId,
                   }).catch((e) => console.warn('Background PRISM trace error:', e))
                 );
               }
@@ -266,6 +268,7 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
             verifiedCount: matchingAnalysis.signals.length,
             primaryFraming: matchingAnalysis.primary_framing,
             dominantTone: matchingAnalysis.dominant_tone,
+            sessionId: runSessionId,
           }).catch((e) => console.warn('Background PRISM trace error:', e))
         );
       }

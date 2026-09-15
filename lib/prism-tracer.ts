@@ -7,9 +7,9 @@
 const PRISM_HOST =
   process.env.PRISMTRACE_HOST || 'https://prism-api-prod.up.railway.app';
 const PRISM_PROJECT_ID =
-  process.env.PRISMTRACE_PROJECT_ID || '06b0abd9-4df1-40f0-87ff-c33212e3a973';
+  process.env.PRISMTRACE_PROJECT_ID || 'e39cec70-7162-4311-bb0b-86f86154242c';
 const PRISM_API_KEY =
-  process.env.PRISMTRACE_API_KEY || 'pt-sk-03c944d694954cac8a5f9357887e73f4';
+  process.env.PRISMTRACE_API_KEY || 'pt-sk-50073210c51841cabce437c9809052ec';
 
 export interface SendPrismTraceParams {
   model: string;
@@ -22,6 +22,7 @@ export interface SendPrismTraceParams {
   verifiedCount: number;
   primaryFraming?: string;
   dominantTone?: string;
+  sessionId?: string;
 }
 
 export async function sendPrismTrace({
@@ -35,6 +36,7 @@ export async function sendPrismTrace({
   verifiedCount,
   primaryFraming = 'News Analysis',
   dominantTone = 'Neutral',
+  sessionId,
 }: SendPrismTraceParams): Promise<boolean> {
   if (!PRISM_API_KEY || !PRISM_PROJECT_ID) {
     return false;
@@ -88,6 +90,7 @@ export async function sendPrismTrace({
       model: model || 'qwen/qwen3.8-27b',
       agent_name: 'perspecta-framing-engine',
       agent_id: 'perspecta-analyzer-v1',
+      session_id: sessionId || `perspecta-session-${Date.now()}`,
       input_messages: [
         {
           role: 'user',
