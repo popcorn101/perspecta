@@ -226,13 +226,21 @@ ${webSources.map((s, i) => `${i + 1}. [${s.domain}] ${s.snippet}`).join('\n')}`,
           summary = parsed.summary || '';
         }
 
+        const corroborationReport = `### Empirical Corroboration Verdict: ${verdict.toUpperCase()}
+
+**Synthesis**:
+${summary}
+
+**Primary Sources Referenced**:
+${webSources.slice(0, 3).map((s, idx) => `${idx + 1}. **[${s.domain}]** ${s.title}\n   ${s.snippet}`).join('\n\n')}`;
+
         // PRISM standing rule: Wire model calls to PRISM
         await sendPrismTrace({
           model: fastModel,
-          articleTitle: rawTitle || 'Corroboration Verification',
-          publisher: 'PERSPECTA Corroborator',
-          inputText: `Claim: ${quote} | Query: ${searchQuery}`,
-          outputText: JSON.stringify({ verdict, summary }),
+          articleTitle: rawTitle || 'Claim Corroboration',
+          publisher: 'PERSPECTA Empirical Corroborator',
+          inputText: `Claim Excerpt: "${quote}"\nContext: ${context || 'Editorial Framing Review'}\nSearch Query: ${searchQuery}`,
+          outputText: corroborationReport,
           latencyMs: Date.now() - callStartTime,
           signalsCount: 1,
           verifiedCount: verdict === 'corroborated' ? 1 : 0,

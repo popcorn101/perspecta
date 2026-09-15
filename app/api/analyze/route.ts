@@ -167,13 +167,15 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
                     articleTitle: originalArt.title || 'Untitled Article',
                     publisher: originalArt.publisher || 'Unknown Publisher',
                     inputText: originalArt.text,
-                    outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
                     latencyMs,
                     signalsCount: matchingAnalysis.signals.length,
                     verifiedCount: matchingAnalysis.signals.length,
                     primaryFraming: matchingAnalysis.primary_framing,
                     dominantTone: matchingAnalysis.dominant_tone,
                     sessionId: runSessionId,
+                    highlightedActors: matchingAnalysis.highlighted_actors,
+                    omittedPerspectives: matchingAnalysis.omitted_perspectives,
+                    signals: matchingAnalysis.signals,
                   }).catch((e) => console.warn('Background PRISM trace error:', e))
                 );
               }
@@ -234,13 +236,15 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
             articleTitle: originalArt.title || 'Untitled Article',
             publisher: originalArt.publisher || 'Unknown Publisher',
             inputText: originalArt.text,
-            outputText: `Analyzed ${matchingAnalysis.signals.length} verified signals. Primary framing: ${matchingAnalysis.primary_framing}. Dominant tone: ${matchingAnalysis.dominant_tone}`,
             latencyMs,
             signalsCount: matchingAnalysis.signals.length,
             verifiedCount: matchingAnalysis.signals.length,
             primaryFraming: matchingAnalysis.primary_framing,
             dominantTone: matchingAnalysis.dominant_tone,
             sessionId: runSessionId,
+            highlightedActors: matchingAnalysis.highlighted_actors,
+            omittedPerspectives: matchingAnalysis.omitted_perspectives,
+            signals: matchingAnalysis.signals,
           }).catch((e) => console.warn('Background PRISM trace error:', e))
         );
       }
