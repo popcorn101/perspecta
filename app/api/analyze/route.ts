@@ -43,20 +43,7 @@ export async function POST(req: NextRequest) {
     if (groqApiKey && !groqApiKey.includes('gsk_...')) {
       try {
         const groq = new Groq({ apiKey: groqApiKey });
-        // Priority candidate models: includes available high-capacity models on Groq
-        const requestedModel = process.env.GROQ_MODEL?.trim();
-        const candidateModels = Array.from(
-          new Set(
-            [
-              requestedModel,
-              'qwen/qwen3.8-27b',
-              'openai/gpt-oss-20b',
-              'openai/gpt-oss-120b',
-              'llama-3.3-70b-versatile',
-              'llama-3.1-8b-instant',
-            ].filter(Boolean) as string[]
-          )
-        );
+        const modelName = process.env.GROQ_MODEL?.trim() || 'qwen/qwen3.8-27b';
 
         // Strict token budget to prevent 429 TPM Rate Limit on free tiers:
         // Cap article excerpt length to 1,500 characters so combined prompt stays under 1,800 tokens
@@ -75,41 +62,26 @@ ${JSON.stringify(tokenConstrainedArticles, null, 2)}
 `;
 
         let completion = null;
-        let modelName: string = requestedModel || candidateModels[0] || 'qwen/qwen3.8-27b';
-
-        // Try candidate models sequentially (handles 404 model not found and 429 rate limits gracefully)
-        for (const candidate of candidateModels) {
-          try {
-            completion = await groq.chat.completions.create({
-              model: candidate,
-              temperature: 0.15,
-              max_tokens: 1400, // Reduced to prevent exceeding output token budget
-              response_format: { type: 'json_object' },
-              messages: [
-                {
-                  role: 'system',
-                  content:
-                    'You are PERSPECTA PRISM. Decompose news text into framing signals (attribution, evaluative, certainty, claims, primacy, omission, emotional). Quoted_text must be exact verbatim substring. Respond with strict JSON matching schema: {"articles": [{"article_id": "string", "title": "string", "publisher": "string", "primary_framing": "string", "dominant_tone": "string", "highlighted_actors": ["string"], "omitted_perspectives": ["string"], "signals": [{"quoted_text": "verbatim text", "category": "attribution"|"evaluative"|"certainty"|"claims"|"primacy"|"omission"|"emotional", "explanation": "string", "confidence": 0.85, "framing_effect": "string", "alternative_phrasing": "string"}]}], "comparative_findings": [{"category": "string", "title": "string", "description": "string", "contrast_table": [{"publisher": "string", "approach": "string"}]}], "summary": "string"}',
-                },
-                {
-                  role: 'user',
-                  content: promptContent,
-                },
-              ],
-            });
-
-            if (completion?.choices?.[0]?.message?.content) {
-              modelName = candidate;
-              break;
-            }
-          } catch (modelErr: any) {
-            const isRateLimit = modelErr?.status === 429 || modelErr?.message?.includes('Rate limit') || modelErr?.error?.error?.code === 'rate_limit_exceeded';
-            const isNotFound = modelErr?.status === 404 || modelErr?.message?.includes('model_not_found');
-            console.warn(
-              `Model ${candidate} encountered ${isRateLimit ? '429 Rate Limit' : isNotFound ? '404 Not Found' : 'error'}. Attempting next fallback model in cascade...`
-            );
-            // Continue loop to next candidate
-          }
+        try {
+          completion = await groq.chat.completions.create({
+            model: modelName,
+            temperature: 0.15,
+            max_tokens: 1400,
+            response_format: { type: 'json_object' },
+            messages: [
+              {
+                role: 'system',
+                content:
+                  'You are PERSPECTA PRISM. Decompose news text into framing signals (attribution, evaluative, certainty, claims, primacy, omission, emotional). Quoted_text must be exact verbatim substring. Respond with strict JSON matching schema: {"articles": [{"article_id": "string", "title": "string", "publisher": "string", "primary_framing": "string", "dominant_tone": "string", "highlighted_actors": ["string"], "omitted_perspectives": ["string"], "signals": [{"quoted_text": "verbatim text", "category": "attribution"|"evaluative"|"certainty"|"claims"|"primacy"|"omission"|"emotional", "explanation": "string", "confidence": 0.85, "framing_effect": "string", "alternative_phrasing": "string"}]}], "comparative_findings": [{"category": "string", "title": "string", "description": "string", "contrast_table": [{"publisher": "string", "approach": "string"}]}], "summary": "string"}',
+              },
+              {
+                role: 'user',
+                content: promptContent,
+              },
+            ],
+          });
+        } catch (modelErr: any) {
+          console.error(`Error executing analysis with ${modelName}:`, modelErr?.message || modelErr);
         }
 
         const rawJsonString = completion?.choices?.[0]?.message?.content;

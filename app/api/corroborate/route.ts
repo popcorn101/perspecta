@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import Groq from 'groq-sdk';
+import { sendPrismTrace } from '@/lib/prism-tracer';
 
 export const runtime = 'nodejs';
 
@@ -186,53 +187,61 @@ export async function POST(req: NextRequest) {
     let verdict: 'corroborated' | 'contested' | 'unverified' = 'unverified';
     let summary = '';
 
-    // 2. Token-efficient synthesis using qwen/qwen3.8-27b
+    // 2. Token-efficient single-model synthesis using qwen/qwen3.8-27b
     if (groqKey && !groqKey.includes('gsk_...')) {
+      const fastModel = process.env.GROQ_MODEL?.trim() || 'qwen/qwen3.8-27b';
+      const callStartTime = Date.now();
       try {
         const groq = new Groq({ apiKey: groqKey });
-        const candidateModels = ['qwen/qwen3.8-27b', 'groq/compound-mini'];
-
-        for (const fastModel of candidateModels) {
-          try {
-            const completion = await groq.chat.completions.create({
-              model: fastModel,
-              temperature: 0.1,
-              max_tokens: 180, // Hard limit to save tokens
-              response_format: { type: 'json_object' },
-              messages: [
-                {
-                  role: 'system',
-                  content: `You are PERSPECTA's Empirical Corroboration Engine.
+        const completion = await groq.chat.completions.create({
+          model: fastModel,
+          temperature: 0.1,
+          max_tokens: 180, // Hard limit to save tokens
+          response_format: { type: 'json_object' },
+          messages: [
+            {
+              role: 'system',
+              content: `You are PERSPECTA's Empirical Corroboration Engine.
 Synthesize if the excerpt is corroborated, contested, or unverified based on the live search results. Do not express political bias.
 JSON schema:
 {
   "verdict": "corroborated" | "contested" | "unverified",
   "summary": "1 concise sentence explaining what live news/records state regarding this topic."
 }`,
-                },
-                {
-                  role: 'user',
-                  content: `Article Topic: ${rawTitle || 'News Topic'}
+            },
+            {
+              role: 'user',
+              content: `Article Topic: ${rawTitle || 'News Topic'}
 Claim/Excerpt Under Review: "${quote}"
 Context: ${context || 'Editorial framing analysis'}
 Search snippets:
 ${webSources.map((s, i) => `${i + 1}. [${s.domain}] ${s.snippet}`).join('\n')}`,
-                },
-              ],
-            });
+            },
+          ],
+        });
 
-            const parsed = JSON.parse(completion.choices[0]?.message?.content || '{}');
-            if (parsed.verdict || parsed.summary) {
-              verdict = parsed.verdict || 'unverified';
-              summary = parsed.summary || '';
-              break;
-            }
-          } catch (modelErr) {
-            console.warn(`Corroboration synthesis with ${fastModel} failed, trying next:`, modelErr);
-          }
+        const parsed = JSON.parse(completion.choices[0]?.message?.content || '{}');
+        if (parsed.verdict || parsed.summary) {
+          verdict = parsed.verdict || 'unverified';
+          summary = parsed.summary || '';
         }
+
+        // PRISM standing rule: Wire model calls to PRISM
+        await sendPrismTrace({
+          model: fastModel,
+          articleTitle: rawTitle || 'Corroboration Verification',
+          publisher: 'PERSPECTA Corroborator',
+          inputText: `Claim: ${quote} | Query: ${searchQuery}`,
+          outputText: JSON.stringify({ verdict, summary }),
+          latencyMs: Date.now() - callStartTime,
+          signalsCount: 1,
+          verifiedCount: verdict === 'corroborated' ? 1 : 0,
+          primaryFraming: 'Empirical Corroboration',
+          dominantTone: verdict === 'corroborated' ? 'Objective' : 'Contested',
+          sessionId: `corroborate-session-${Date.now()}`,
+        }).catch((tErr) => console.warn('PRISM corroboration trace failed:', tErr));
       } catch (llmErr) {
-        console.warn('Groq fast corroboration error, falling back to heuristic:', llmErr);
+        console.warn(`Groq corroboration with ${fastModel} failed:`, llmErr);
       }
     }
 

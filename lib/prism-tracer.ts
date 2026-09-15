@@ -9,7 +9,7 @@ const PRISM_HOST =
 const PRISM_PROJECT_ID =
   process.env.PRISMTRACE_PROJECT_ID || 'e39cec70-7162-4311-bb0b-86f86154242c';
 const PRISM_API_KEY =
-  process.env.PRISMTRACE_API_KEY || 'pt-sk-50073210c51841cabce437c9809052ec';
+  process.env.PRISMTRACE_API_KEY || 'pt-sk-c455b395c24f45d198cd6720e6c1d463';
 
 export interface SendPrismTraceParams {
   model: string;
