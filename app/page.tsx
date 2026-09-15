@@ -35,9 +35,12 @@ export default function Home() {
   const [isFrameworkOpen, setIsFrameworkOpen] = useState<boolean>(false);
   const [isObservabilityOpen, setIsObservabilityOpen] = useState<boolean>(false);
 
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
+
   // Trigger framing analysis
   const handleAnalyze = useCallback(async (articlesToAnalyze: ArticleInput[]) => {
     setIsLoading(true);
+    setAnalysisError(null);
     setSelectedSignal(null);
     try {
       const res = await fetch('/api/analyze', {
@@ -57,9 +60,13 @@ export default function Home() {
           setSelectedPublisher(activeArticleAnalysis.publisher);
         }
       } else {
-        console.error('Failed to analyze articles');
+        const errJson = await res.json().catch(() => null);
+        const errMsg = errJson?.error || 'Failed to analyze articles. Check server logs.';
+        setAnalysisError(errMsg);
+        console.error('Failed to analyze articles:', errJson);
       }
-    } catch (err) {
+    } catch (err: any) {
+      setAnalysisError(err?.message || 'Network error during analysis.');
       console.error('Error during analysis request:', err);
     } finally {
       setIsLoading(false);
@@ -142,6 +149,22 @@ export default function Home() {
             activeDemoId={activeDemoId}
           />
         </section>
+
+        {/* Error Banner */}
+        {analysisError && (
+          <div className="bg-red-50 border border-red-200 text-red-800 text-xs p-4 rounded-xl flex items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-bold uppercase tracking-wider">Analysis Warning:</span>
+              <span>{analysisError}</span>
+            </div>
+            <button
+              onClick={() => handleAnalyze(articles)}
+              className="px-3 py-1 bg-red-800 text-white rounded font-medium hover:bg-red-900 transition-colors cursor-pointer"
+            >
+              Retry Analysis
+            </button>
+          </div>
+        )}
 
         {/* View 1: Primary Story Analysis Dashboard (Linen & Sandstone reference layout) */}
         {analysis && currentView === 'analysis' && currentArticle && (
