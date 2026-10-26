@@ -9,7 +9,7 @@ PERSPECTA is a web platform designed to deconstruct news coverage into inspectab
 - **PRISM Methodology Integration:** Structural rhetorical analysis across key framing dimensions.
 - **Side-by-Side Comparison:** Compare coverage across multiple media sources interactively.
 - **Inspectable Framing Signals:** Highlighted rhetorical patterns, word choice, and structural choices.
-- **Interactive Demos & Mock Engine:** Built-in demo datasets for instant testing and evaluation.
+- **Interactive Demos & Mock Engine:** Built-in demo datasets for instant testing and evaluation👌
 
 ---
 
